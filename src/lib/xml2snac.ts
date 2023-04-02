@@ -150,6 +150,10 @@ export const _xml2snac = (xml: string, stack: SNACNSNode[]) => {
             out.push(data)
             xml = ""
         }
+
+        else {
+            throw Error(`Invalid tag ${xml}\n`)
+        }
     }
 
     return {
@@ -163,7 +167,7 @@ export const getAttributes = (xml: string): AttributesXMLhasChildrenType => {
     let attributes: AttributesType = {}
 
     while (xml.length > 0) {
-        const closingTag = xml.match(/^\s*(\/?>)(.*)$/)
+        const closingTag = xml.match(/^\s*(\/?>)(.*)$/s)
         const nextAttribute = xml.match(/^\s*([\w]+:?[\w]+)=(['"])(.*)$/s)
 
         if (closingTag) {

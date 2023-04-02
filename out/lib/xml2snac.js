@@ -121,6 +121,9 @@ const _xml2snac = (xml, stack) => {
             out.push(data);
             xml = "";
         }
+        else {
+            throw Error(`Invalid tag ${xml}\n`);
+        }
     }
     return {
         xml: "",
@@ -131,7 +134,7 @@ exports._xml2snac = _xml2snac;
 const getAttributes = (xml) => {
     let attributes = {};
     while (xml.length > 0) {
-        const closingTag = xml.match(/^\s*(\/?>)(.*)$/);
+        const closingTag = xml.match(/^\s*(\/?>)(.*)$/s);
         const nextAttribute = xml.match(/^\s*([\w]+:?[\w]+)=(['"])(.*)$/s);
         if (closingTag) {
             let hasChildren = false;

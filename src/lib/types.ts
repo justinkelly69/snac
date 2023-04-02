@@ -1,5 +1,15 @@
 export type QuoteChar = '"' | "'"
 
+export type XMLOptions = {
+    prefixStart: string,
+    prefixCharacter: string,
+    attributePrefix: string,
+    minify: boolean,
+    usePrefix: boolean,
+    selfCloseTags: boolean,
+    trimText: boolean,
+}
+
 export type AttributesType = {
     [name: string]: {
         [name: string]: string
