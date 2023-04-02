@@ -31,9 +31,14 @@ export const _snac2xml = (snac: SNACItem[], options: XMLOptions, depth: number) 
             const attrs = attributesToXML(snacElementNode["A"], options, depth)
             const children = _snac2xml(snacElementNode["C"], options, depth + 1)
 
-            out = `${out}${prefix}<${elementName}${attrs}>`
-            out = `${out}${children}`
-            out = `${out}${prefix}</${elementName}>`
+            if (children.length === 0 && options["selfCloseTags"]) {
+                out = `${out}${prefix}<${elementName}${attrs} />`
+            }
+            else {
+                out = `${out}${prefix}<${elementName}${attrs}>`
+                out = `${out}${children}`
+                out = `${out}${prefix}</${elementName}>`
+            }
         }
 
         else if (snacNode.hasOwnProperty("T")) {
@@ -103,7 +108,7 @@ export const getPrefix = (depth: number, options: XMLOptions, isAttribute: boole
         if (options["usePrefix"]) {
             out = `${out}${options["prefixStart"]}`
 
-            for(let i of Array.from({ length: depth }, (value, index) => index)){
+            for (let i of Array.from({ length: depth }, (value, index) => index)) {
                 out = `${out}${options["prefixCharacter"]}`
             }
         }

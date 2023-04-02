@@ -18,9 +18,14 @@ const _snac2xml = (snac, options, depth) => {
             const elementName = (0, exports.tagName)(snacElementNode);
             const attrs = (0, exports.attributesToXML)(snacElementNode["A"], options, depth);
             const children = (0, exports._snac2xml)(snacElementNode["C"], options, depth + 1);
-            out = `${out}${prefix}<${elementName}${attrs}>`;
-            out = `${out}${children}`;
-            out = `${out}${prefix}</${elementName}>`;
+            if (children.length === 0 && options["selfCloseTags"]) {
+                out = `${out}${prefix}<${elementName}${attrs} />`;
+            }
+            else {
+                out = `${out}${prefix}<${elementName}${attrs}>`;
+                out = `${out}${children}`;
+                out = `${out}${prefix}</${elementName}>`;
+            }
         }
         else if (snacNode.hasOwnProperty("T")) {
             const snacTextNode = snacNode;
