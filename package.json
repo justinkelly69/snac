@@ -1,0 +1,12 @@
+{
+    "name": "snac",
+    "version": "1.0.0",
+    "description": "A utility to convert XML into SNAC JSON format",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Justin Kelly",
+    "license": "ISC"
+  }
+  
