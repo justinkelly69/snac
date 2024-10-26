@@ -172,7 +172,7 @@ export const CloseTag = (props: {
     }
     return (
         <Fragment>
-            {props.isChildrenOpen ?(
+            {props.isChildrenOpen ? (
                 <>
                     <ShowHideSwitch
                         root={props.root}
@@ -192,7 +192,7 @@ export const CloseTag = (props: {
                         openClose={e => props.setChildrenOpen(!props.isChildrenOpen)}
                     />
                 </>
-                ) :
+            ) :
                 null
             }
             &lt;/
@@ -211,11 +211,12 @@ export const Text = (props: {
     opts: SNACOpts,
 }): JSX.Element => {
 
-    const [isSelected, setSelected] = useState(props.node.q)
-    const [isChildrenOpen, setChildrenOpen] = useState(props.node.o)
+    const [isSelected, setSelected] = useState(false)
+    const [isChildrenOpen, setChildrenOpen] = useState(false)
+    const [isEditable, setIsEditable] = useState(false)
 
     let selectState = SwitchStates.HIDDEN
-    let openState = SwitchStates.HIDDEN
+    let openState = SwitchStates.OFF
     let selectedClassName = 'text'
 
     if (props.showSelected) {
@@ -227,33 +228,73 @@ export const Text = (props: {
     }
 
     let text = props.node.T
-    if (!isChildrenOpen) {
+    if (!isChildrenOpen && text.length > props.opts.xml_trimTextLength) {
         text = `${text.trim().substring(0, props.opts.xml_trimTextLength)} ${props.opts.xml_ellipsis}`
     }
 
+    const prefix = <Prefix path={props.path} opts={props.opts} />
+
     return (
         <div className={selectedClassName}>
-            <ShowHideSwitch
-                root={props.root}
-                path={props.path}
-                selected={selectState}
-                chars={props.opts.switch_selectChars}
-                className='selected-show-hide'
-                openClose={e => setSelected(!isSelected)}
-            />
-            <Prefix path={props.path} opts={props.opts} />
-            {props.showOpen ?
+            <span className='text-head'>
                 <ShowHideSwitch
                     root={props.root}
                     path={props.path}
-                    selected={openState}
-                    chars={props.opts.switch_elementChars}
-                    className='element-show-hide'
-                    openClose={e => setChildrenOpen(!isChildrenOpen)}
-                /> :
-                null
+                    selected={selectState}
+                    chars={props.opts.switch_selectChars}
+                    className='selected-show-hide'
+                    openClose={e => setSelected(!isSelected)}
+                />
+                {prefix}
+                {props.showOpen ?
+                    <ShowHideSwitch
+                        root={props.root}
+                        path={props.path}
+                        selected={openState}
+                        chars={props.opts.switch_elementChars}
+                        className='element-show-hide'
+                        openClose={e => setChildrenOpen(!isChildrenOpen)}
+                    /> :
+                    null
+                }
+            </span>
+            {openState === SwitchStates.ON ?
+                <>
+                    <span className='text-editor'>
+
+                        {isEditable ?
+                            <>
+                                <span className='text-editor-controls'>
+                                    <button className='text-button text-save' onClick={e => {
+                                        setIsEditable(false)
+                                        setChildrenOpen(false)
+                                    }}>Save</button>
+                                    <button className='text-button text-cancel' onClick={e => {
+                                        setIsEditable(false)
+                                        setChildrenOpen(false)
+                                    }}>Cancel</button>
+                                </span>
+                                <textarea className='text-editor-text'>
+                                    {text}
+                                </textarea>
+                            </> :
+                            <>
+                                <span className='text-editor-controls'>
+                                    <button className='text-button text-edit' onClick={e => {
+                                        setIsEditable(true)
+                                    }}>Edit</button>
+                                </span>
+                                <span className='text-editor-text'>
+                                    {text.trim()}
+                                </span>
+                            </>
+                        }
+
+                    </span>
+                    <br />
+                </> :
+                <span className='text-body'>{text}</span>
             }
-            <span className='text-body'>{text}</span>
         </div>
     )
 }
@@ -288,6 +329,8 @@ export const CDATA = (props: {
         cdata = `${cdata.substring(0, props.opts.xml_trimCDATALength)} ${props.opts.xml_ellipsis}`
     }
 
+    const prefix = <Prefix path={props.path} opts={props.opts} />
+
     return (
         <div className={selectedClassName}>
             <ShowHideSwitch
@@ -311,7 +354,15 @@ export const CDATA = (props: {
                 null
             }
             &lt;![CDATA[
-            <span className='cdata-body'>{escapeCDATA(cdata)}</span>
+
+            {openState === SwitchStates.ON ?
+                <>
+                    <br /> {prefix}
+                    <span className='cdata-body'>{escapeCDATA(cdata)}</span>
+                    <br /> {prefix}
+                </> :
+                <span className='cdata-body'>{escapeCDATA(cdata)}</span>
+            }
             ]]&gt;
         </div>
     )
@@ -347,6 +398,8 @@ export const Comment = (props: {
         comment = `${comment.substring(0, props.opts.xml_trimCommentLength)} ${props.opts.xml_ellipsis}`
     }
 
+    const prefix = <Prefix path={props.path} opts={props.opts} />
+
     return (
         <div className={selectedClassName}>
             <ShowHideSwitch
@@ -357,7 +410,7 @@ export const Comment = (props: {
                 className='selected-show-hide'
                 openClose={e => setSelected(!isSelected)}
             />
-            <Prefix path={props.path} opts={props.opts} />
+            {prefix}
             {props.showOpen ?
                 <ShowHideSwitch
                     root={props.root}
@@ -370,7 +423,14 @@ export const Comment = (props: {
                 null
             }
             &lt;!--
-            <span className='comment-body'>{escapeComment(comment)}</span>
+            {openState === SwitchStates.ON ?
+                <>
+                    <br /> {prefix}
+                    <span className='comment-body'>{escapeComment(comment)}</span>
+                    <br /> {prefix}
+                </> :
+                <span className='comment-body'>{escapeComment(comment)}</span>
+            }
             --&gt;
         </div>
     )
@@ -405,6 +465,8 @@ export const PI = (props: {
         body = `${props.opts.xml_ellipsis}`
     }
 
+    const prefix = <Prefix path={props.path} opts={props.opts} />
+
     return (
         <div className={selectedClassName}>
             <ShowHideSwitch
@@ -430,7 +492,15 @@ export const PI = (props: {
             &lt;?
             <span className='pi-lang'>{props.node.L}</span>
             {" "}
-            <span className='pi-body'>{escapePIBody(body)}</span>
+
+            {openState === SwitchStates.ON ?
+                <>
+                    <br /> {prefix}
+                    <span className='pi-body'>{escapePIBody(body)}</span>
+                    <br /> {prefix}
+                </> :
+                <span className='pi-body'>{escapePIBody(body)}</span>
+            }
             {" "}?&gt;
         </div>
     )
