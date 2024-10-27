@@ -485,8 +485,10 @@ export const PI = (props: {
     showOpen: boolean,
     opts: SNACOpts,
 }): JSX.Element | null => {
-    const [isSelected, setSelected] = useState(props.node.q)
-    const [isChildrenOpen, setChildrenOpen] = useState(props.node.o)
+
+    const [isSelected, setSelected] = useState(false)
+    const [isChildrenOpen, setChildrenOpen] = useState(false)
+    const [isEditable, setIsEditable] = useState(false)
 
     let selectState = SwitchStates.HIDDEN
     let openState = SwitchStates.HIDDEN
@@ -518,30 +520,64 @@ export const PI = (props: {
                 className='selected-show-hide'
                 openClose={e => setSelected(!isSelected)}
             />
-            <Prefix path={props.path} opts={props.opts} />
-            {props.showOpen ?
-                <ShowHideSwitch
-                    root={props.root}
-                    path={props.path}
-                    selected={openState}
-                    chars={props.opts.switch_elementChars}
-                    className='element-show-hide'
-                    openClose={e => setChildrenOpen(!isChildrenOpen)}
-                /> :
-                null
-            }
+            {prefix}
+
             &lt;?
             <span className='pi-lang'>{props.node.L}</span>
             {" "}
 
-            {openState === SwitchStates.ON ?
+            {/* {openState === SwitchStates.ON ?
                 <>
                     <br /> {prefix}
                     <span className='pi-body'>{escapePIBody(body)}</span>
                     <br /> {prefix}
                 </> :
                 <span className='pi-body'>{escapePIBody(body)}</span>
+            } */}
+
+{openState === SwitchStates.ON ?
+                <>
+                    <br /> {prefix}
+                    <span className='pi-body'>
+                        {isEditable ?
+                            <>
+                                <span className='text-editor-controls'>
+                                    <button className='text-button text-save' onClick={e => {
+                                        setIsEditable(false)
+                                        setChildrenOpen(false)
+                                    }}>Save</button>
+                                    <button className='text-button text-cancel' onClick={e => {
+                                        setIsEditable(false)
+                                        setChildrenOpen(false)
+                                    }}>Cancel</button>
+                                </span>
+                                <textarea className='text-editor-text' defaultValue={body}></textarea>
+                            </> :
+                            <>
+                                <span className='text-editor-controls'>
+                                    <button className='text-button text-edit' onClick={e => {
+                                        setIsEditable(true)
+                                    }}>Edit</button>
+                                    <button className='text-button text-insert' onClick={e => {
+                                        setIsEditable(false)
+                                        setChildrenOpen(false)
+                                    }}>Insert</button>
+                                </span>
+                                <span className='text-editor-text' >
+                                    {body.trim()}
+                                </span>
+                            </>
+                        }
+                    </span>
+                    <br /> {prefix}
+                </> :
+                <span className='pi-body' onClick={e => {
+                    setChildrenOpen(true)
+                }}>
+                    {escapePIBody(body)}
+                </span>
             }
+
             {" "}?&gt;
         </div>
     )

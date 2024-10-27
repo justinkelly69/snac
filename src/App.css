@@ -118,7 +118,6 @@
 .cdata-body {
   color: darkorange;
   display: inline-block;
-  border: 1px dotted darkorange;
   padding: .25em;
   white-space: nowrap;
 }
@@ -130,7 +129,6 @@
 .comment-body {
   color: darkgreen;
   display: inline-block;
-  border: 1px dotted darkgreen;
   padding: .25em;
   white-space: nowrap;
 }
@@ -146,7 +144,6 @@
 .pi-body {
   color: green;
   display: inline-block;
-  border: 1px dotted green;
   padding: .25em;
   white-space: nowrap;
 }
