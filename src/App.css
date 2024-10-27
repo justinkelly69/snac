@@ -20,6 +20,10 @@
   background-color: rgb(215, 180, 210);
 }
 
+.selected-show-hide {
+  color: rgb(77, 44, 1);
+}
+
 .attribute {}
 
 .attribute-ns {
@@ -41,7 +45,6 @@
 .text-head {
   color: black;
   display: inline-block;
-  /* border: 1px dotted black; */
   vertical-align: top;
 }
 
@@ -86,9 +89,16 @@
   padding: .1em;
   font-size: .75rem;
 }
+.text-bracket {
+  color: black;
+}
 .text-insert {
   color: white;
   background-color: black;
+}
+.text-remove {
+  color: white;
+  background-color: olive;
 }
 .text-edit {
   color: white;
