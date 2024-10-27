@@ -246,17 +246,6 @@ export const Text = (props: {
                     openClose={e => setSelected(!isSelected)}
                 />
                 {prefix}
-                {props.showOpen ?
-                    <ShowHideSwitch
-                        root={props.root}
-                        path={props.path}
-                        selected={openState}
-                        chars={props.opts.switch_elementChars}
-                        className='element-show-hide'
-                        openClose={e => setChildrenOpen(!isChildrenOpen)}
-                    /> :
-                    null
-                }
             </span>
             {openState === SwitchStates.ON ?
                 <>
@@ -274,17 +263,19 @@ export const Text = (props: {
                                         setChildrenOpen(false)
                                     }}>Cancel</button>
                                 </span>
-                                <textarea className='text-editor-text'>
-                                    {text}
-                                </textarea>
+                                <textarea className='text-editor-text' defaultValue={text}></textarea>
                             </> :
                             <>
                                 <span className='text-editor-controls'>
                                     <button className='text-button text-edit' onClick={e => {
                                         setIsEditable(true)
                                     }}>Edit</button>
+                                    <button className='text-button text-insert' onClick={e => {
+                                        setIsEditable(false)
+                                        setChildrenOpen(false)
+                                    }}>Insert</button>
                                 </span>
-                                <span className='text-editor-text'>
+                                <span className='text-editor-text' >
                                     {text.trim()}
                                 </span>
                             </>
@@ -293,7 +284,9 @@ export const Text = (props: {
                     </span>
                     <br />
                 </> :
-                <span className='text-body'>{text}</span>
+                <span className='text-body' onClick={e => {
+                    setChildrenOpen(true)
+                }} >{text}</span>
             }
         </div>
     )
@@ -308,11 +301,12 @@ export const CDATA = (props: {
     opts: SNACOpts,
 }): JSX.Element => {
 
-    const [isSelected, setSelected] = useState(props.node.q)
-    const [isChildrenOpen, setChildrenOpen] = useState(props.node.o)
+    const [isSelected, setSelected] = useState(false)
+    const [isChildrenOpen, setChildrenOpen] = useState(false)
+    const [isEditable, setIsEditable] = useState(false)
 
     let selectState = SwitchStates.HIDDEN
-    let openState = SwitchStates.HIDDEN
+    let openState = SwitchStates.OFF
     let selectedClassName = 'cdata'
 
     if (props.showSelected) {
@@ -342,28 +336,50 @@ export const CDATA = (props: {
                 openClose={e => setSelected(!isSelected)}
             />
             <Prefix path={props.path} opts={props.opts} />
-            {props.showOpen ?
-                <ShowHideSwitch
-                    root={props.root}
-                    path={props.path}
-                    selected={openState}
-                    chars={props.opts.switch_elementChars}
-                    className='element-show-hide'
-                    openClose={e => setChildrenOpen(!isChildrenOpen)}
-                /> :
-                null
-            }
-            &lt;![CDATA[
-
+            &lt;!<span className='cdata-brackets'>[<span className='cdata-label'>CDATA</span>[</span>
             {openState === SwitchStates.ON ?
                 <>
                     <br /> {prefix}
-                    <span className='cdata-body'>{escapeCDATA(cdata)}</span>
+                    <span className='cdata-body'>
+                        {isEditable ?
+                            <>
+                                <span className='text-editor-controls'>
+                                    <button className='text-button text-save' onClick={e => {
+                                        setIsEditable(false)
+                                        setChildrenOpen(false)
+                                    }}>Save</button>
+                                    <button className='text-button text-cancel' onClick={e => {
+                                        setIsEditable(false)
+                                        setChildrenOpen(false)
+                                    }}>Cancel</button>
+                                </span>
+                                <textarea className='text-editor-text' defaultValue={cdata}></textarea>
+                            </> :
+                            <>
+                                <span className='text-editor-controls'>
+                                    <button className='text-button text-edit' onClick={e => {
+                                        setIsEditable(true)
+                                    }}>Edit</button>
+                                    <button className='text-button text-insert' onClick={e => {
+                                        setIsEditable(false)
+                                        setChildrenOpen(false)
+                                    }}>Insert</button>
+                                </span>
+                                <span className='text-editor-text' >
+                                    {cdata.trim()}
+                                </span>
+                            </>
+                        }
+                    </span>
                     <br /> {prefix}
                 </> :
-                <span className='cdata-body'>{escapeCDATA(cdata)}</span>
+                <span className='cdata-body' onClick={e => {
+                    setChildrenOpen(true)
+                }}>
+                    {escapeCDATA(cdata)}
+                </span>
             }
-            ]]&gt;
+            <span className='cdata-brackets'>]]</span>&gt;
         </div>
     )
 }
@@ -377,8 +393,9 @@ export const Comment = (props: {
     opts: SNACOpts,
 }): JSX.Element | null => {
 
-    const [isSelected, setSelected] = useState(props.node.q)
-    const [isChildrenOpen, setChildrenOpen] = useState(props.node.o)
+    const [isSelected, setSelected] = useState(false)
+    const [isChildrenOpen, setChildrenOpen] = useState(false)
+    const [isEditable, setIsEditable] = useState(false)
 
     let selectState = SwitchStates.HIDDEN
     let openState = SwitchStates.HIDDEN
@@ -411,25 +428,49 @@ export const Comment = (props: {
                 openClose={e => setSelected(!isSelected)}
             />
             {prefix}
-            {props.showOpen ?
-                <ShowHideSwitch
-                    root={props.root}
-                    path={props.path}
-                    selected={openState}
-                    chars={props.opts.switch_elementChars}
-                    className='element-show-hide'
-                    openClose={e => setChildrenOpen(!isChildrenOpen)}
-                /> :
-                null
-            }
+
             &lt;!--
             {openState === SwitchStates.ON ?
                 <>
                     <br /> {prefix}
-                    <span className='comment-body'>{escapeComment(comment)}</span>
+                    <span className='comment-body'>
+                        {isEditable ?
+                            <>
+                                <span className='text-editor-controls'>
+                                    <button className='text-button text-save' onClick={e => {
+                                        setIsEditable(false)
+                                        setChildrenOpen(false)
+                                    }}>Save</button>
+                                    <button className='text-button text-cancel' onClick={e => {
+                                        setIsEditable(false)
+                                        setChildrenOpen(false)
+                                    }}>Cancel</button>
+                                </span>
+                                <textarea className='text-editor-text' defaultValue={comment}></textarea>
+                            </> :
+                            <>
+                                <span className='text-editor-controls'>
+                                    <button className='text-button text-edit' onClick={e => {
+                                        setIsEditable(true)
+                                    }}>Edit</button>
+                                    <button className='text-button text-insert' onClick={e => {
+                                        setIsEditable(false)
+                                        setChildrenOpen(false)
+                                    }}>Insert</button>
+                                </span>
+                                <span className='text-editor-text' >
+                                    {comment.trim()}
+                                </span>
+                            </>
+                        }
+                    </span>
                     <br /> {prefix}
                 </> :
-                <span className='comment-body'>{escapeComment(comment)}</span>
+                <span className='comment-body' onClick={e => {
+                    setChildrenOpen(true)
+                }}>
+                    {escapeCDATA(comment)}
+                </span>
             }
             --&gt;
         </div>

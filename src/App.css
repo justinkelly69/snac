@@ -86,7 +86,10 @@
   padding: .1em;
   font-size: .75rem;
 }
-
+.text-insert {
+  color: white;
+  background-color: black;
+}
 .text-edit {
   color: white;
   background-color: navy;
@@ -102,6 +105,14 @@
 
 .cdata {
   color: orangered
+}
+
+.cdata-brackets {
+  color: brown;
+}
+
+.cdata-label {
+  color: magenta;
 }
 
 .cdata-body {
