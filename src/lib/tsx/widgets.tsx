@@ -28,3 +28,37 @@ export const TextArea = props =>
         onChange={props.onChange}
         onSelect={props.onSelect}
     />
+
+export const CDATA_OPEN_BRACKET = () =>
+    <>
+        &lt;!
+        <span className='cdata-brackets'>
+            [
+            <span className='cdata-label'>
+                CDATA
+            </span>
+            [
+        </span>
+    </>
+
+export const CDATA_CLOSE_BRACKET = () =>
+    <>
+        <span className='cdata-brackets'>
+            ]]
+        </span>
+        &gt;
+    </>
+
+export const COMMENT_OPEN_BRACKET = () =>
+    <>
+        <span className='comment-brackets'>
+            &lt;!--
+        </span>
+    </>
+
+export const COMMENT_CLOSE_BRACKET = () =>
+    <>
+        <span className='comment-brackets'>
+            --&gt;
+        </span>
+    </>
