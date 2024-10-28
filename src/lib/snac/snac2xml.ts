@@ -1,12 +1,17 @@
+
+
 import {
     SNACItem, SNACElement, AttributesType,
     SNACText, SNACCDATA, SNACComment, SNACPINode,
     XMLOpts
 } from './types'
 
+import { escapePIBody } from '../tsx/pi'
+import { escapeCDATA } from '../tsx/cdata'
+import { escapeComment } from '../tsx/comment'
+
 import {
-    escapeHtml, escapeCDATA, escapeComment,
-    escapePIBody,
+    escapeHtml,
 } from './textutils'
 
 const render = (snac: SNACItem[], opts: XMLOpts) => {

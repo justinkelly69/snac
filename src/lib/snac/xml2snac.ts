@@ -1,3 +1,4 @@
+
 import {
     SNACNamesNode, SNACItem, SNACElement, AttributesXMLhasChildrenType,
     AttributesType, QuoteChar, AttributeXMLType, AttributeValueType
@@ -7,7 +8,6 @@ import { unEscapeHtml } from './textutils'
 
 const render = (xml: string) => {
     const stack: SNACNamesNode[] = []
-    
     return _render(xml, stack)['out']
 }
 
