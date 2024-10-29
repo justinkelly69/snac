@@ -38,6 +38,60 @@
   color: darkgreen
 }
 
+.attributes-table-box {
+  display: block;
+  height: fit-content;
+  width: fit-content;
+  background-color: aliceblue;
+}
+
+
+
+/* .attributes-table {
+  display: grid;
+  grid-template-columns: 1.2em 4em 20em 20em 10em 10em;
+  grid-template-rows: repeat(1.2em);
+}
+
+
+.att-cell-1 {
+  flex: 1 0 1.2em;
+  background-color: pink;
+}
+
+.att-cell-2 {
+  flex: 4 0 1.2em;
+  background-color: aquamarine;
+}
+
+.att-cell-3 {
+  flex: 20 0 1.2em;
+  background-color: pink;
+}
+
+.att-cell-4 {
+  flex: 20 0 1.2em;
+  background-color: aquamarine;
+}
+
+.att-cell-5 {
+  flex: 6 0 1.2em;
+  background-color: pink;
+}
+
+.att-cell-6 {
+  flex: 6 0 1.2em;
+  background-color: aquamarine;
+} */
+
+
+
+
+
+
+
+
+
 .text {
   color: blueviolet
 }
@@ -65,7 +119,7 @@
   white-space: nowrap;
 }
 
-.text-editor-controls{
+.text-editor-controls {
   float: left;
   clear: right;
   width: 100%;
@@ -89,25 +143,41 @@
   padding: .1em;
   font-size: .75rem;
 }
+
+.x-button {
+  height: 1.25em;
+  width: 1.25em;
+  border: none;
+  margin-right: .25em;
+  border-radius: .25em;
+  padding: .1em;
+  font-size: .75rem;
+}
+
 .text-bracket {
   color: black;
 }
+
 .text-insert {
   color: white;
   background-color: black;
 }
+
 .text-remove {
   color: white;
   background-color: olive;
 }
+
 .text-edit {
   color: white;
   background-color: navy;
 }
+
 .text-save {
   color: white;
   background-color: maroon;
 }
+
 .text-cancel {
   color: black;
   background-color: lightgray;

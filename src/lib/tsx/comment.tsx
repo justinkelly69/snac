@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { SNACComment, SNACItem, SNACOpts, SwitchStates } from '../snac/types'
 import { Button, TextArea } from './widgets'
 import { Prefix, ShowHideSwitch } from './prefix'
+import { escapeComment } from '../snac/textutils'
 
 export const Comment = (props: {
     root: SNACItem[],
@@ -24,12 +25,19 @@ export const Comment = (props: {
     let selectedClassName = 'comment'
 
     if (props.showSelected) {
-        selectState = isSelected ? SwitchStates.ON : SwitchStates.OFF
-        selectedClassName = isSelected ? 'comment selected' : 'comment'
+        selectState = isSelected ?
+            SwitchStates.ON :
+            SwitchStates.OFF
+
+        selectedClassName = isSelected ?
+            'comment selected' :
+            'comment'
     }
 
     if (props.showOpen) {
-        openState = isChildrenOpen ? SwitchStates.ON : SwitchStates.OFF
+        openState = isChildrenOpen ?
+            SwitchStates.ON :
+            SwitchStates.OFF
     }
 
     let comment = valueComment
@@ -37,7 +45,10 @@ export const Comment = (props: {
         comment = `${comment.substring(0, props.opts.xml_trimCommentLength)} ${props.opts.xml_ellipsis}`
     }
 
-    const prefix = <Prefix path={props.path} opts={props.opts} />
+    const prefix = <Prefix
+        path={props.path}
+        opts={props.opts}
+    />
 
     return (
         <div className={selectedClassName}>
@@ -125,23 +136,12 @@ export const Comment = (props: {
 }
 
 export const COMMENT_OPEN_BRACKET = () =>
-    <>
-        <span className='comment-brackets'>
-            &lt;!--
-        </span>
-    </>
+    <span className='comment-brackets'>
+        &lt;!--
+    </span>
 
 export const COMMENT_CLOSE_BRACKET = () =>
-    <>
-        <span className='comment-brackets'>
-            --&gt;
-        </span>
-    </>
+    <span className='comment-brackets'>
+        --&gt;
+    </span>
 
-export const escapeComment = (text: string): string => {
-    return text.replace(/--/g, ' - - ')
-}
-
-export const unEscapeComment = (text: string): string => {
-    return text.replace(/ - - /g, '--')
-}

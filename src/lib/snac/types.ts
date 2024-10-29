@@ -83,7 +83,6 @@ export interface SNAC2XMLJSXFuncs {
     Comment: CommentJSXType,
     PI: PIJSXType,
     Attributes: AttributesJSXType,
-    Attribute: AttributeJSXType,
     Prefix: PrefixJSXType,
 }
 

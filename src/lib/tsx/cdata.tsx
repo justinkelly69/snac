@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { SNACCDATA, SNACItem, SNACOpts, SwitchStates } from '../snac/types'
 import { Prefix, ShowHideSwitch } from './prefix'
 import { Button, TextArea } from './widgets'
+import { escapeCDATA } from '../snac/textutils'
 
 export const CDATA = (props: {
     root: SNACItem[],
@@ -24,12 +25,19 @@ export const CDATA = (props: {
     let selectedClassName = 'cdata'
 
     if (props.showSelected) {
-        selectState = isSelected ? SwitchStates.ON : SwitchStates.OFF
-        selectedClassName = isSelected ? 'cdata selected' : 'cdata'
+        selectState = isSelected ?
+            SwitchStates.ON :
+            SwitchStates.OFF
+
+        selectedClassName = isSelected ?
+            'cdata selected' :
+            'cdata'
     }
 
     if (props.showOpen) {
-        openState = isChildrenOpen ? SwitchStates.ON : SwitchStates.OFF
+        openState = isChildrenOpen ?
+            SwitchStates.ON :
+            SwitchStates.OFF
     }
 
     let cdata = valueCDATA
@@ -37,7 +45,10 @@ export const CDATA = (props: {
         cdata = `${cdata.substring(0, props.opts.xml_trimCDATALength)} ${props.opts.xml_ellipsis}`
     }
 
-    const prefix = <Prefix path={props.path} opts={props.opts} />
+    const prefix = <Prefix
+        path={props.path}
+        opts={props.opts}
+    />
 
     return (
         <div className={selectedClassName}>
@@ -49,7 +60,12 @@ export const CDATA = (props: {
                 className='selected-show-hide'
                 openClose={e => setSelected(!isSelected)}
             />
-            <Prefix path={props.path} opts={props.opts} />
+
+            <Prefix
+                path={props.path}
+                opts={props.opts}
+            />
+
             <CDATA_OPEN_BRACKET />
             {openState === SwitchStates.ON ?
                 <>
@@ -124,29 +140,15 @@ export const CDATA = (props: {
 }
 
 export const CDATA_OPEN_BRACKET = () =>
-    <>
-        &lt;!
-        <span className='cdata-brackets'>
-            [
-            <span className='cdata-label'>
-                CDATA
-            </span>
-            [
+    <span className='cdata-brackets'>
+        &lt;![
+        <span className='cdata-label'>
+            CDATA
         </span>
-    </>
+        [
+    </span>
 
 export const CDATA_CLOSE_BRACKET = () =>
-    <>
-        <span className='cdata-brackets'>
-            ]]
-        </span>
-        &gt;
-    </>
-
-export const escapeCDATA = (text: string): string => {
-    return text.replace(/]]>/g, ']]&gt;')
-}
-
-export const unEscapeCDATA = (text: string): string => {
-    return text.replace(/]]&gt;/g, ']]>')
-}
+    <span className='cdata-brackets'>
+        ]]&gt;
+    </span>

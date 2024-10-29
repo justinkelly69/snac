@@ -1,7 +1,12 @@
-
 import {
-    SNACNamesNode, SNACItem, SNACElement, AttributesXMLhasChildrenType,
-    AttributesType, QuoteChar, AttributeXMLType, AttributeValueType
+    SNACNamesNode,
+    SNACItem,
+    SNACElement,
+    AttributesXMLhasChildrenType,
+    AttributesType,
+    QuoteChar,
+    AttributeXMLType,
+    AttributeValueType
 } from './types'
 
 import { unEscapeHtml } from './textutils'
@@ -46,22 +51,19 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                 snac['C'] = kids['out']
                 xml = kids['xml']
                 out.push(snac)
-
             } else {
                 out.push(snac)
                 //eslint-disable-next-line
                 const prev = stack.pop()
             }
-        }
-
-        else if (closeTag !== null) {
+        } else if (closeTag !== null) {
             const tagName = closeTag[1]
             const snac: SNACNamesNode = {
                 N: tagName
             }
 
             const prev = stack.pop()
-            if (prev && (prev['N'] !== snac['N'])) {
+            if (prev && prev['N'] !== snac['N']) {
                 throw Error(`\n\nUNMATCHED TAG <${prev['N']}></${snac['N']}>\n`)
             }
 
@@ -69,9 +71,7 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                 xml: closeTag[2],
                 out: out
             }
-        }
-
-        else if (dataTag !== null) {
+        } else if (dataTag !== null) {
             if (stack.length > 0) {
                 out.push({
                     D: dataTag[1],
@@ -80,9 +80,7 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                 })
             }
             xml = dataTag[2]
-        }
-
-        else if (commentTag !== null) {
+        } else if (commentTag !== null) {
             if (stack.length > 0) {
                 out.push({
                     M: commentTag[1],
@@ -91,9 +89,7 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                 })
             }
             xml = commentTag[2]
-        }
-
-        else if (piTag !== null) {
+        } else if (piTag !== null) {
             if (stack.length > 0) {
                 out.push({
                     L: piTag[1],
@@ -103,9 +99,7 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                 })
             }
             xml = piTag[3]
-        }
-
-        else if (textTag !== null) {
+        } else if (textTag !== null) {
             if (stack.length > 0) {
                 out.push({
                     T: unEscapeHtml(textTag[1]),
@@ -114,26 +108,22 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                 })
             }
             xml = textTag[2]
-        }
-
-        else if (blankTag !== null) {
+        } else if (blankTag !== null) {
             if (stack.length > 0) {
                 out.push({
-                    T: "",
+                    T: '',
                     o: true,
                     q: false
                 })
             }
-            xml = ""
-        }
-
-        else {
+            xml = ''
+        } else {
             throw Error(`INVALID TAG ${xml}\n`)
         }
     }
 
     return {
-        xml: "",
+        xml: '',
         out: out
     }
 }
@@ -157,16 +147,17 @@ const getAttributes = (xml: string): AttributesXMLhasChildrenType => {
                 hasChildren: hasChildren,
                 attributes: attributes
             }
-        }
-
-        else if (nextAttribute) {
+        } else if (nextAttribute) {
             const quoteChar = nextAttribute[2] as QuoteChar
-            const att = addAttribute(attributes, nextAttribute[1], quoteChar, nextAttribute[3])
+            const att = addAttribute(
+                attributes,
+                nextAttribute[1],
+                quoteChar,
+                nextAttribute[3]
+            )
             attributes = att['attributes']
             xml = att['xml']
-        }
-
-        else {
+        } else {
             throw Error(`INVALID ATTRIBUTE ${xml}\n`)
         }
     }
@@ -178,7 +169,12 @@ const getAttributes = (xml: string): AttributesXMLhasChildrenType => {
     }
 }
 
-const addAttribute = (attributes: AttributesType, nameStr: string, quoteChar: QuoteChar, xml: string): AttributeXMLType => {
+const addAttribute = (
+    attributes: AttributesType,
+    nameStr: string,
+    quoteChar: QuoteChar,
+    xml: string
+): AttributeXMLType => {
     const attVal = getAttributeValue(xml, quoteChar)
     attributes[nameStr] = attVal['value']
 
@@ -188,7 +184,10 @@ const addAttribute = (attributes: AttributesType, nameStr: string, quoteChar: Qu
     }
 }
 
-const getAttributeValue = (text: string, quoteChar: QuoteChar): AttributeValueType => {
+const getAttributeValue = (
+    text: string,
+    quoteChar: QuoteChar
+): AttributeValueType => {
     const values = getValueString(text, quoteChar)
     if (values === null) {
         throw Error(`BAD XML ${text}`)
@@ -201,7 +200,10 @@ const getAttributeValue = (text: string, quoteChar: QuoteChar): AttributeValueTy
     }
 }
 
-const getValueString = (text: string, quoteChar: QuoteChar): AttributeValueType | null => {
+const getValueString = (
+    text: string,
+    quoteChar: QuoteChar
+): AttributeValueType | null => {
     for (let i = 0; i < text.length; i++) {
         if (text.charAt(i) === quoteChar && text.charAt(i - 1) !== '\\') {
             return {

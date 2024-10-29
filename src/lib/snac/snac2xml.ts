@@ -6,9 +6,7 @@ import {
     XMLOpts
 } from './types'
 
-import { escapePIBody } from '../tsx/pi'
-import { escapeCDATA } from '../tsx/cdata'
-import { escapeComment } from '../tsx/comment'
+import { escapePIBody , escapeCDATA , escapeComment } from './textutils'
 
 import {
     escapeHtml,

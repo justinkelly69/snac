@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { SNACItem, SNACPINode, SNACOpts, SwitchStates } from "../snac/types"
 import { Prefix, ShowHideSwitch } from './prefix'
 import { Button, TextArea } from './widgets'
+import { escapePIBody } from '../snac/textutils'
 
 export const PI = (props: {
     root: SNACItem[],
@@ -26,12 +27,19 @@ export const PI = (props: {
     let selectedClassName = 'pi'
 
     if (props.showSelected) {
-        selectState = isSelected ? SwitchStates.ON : SwitchStates.OFF
-        selectedClassName = isSelected ? 'pi selected' : 'pi'
+        selectState = isSelected ?
+            SwitchStates.ON :
+            SwitchStates.OFF
+
+        selectedClassName = isSelected ?
+            'pi selected' :
+            'pi'
     }
 
     if (props.showOpen) {
-        openState = isChildrenOpen ? SwitchStates.ON : SwitchStates.OFF
+        openState = isChildrenOpen ?
+            SwitchStates.ON :
+            SwitchStates.OFF
     }
 
     let body = valuePIBody
@@ -39,7 +47,10 @@ export const PI = (props: {
         body = `${props.opts.xml_ellipsis}`
     }
 
-    const prefix = <Prefix path={props.path} opts={props.opts} />
+    const prefix = <Prefix
+        path={props.path}
+        opts={props.opts}
+    />
 
     return (
         <div className={selectedClassName}>
@@ -120,31 +131,20 @@ export const PI = (props: {
                     {escapePIBody(body)}
                 </span>
             }
-            
+
         </div>
     )
 }
 
 export const PI_OPEN_BRACKET = (props) =>
-    <>
+    <span className='pi-bracket'>
         &lt;?
         <span className='pi-lang'>{props.node.L}</span>
         {" "}
-    </>
+    </span>
 
 export const PI_CLOSE_BRACKET = () =>
-    <>
+    <span className='pi-bracket'>
         {" "}?&gt;
-    </>
+    </span>
 
-export const testPILang = (text: string): boolean => {
-    return text.match(/^[a-z]+[0-9]?=?/) ? true : false
-}
-
-export const escapePIBody = (text: string): string => {
-    return text.replace(/\?>/g, '?&gt;')
-}
-
-export const unEscapePIBody = (text: string): string => {
-    return text.replace(/\?&gt;/g, '?>')
-}
