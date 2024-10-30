@@ -39,6 +39,12 @@
   color: darkgreen
 }
 
+.attribute-value-input {
+  width: 20em;
+  color: darkgreen;
+  border-color: darkgreen;
+}
+
 .attributes-table-box {
   display: block;
   height: fit-content;

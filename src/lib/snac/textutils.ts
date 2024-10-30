@@ -42,5 +42,23 @@ export const unEscapePIBody = (text: string): string => {
     return text.replace(/\?&gt;/g, '?>')
 }
 
+export const nsNameSplit = (text:string): string[] => {
+    const nsName = text.split(/:/)
 
+    if(nsName.length === 1) {
+        return ['', nsName[0]]
+    }
+
+    else {
+        return nsName
+    }
+}
+
+export const nsNameJoin = (tag:{S: string, N: string}):string => {
+    let joinedTag = `${tag.N}`
+    if(tag.S.length > 0) {
+        joinedTag = `${tag.S}:${tag.N}`
+    }
+    return joinedTag
+}
 

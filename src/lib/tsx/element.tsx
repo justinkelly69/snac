@@ -295,36 +295,43 @@ const NSNodeEdit = (props: {
 
     const [ns, setNs] = useState(tagNSName[0])
     const [name, setName] = useState(tagNSName[1])
+    const [attributes, setAttributes] = useState(props.attributes)
     const [isNewMode, setIsNewMode] = useState(true)
     const [isEditMode, setIsEditMode] = useState(false)
     const [index, setIndex] = useState(-1)
 
     const keys = Object.keys(props.attributes)
-    const height = (keys.length + 2) * 1.4
+    const numRows = keys.length + 2
+    const height = numRows * 1.4
     const width = props.path.length
 
+    console.log(JSON.stringify(props.attributes, null, 4))
+    console.log(JSON.stringify(keys, null, 4))
+
     let rows = ''
+    let values = []
     for (let i in keys) {
+        console.log(i, keys[i], attributes[keys[i]])
         rows += ' .6fr'
+        //values.push(props.attributes[i])
     }
 
     return (
         <>
-            <span className='table-prefix'
-                style={{
-
-                    height: `${height}vw`,
-                    width: `${width}vw`
-                }}
-            >
-            </span>
             <span className='attributes-table' style={{
                 display: 'grid',
-                gridTemplateColumns: '1.2fr 4fr 20fr 20fr 10fr 10fr',
+                // gridTemplateColumns: '1.2fr 4fr 20fr 20fr 10fr 10fr',
+                gridTemplateColumns: `${width}em 1.2em 4em 20em 20em 10em 10em`,
                 gridTemplateRows: `${rows}`,
-                height: `${height}vw`,
-                width: '65.2vw'
+                height: `${height}em`,
+                width: '65.2em'
             }}>
+                <span className='table-prefix'
+                    style={{
+                        gridArea: `1 / 1 / ${numRows} / 1`,
+                        backgroundColor: 'green'
+                    }}
+                ></span>
                 <span>
                     <Button
                         className='button x-button'
@@ -380,13 +387,14 @@ const NSNodeEdit = (props: {
                 </span>
                 <AttributesTable
                     path={props.path}
-                    attributes={props.attributes}
+                    attributes={attributes}
                     isNewMode={isNewMode}
                     isEditMode={isEditMode}
                     index={index}
                     setIsNewMode={setIsNewMode}
                     setIsEditMode={setIsEditMode}
                     setIndex={setIndex}
+                    setAttributes={setAttributes}
                 />
             </span>
         </>

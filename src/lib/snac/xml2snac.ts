@@ -51,12 +51,16 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                 snac['C'] = kids['out']
                 xml = kids['xml']
                 out.push(snac)
-            } else {
+            } 
+            
+            else {
                 out.push(snac)
                 //eslint-disable-next-line
                 const prev = stack.pop()
             }
-        } else if (closeTag !== null) {
+        }
+
+        else if (closeTag !== null) {
             const tagName = closeTag[1]
             const snac: SNACNamesNode = {
                 N: tagName
@@ -71,7 +75,9 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                 xml: closeTag[2],
                 out: out
             }
-        } else if (dataTag !== null) {
+        }
+
+        else if (dataTag !== null) {
             if (stack.length > 0) {
                 out.push({
                     D: dataTag[1],
@@ -80,7 +86,9 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                 })
             }
             xml = dataTag[2]
-        } else if (commentTag !== null) {
+        } 
+        
+        else if (commentTag !== null) {
             if (stack.length > 0) {
                 out.push({
                     M: commentTag[1],
@@ -89,7 +97,9 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                 })
             }
             xml = commentTag[2]
-        } else if (piTag !== null) {
+        } 
+        
+        else if (piTag !== null) {
             if (stack.length > 0) {
                 out.push({
                     L: piTag[1],
@@ -99,7 +109,9 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                 })
             }
             xml = piTag[3]
-        } else if (textTag !== null) {
+        } 
+        
+        else if (textTag !== null) {
             if (stack.length > 0) {
                 out.push({
                     T: unEscapeHtml(textTag[1]),
@@ -108,7 +120,9 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                 })
             }
             xml = textTag[2]
-        } else if (blankTag !== null) {
+        } 
+        
+        else if (blankTag !== null) {
             if (stack.length > 0) {
                 out.push({
                     T: '',
@@ -117,7 +131,9 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                 })
             }
             xml = ''
-        } else {
+        } 
+        
+        else {
             throw Error(`INVALID TAG ${xml}\n`)
         }
     }
@@ -147,7 +163,9 @@ const getAttributes = (xml: string): AttributesXMLhasChildrenType => {
                 hasChildren: hasChildren,
                 attributes: attributes
             }
-        } else if (nextAttribute) {
+        } 
+        
+        else if (nextAttribute) {
             const quoteChar = nextAttribute[2] as QuoteChar
             const att = addAttribute(
                 attributes,
@@ -157,7 +175,9 @@ const getAttributes = (xml: string): AttributesXMLhasChildrenType => {
             )
             attributes = att['attributes']
             xml = att['xml']
-        } else {
+        } 
+        
+        else {
             throw Error(`INVALID ATTRIBUTE ${xml}\n`)
         }
     }
@@ -175,6 +195,7 @@ const addAttribute = (
     quoteChar: QuoteChar,
     xml: string
 ): AttributeXMLType => {
+
     const attVal = getAttributeValue(xml, quoteChar)
     attributes[nameStr] = attVal['value']
 
@@ -188,10 +209,12 @@ const getAttributeValue = (
     text: string,
     quoteChar: QuoteChar
 ): AttributeValueType => {
+
     const values = getValueString(text, quoteChar)
     if (values === null) {
         throw Error(`BAD XML ${text}`)
     }
+
     const re = new RegExp(`\\${quoteChar}`, 'g')
 
     return {
@@ -204,6 +227,7 @@ const getValueString = (
     text: string,
     quoteChar: QuoteChar
 ): AttributeValueType | null => {
+
     for (let i = 0; i < text.length; i++) {
         if (text.charAt(i) === quoteChar && text.charAt(i - 1) !== '\\') {
             return {

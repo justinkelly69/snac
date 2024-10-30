@@ -85,6 +85,7 @@ export const AttributesTable = (props: {
     setIsNewMode: Function,
     setIsEditMode: Function,
     setIndex: Function,
+    setAttributes: Function,
 }): JSX.Element => {
 
     const keys = Object.keys(props.attributes)
@@ -110,16 +111,35 @@ export const AttributesTable = (props: {
                                 label='X'
                             />
                         </span>
-                        <span className='attribute-ns'>
+                        <span className='attribute-ns'
+                            onClick={e => props.setIsEditMode(true)}
+                        >
                             {tagANSName[0]}
                         </span>
-                        <span className='attribute-name'>
+                        <span className='attribute-name'
+                            onClick={e => props.setIsEditMode(true)}
+                        >
                             {tagANSName[1]}
                         </span>
                         <span>
-                            <span className='attribute-value'>
-                                {props.attributes[attName]}
-                            </span>
+                            {props.isEditMode ?
+                                <>
+                                    <TextInput
+                                        name="ns"
+                                        className='text-input attribute-value-input'
+                                        value={props.attributes[attName]}
+                                        size={4}
+                                        placeholder='ns'
+                                        onChange={f=>f}
+                                    />
+                                </> :
+                                <>
+                                    <span className='attribute-value'>
+                                        {props.attributes[attName]}
+                                    </span>
+                                </>
+                            }
+
                         </span>
                         <span>
                             <Button
@@ -154,16 +174,6 @@ export const AttributesTable = (props: {
                 </>
             }
         </>
-    )
-}
-
-const AttributesTableRow = () => {
-
-}
-
-const AttributesTableCell = () => {
-    return (
-        <span className='attributes-table-cell'></span>
     )
 }
 
