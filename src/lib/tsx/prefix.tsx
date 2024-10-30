@@ -5,7 +5,10 @@ export const Prefix = (props: {
     opts: SNACOpts
 }): JSX.Element | null => {
     if (props.opts.prefix_showPrefix) {
-        return (<span className="prefix">{getPrefixString(props.path, props.opts)}</span>)
+        return (
+            <span className="prefix">
+                {getPrefixString(props.path, props.opts)}
+            </span>)
     }
     else {
         return null

@@ -9,7 +9,7 @@
 }
 
 .element-ns {
-  color: red
+  color: red;
 }
 
 .element-name {
@@ -27,7 +27,8 @@
 .attribute {}
 
 .attribute-ns {
-  color: darkred
+  color: darkred;
+  text-align: right;
 }
 
 .attribute-name {
@@ -45,52 +46,10 @@
   background-color: aliceblue;
 }
 
-
-
-/* .attributes-table {
-  display: grid;
-  grid-template-columns: 1.2em 4em 20em 20em 10em 10em;
-  grid-template-rows: repeat(1.2em);
+.table-prefix {
+  display: block;
+  float: left;
 }
-
-
-.att-cell-1 {
-  flex: 1 0 1.2em;
-  background-color: pink;
-}
-
-.att-cell-2 {
-  flex: 4 0 1.2em;
-  background-color: aquamarine;
-}
-
-.att-cell-3 {
-  flex: 20 0 1.2em;
-  background-color: pink;
-}
-
-.att-cell-4 {
-  flex: 20 0 1.2em;
-  background-color: aquamarine;
-}
-
-.att-cell-5 {
-  flex: 6 0 1.2em;
-  background-color: pink;
-}
-
-.att-cell-6 {
-  flex: 6 0 1.2em;
-  background-color: aquamarine;
-} */
-
-
-
-
-
-
-
-
 
 .text {
   color: blueviolet
@@ -134,24 +93,39 @@
   width: 100%;
 }
 
-.text-button {
-  height: 1.25em;
+.text-input {
+  height: 1em;
+  border: 1px solid lightgray;
+  margin-right: .25em;
+  border-radius: .25em;
+  padding: .1em;
+  font-size: .8rem;
+}
+
+.ns-input {
   width: 6em;
+  text-align: right;
+}
+
+.name-input {
+  width: 12em;
+}
+
+.button {
+  height: 1.4em;
   border: none;
   margin-right: .25em;
   border-radius: .25em;
   padding: .1em;
-  font-size: .75rem;
+  font-size: .8rem;
+}
+
+.text-button {
+  width: 6em;
 }
 
 .x-button {
-  height: 1.25em;
-  width: 1.25em;
-  border: none;
-  margin-right: .25em;
-  border-radius: .25em;
-  padding: .1em;
-  font-size: .75rem;
+  width: 1.4em;
 }
 
 .text-bracket {

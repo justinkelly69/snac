@@ -12,6 +12,8 @@ export const TextInput = props =>
     <input
         id={props.id}
         name={props.name}
+        className={props.className}
+        type='text'
         value={props.value}
         size={props.size}
         maxLength={props.maxLength}

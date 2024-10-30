@@ -133,42 +133,40 @@ export const OpenTag = (props: {
 
     return (
         <>
-            <ShowHideSwitch
-                root={props.root}
-                path={props.path}
-                selected={selectState}
-                chars={props.opts.switch_selectChars}
-                className='selected-show-hide'
-                openClose={e => props.setSelected(!props.isSelected)}
-            />
-
-            <Prefix
-                path={props.path}
-                opts={props.opts}
-            />
-
-            <ShowHideSwitch
-                root={props.root}
-                path={props.path}
-                selected={childrenOpenState}
-                chars={props.opts.switch_elementChars}
-                className='element-show-hide'
-                openClose={e => props.setChildrenOpen(!props.isChildrenOpen)}
-            />
-
             {isEditable ?
                 <>
-                    &lt;
-                    <NSNameEdit
+                    <NSNodeEdit
                         name={props.node.N}
                         attributes={props.node.A}
                         type='element'
                         path={props.path}
+                        opts={props.opts}
                         openClose={e => { setIsEditable(false) }}
                     />
-
                 </> :
                 <>
+                    <ShowHideSwitch
+                        root={props.root}
+                        path={props.path}
+                        selected={selectState}
+                        chars={props.opts.switch_selectChars}
+                        className='selected-show-hide'
+                        openClose={e => props.setSelected(!props.isSelected)}
+                    />
+
+                    <Prefix
+                        path={props.path}
+                        opts={props.opts}
+                    />
+
+                    <ShowHideSwitch
+                        root={props.root}
+                        path={props.path}
+                        selected={childrenOpenState}
+                        chars={props.opts.switch_elementChars}
+                        className='element-show-hide'
+                        openClose={e => props.setChildrenOpen(!props.isChildrenOpen)}
+                    />
                     &lt;
                     <NSName
                         name={props.node.N}
@@ -280,11 +278,12 @@ const NSName = (props: {
         </span>
 }
 
-const NSNameEdit = (props: {
+const NSNodeEdit = (props: {
     name: string,
     attributes: AttributesType,
     type: string,
     path: number[],
+    opts: SNACOpts,
     openClose?: Function
 }): JSX.Element => {
 
@@ -302,6 +301,7 @@ const NSNameEdit = (props: {
 
     const keys = Object.keys(props.attributes)
     const height = (keys.length + 2) * 1.4
+    const width = props.path.length
 
     let rows = ''
     for (let i in keys) {
@@ -309,75 +309,87 @@ const NSNameEdit = (props: {
     }
 
     return (
-        <span className='attributes-table' style={{
-            display: 'grid',
-            gridTemplateColumns: '1.2fr 4fr 20fr 20fr 10fr 10fr',
-            gridTemplateRows: rows,
-            height: `${height}vw`,
-            width: '65.2vw'
-        }}>
-            <span>
-                <Button
-                    className='x-button text-insert'
-                    onClick={e => {
-                        props.openClose && props.openClose()
-                    }}
-                    label='X'
+        <>
+            <span className='table-prefix'
+                style={{
+
+                    height: `${height}vw`,
+                    width: `${width}vw`
+                }}
+            >
+            </span>
+            <span className='attributes-table' style={{
+                display: 'grid',
+                gridTemplateColumns: '1.2fr 4fr 20fr 20fr 10fr 10fr',
+                gridTemplateRows: `${rows}`,
+                height: `${height}vw`,
+                width: '65.2vw'
+            }}>
+                <span>
+                    <Button
+                        className='button x-button'
+                        onClick={e => {
+                            props.openClose && props.openClose()
+                        }}
+                        label='X'
+                    />
+                </span>
+                <span>
+                    <TextInput
+                        name="ns"
+                        className='text-input ns-input'
+                        value={ns}
+                        size={4}
+                        placeholder='ns'
+                        onChange={e => setNs(e.target.value)}
+                    />
+                </span>
+                <span>
+                    <TextInput
+                        name="name"
+                        className='text-input name-input'
+                        value={name}
+                        size={10}
+                        placeholder='name'
+                        onChange={e => setName(e.target.value)}
+                    />
+                </span>
+                <span>
+                </span>
+                <span>
+                    <Button
+                        className='button text-button'
+                        onClick={e => {
+                            if (ns.length > 0 && name.length > 0) {
+                                console.log(`[${props.path}] <${ns}:${name} />`)
+                            }
+                            else if (name.length > 0) {
+                                console.log(`[${props.path}] <${name} />`)
+                            }
+                            props.openClose && props.openClose()
+                        }}
+                        label='Save'
+                    />
+                </span>
+                <span>
+                    <Button
+                        className='button text-button'
+                        onClick={f => f}
+                        label='Cancel'
+                    />
+                </span>
+                <AttributesTable
+                    path={props.path}
+                    attributes={props.attributes}
+                    isNewMode={isNewMode}
+                    isEditMode={isEditMode}
+                    index={index}
+                    setIsNewMode={setIsNewMode}
+                    setIsEditMode={setIsEditMode}
+                    setIndex={setIndex}
                 />
             </span>
-            <span>
-                <TextInput
-                    name="ns"
-                    value={ns}
-                    size={4}
-                    placeholder='ns'
-                    onChange={e => setNs(e.target.value)}
-                />
-            </span>
-            <span>
-                <TextInput
-                    name="name"
-                    value={name}
-                    size={10}
-                    placeholder='name'
-                    onChange={e => setName(e.target.value)}
-                />
-            </span>
-            <span>
-            </span>
-            <span>
-                <Button
-                    className='text-button text-insert'
-                    onClick={e => {
-                        if (ns.length > 0 && name.length > 0) {
-                            console.log(`[${props.path}] <${ns}:${name} />`)
-                        }
-                        else if (name.length > 0) {
-                            console.log(`[${props.path}] <${name} />`)
-                        }
-                        props.openClose && props.openClose()
-                    }}
-                    label='Save'
-                />
-            </span>
-            <span>
-                <Button
-                    className='text-button'
-                    onClick={f => f}
-                    label='Cancel'
-                />
-            </span>
-            <AttributesTable
-                path={props.path}
-                attributes={props.attributes}
-                isNewMode={isNewMode}
-                isEditMode={isEditMode}
-                index={index}
-                setIsNewMode={setIsNewMode}
-                setIsEditMode={setIsEditMode}
-                setIndex={setIndex}
-            />
-        </span>
+        </>
     )
 }
 

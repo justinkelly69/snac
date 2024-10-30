@@ -97,25 +97,24 @@ export const AttributesTable = (props: {
                 if (tagANSName.length === 1) {
                     tagANSName = ['', tagANSName[0]]
                 }
+                else {
+                    tagANSName[0] = `${tagANSName[0]}:`
+                }
 
                 return (
                     <Fragment key={i}>
                         <span>
                             <Button
-                                className='x-button'
+                                className='button x-button'
                                 onClick={f => f}
                                 label='X'
                             />
                         </span>
-                        <span>
-                            <span className='attribute-ns'>
-                                {tagANSName[0]}
-                            </span>
+                        <span className='attribute-ns'>
+                            {tagANSName[0]}
                         </span>
-                        <span>
-                            <span className='attribute-name'>
-                                {tagANSName[1]}
-                            </span>
+                        <span className='attribute-name'>
+                            {tagANSName[1]}
                         </span>
                         <span>
                             <span className='attribute-value'>
@@ -124,14 +123,14 @@ export const AttributesTable = (props: {
                         </span>
                         <span>
                             <Button
-                                className='text-button'
+                                className='button text-button'
                                 onClick={f => f}
                                 label='Edit'
                             />
                         </span>
                         <span>
                             <Button
-                                className='text-button'
+                                className='button text-button'
                                 onClick={f => f}
                                 label='Delete'
                             />
@@ -144,7 +143,7 @@ export const AttributesTable = (props: {
                     <span className='attributes-table-cell'></span>
                     <span className='attributes-table-cell'>
                         <Button
-                            className='text-button'
+                            className='button text-button'
                             onClick={f => f}
                             label='New'
                         />
