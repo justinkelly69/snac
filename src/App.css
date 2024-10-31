@@ -109,12 +109,16 @@
 }
 
 .ns-input {
-  width: 6em;
+  width: 3.6em;
   text-align: right;
+  color: red;
+  border-color: darkred;
 }
 
 .name-input {
   width: 12em;
+  color: blue;
+  border-color: darkblue;
 }
 
 .button {

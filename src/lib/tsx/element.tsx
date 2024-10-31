@@ -136,8 +136,7 @@ export const OpenTag = (props: {
             {isEditable ?
                 <>
                     <NSNodeEdit
-                        name={props.node.N}
-                        attributes={props.node.A}
+                        node={props.node}
                         type='element'
                         path={props.path}
                         opts={props.opts}
@@ -169,7 +168,7 @@ export const OpenTag = (props: {
                     />
                     &lt;
                     <NSName
-                        name={props.node.N}
+                        node={props.node}
                         openClose={e => setIsEditable(true)}
                     />
                     <>
@@ -249,63 +248,55 @@ export const CloseTag = (props: {
                 null
             }
             &lt;/
-            <NSName name={props.node.N} />
+            <NSName node={props.node} />
             &gt;
         </>
     )
 }
 
 const NSName = (props: {
-    name: string,
+    node: SNACElement,
     openClose?: Function
 }): JSX.Element => {
 
-    const tagNSName = props.name.split(/:/)
-    return tagNSName.length > 1 ?
+    return props.node.S.length > 1 ?
         <span onClick={e => props.openClose && props.openClose()}>
             <span className='element-ns'>
-                {tagNSName[0]}
+                {props.node.S}
             </span>
             :
             <span className='element-name'>
-                {tagNSName[1]}
+                {props.node.N}
             </span>
         </span>
         :
         <span onClick={e => props.openClose && props.openClose()}
             className='element-name'>
-            {tagNSName[0]}
+            {props.node.N}
         </span>
 }
 
 const NSNodeEdit = (props: {
-    name: string,
-    attributes: AttributesType,
+    node: SNACElement,
     type: string,
     path: number[],
     opts: SNACOpts,
     openClose?: Function
 }): JSX.Element => {
 
-    let tagNSName = props.name.split(/:/)
-
-    if (tagNSName.length === 1) {
-        tagNSName = ['', tagNSName[0]]
-    }
-
-    const [ns, setNs] = useState(tagNSName[0])
-    const [name, setName] = useState(tagNSName[1])
-    const [attributes, setAttributes] = useState(props.attributes)
+    const [ns, setNs] = useState(props.node.S)
+    const [name, setName] = useState(props.node.N)
+    const [attributes, setAttributes] = useState(props.node.A)
     const [isNewMode, setIsNewMode] = useState(true)
     const [isEditMode, setIsEditMode] = useState(false)
     const [index, setIndex] = useState(-1)
 
-    const keys = Object.keys(props.attributes)
+    const keys = Object.keys(attributes)
     const numRows = keys.length + 2
     const height = numRows * 1.4
-    const width = props.path.length
+    const width = props.path.length * 1.2
 
-    console.log(JSON.stringify(props.attributes, null, 4))
+    console.log(JSON.stringify(attributes, null, 4))
     console.log(JSON.stringify(keys, null, 4))
 
     let rows = ''
@@ -320,16 +311,14 @@ const NSNodeEdit = (props: {
         <>
             <span className='attributes-table' style={{
                 display: 'grid',
-                // gridTemplateColumns: '1.2fr 4fr 20fr 20fr 10fr 10fr',
-                gridTemplateColumns: `${width}em 1.2em 4em 20em 20em 10em 10em`,
+                gridTemplateColumns: `${width}em 2em 4em 20em 20em 10em 10em`,
                 gridTemplateRows: `${rows}`,
                 height: `${height}em`,
-                width: '65.2em'
+                width: 'auto'
             }}>
                 <span className='table-prefix'
                     style={{
                         gridArea: `1 / 1 / ${numRows} / 1`,
-                        backgroundColor: 'green'
                     }}
                 ></span>
                 <span>

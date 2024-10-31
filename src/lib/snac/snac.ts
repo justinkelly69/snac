@@ -2,7 +2,7 @@ import xml2snac from "./xml2snac"
 import { SNACItem, SNACElement, SNACText, SNACCDATA, SNACComment, SNACPINode } from "./types"
 
 const find = (snac: SNACItem[], path: number[]): SNACItem | null => {
-    const element: SNACItem = { N: "", A: {}, C: snac, a: true, o: true, q: false }
+    const element: SNACItem = {S: "", N: "", A: {}, C: snac, a: true, o: true, q: false }
     return _find(element, path)
 }
 

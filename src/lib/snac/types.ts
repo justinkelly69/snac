@@ -176,6 +176,7 @@ export interface AttributesType {
 }
 
 export type SNACNamesNode = {
+    S: string,
     N: string,
 }
 
@@ -185,6 +186,7 @@ export interface SNACNode {
 }
 
 export interface SNACElement extends SNACNode {
+    S: string,
     N: string,
     A: AttributesType,
     C: SNACItem[],

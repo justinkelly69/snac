@@ -1,3 +1,5 @@
+import { SNACNamesNode } from "./types"
+
 export const escapeHtml = (text: string): string => {
     return text.replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
@@ -42,23 +44,31 @@ export const unEscapePIBody = (text: string): string => {
     return text.replace(/\?&gt;/g, '?>')
 }
 
-export const nsNameSplit = (text:string): string[] => {
+export const nsNameSplit = (text: string): SNACNamesNode => {
     const nsName = text.split(/:/)
-
-    if(nsName.length === 1) {
-        return ['', nsName[0]]
+    if (nsName.length === 1) {
+        return {
+            S: '',
+            N: nsName[0]
+        }
     }
-
     else {
-        return nsName
+        return {
+            S: nsName[0],
+            N: nsName[1]
+        }
     }
 }
 
-export const nsNameJoin = (tag:{S: string, N: string}):string => {
-    let joinedTag = `${tag.N}`
-    if(tag.S.length > 0) {
-        joinedTag = `${tag.S}:${tag.N}`
-    }
-    return joinedTag
-}
 
+export const nsNameJoin = (nsNode?: SNACNamesNode): string | null => {
+    if (nsNode) {
+        if (nsNode.S.length === 0) {
+            return nsNode.N
+        }
+        else {
+            return `${nsNode.S}:${nsNode.N}`
+        }
+    }
+    return null
+}

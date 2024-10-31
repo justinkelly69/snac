@@ -1,12 +1,19 @@
-
-
 import {
-    SNACItem, SNACElement, AttributesType,
-    SNACText, SNACCDATA, SNACComment, SNACPINode,
+    SNACItem,
+    SNACElement,
+    AttributesType,
+    SNACText,
+    SNACCDATA,
+    SNACComment,
+    SNACPINode,
     XMLOpts
 } from './types'
 
-import { escapePIBody , escapeCDATA , escapeComment } from './textutils'
+import {
+    escapePIBody,
+    escapeCDATA,
+    escapeComment
+} from './textutils'
 
 import {
     escapeHtml,
@@ -24,15 +31,20 @@ const _render = (snac: SNACItem[], path: number[], opts: XMLOpts) => {
         const newPath = [...path, parseInt(i)]
 
         if (snac[i].hasOwnProperty("N")) {
-            const elementNode: SNACElement = snac[i] as SNACElement;
+            const elementNode: SNACElement = snac[i] as SNACElement
 
-            if (elementNode["C"].length === 0 && opts.xml_selfCloseTags) {
-                out += `${prefix}<${elementNode["N"]}${attributes(prefix, elementNode["A"], opts)}/>`
+            let tagName = elementNode.N
+            if (elementNode.S.length > 0) {
+                tagName = `${elementNode.S}:${elementNode.N}`
+            }
+
+            if (elementNode.C.length === 0 && opts.xml_selfCloseTags) {
+                out += `${prefix}<${tagName}${attributes(prefix, elementNode.A, opts)}/>`
             }
             else {
-                out += `${prefix}<${elementNode["N"]}${attributes(prefix, elementNode["A"], opts)}>`
-                out += _render(elementNode["C"], newPath, opts)
-                out += `${prefix}</${elementNode["N"]}>`
+                out += `${prefix}<${tagName}${attributes(prefix, elementNode.A, opts)}>`
+                out += _render(elementNode.C, newPath, opts)
+                out += `${prefix}</${tagName}>`
             }
         }
 
@@ -52,20 +64,20 @@ const _render = (snac: SNACItem[], path: number[], opts: XMLOpts) => {
 
         else if (snac[i].hasOwnProperty("D")) {
             const dataNode: SNACCDATA = snac[i] as SNACCDATA
-            out += `${prefix}<![CDATA[${escapeCDATA(dataNode["D"])}]]>`
+            out += `${prefix}<![CDATA[${escapeCDATA(dataNode.D)}]]>`
         }
 
         else if (snac[i].hasOwnProperty("M")) {
             if (opts.xml_allowComments) {
                 const commentNode: SNACComment = snac[i] as SNACComment
-                out += `${prefix}<!--${escapeComment(commentNode["M"])}-->`
+                out += `${prefix}<!--${escapeComment(commentNode.M)}-->`
             }
         }
 
         else if (snac[i].hasOwnProperty("L")) {
             if (opts.xml_allowPIs) {
                 const piNode: SNACPINode = snac[i] as SNACPINode
-                out += `${prefix}<?${piNode["L"]} ${escapePIBody(piNode["B"])} ?>`
+                out += `${prefix}<?${piNode.L} ${escapePIBody(piNode.B)} ?>`
             }
         }
     }

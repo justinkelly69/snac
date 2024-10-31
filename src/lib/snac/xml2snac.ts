@@ -9,7 +9,7 @@ import {
     AttributeValueType
 } from './types'
 
-import { unEscapeHtml } from './textutils'
+import { nsNameJoin, nsNameSplit, unEscapeHtml } from './textutils'
 
 const render = (xml: string) => {
     const stack: SNACNamesNode[] = []
@@ -29,12 +29,12 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
         const blankTag = xml.match(/^$/s)
 
         if (openTag !== null) {
-            const tagName = openTag[1]
+            const openTagNsName = nsNameSplit(openTag[1])
             const attributes = getAttributes(openTag[2])
             xml = attributes['xml']
 
             const snac: SNACElement = {
-                N: tagName,
+                ...openTagNsName,
                 A: attributes['attributes'],
                 C: [],
                 a: true,
@@ -43,7 +43,7 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
             }
 
             stack.push({
-                N: snac['N']
+                ...openTagNsName,
             })
 
             if (attributes['hasChildren']) {
@@ -55,20 +55,23 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
             
             else {
                 out.push(snac)
-                //eslint-disable-next-line
-                const prev = stack.pop()
+                stack.pop()
             }
         }
 
         else if (closeTag !== null) {
-            const tagName = closeTag[1]
-            const snac: SNACNamesNode = {
-                N: tagName
+            const closeTagNsName = nsNameSplit(closeTag[1])
+            const openTagNsName = stack.pop()
+
+            if(!openTagNsName || !closeTagNsName) {
+                throw Error("Tag is empty\n")
             }
 
-            const prev = stack.pop()
-            if (prev && prev['N'] !== snac['N']) {
-                throw Error(`\n\nUNMATCHED TAG <${prev['N']}></${snac['N']}>\n`)
+            const openTagText = nsNameJoin(openTagNsName)
+            const closeTagText = nsNameJoin(closeTagNsName)
+            
+            if (!openTagNsName || openTagText !== closeTagText) {
+                throw Error(`\n\nUNMATCHED TAG <${openTagText}></${closeTagText}>\n`)
             }
 
             return {
