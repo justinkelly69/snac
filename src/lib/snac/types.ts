@@ -215,17 +215,17 @@ export type SNACItem = SNACElement | SNACText | SNACCDATA | SNACComment | SNACPI
 export interface AttributesXMLhasChildrenType {
     attributes: AttributesType,
     hasChildren: boolean,
-    xml: string
+    remainder: string
 }
 
 export interface AttributeXMLType {
     attributes: AttributesType,
-    xml: string
+    remainder: string
 }
 
 export interface AttributeValueType {
     value: string,
-    xml: string
+    remainder: string
 }
 
 export type QuoteChar = '"' | "'"

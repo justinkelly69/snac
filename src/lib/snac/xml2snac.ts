@@ -9,29 +9,33 @@ import {
     AttributeValueType
 } from './types'
 
-import { nsNameJoin, nsNameSplit, unEscapeHtml } from './textutils'
+import {
+    nsNameJoin,
+    nsNameSplit,
+    unEscapeHtml
+} from './textutils'
 
 const render = (xml: string) => {
     const stack: SNACNamesNode[] = []
     return _render(xml, stack)['out']
 }
 
-const _render = (xml: string, stack: SNACNamesNode[]) => {
+const _render = (remainder: string, stack: SNACNamesNode[]) => {
     const out: SNACItem[] = []
 
-    while (xml.length > 0) {
-        const openTag = xml.match(/^<([\w]*:?[\w]+)(.*)$/s)
-        const closeTag = xml.match(/^<\/([\w]*:?[\w]+)>(.*)$/s)
-        const dataTag = xml.match(/^<!\[CDATA\[(.*?)\]\]>(.*)$/s)
-        const commentTag = xml.match(/^<!--(.*?)-->(.*)$/s)
-        const piTag = xml.match(/^<\?(\w+=?)\s+(.*?)\?>(.*)$/s)
-        const textTag = xml.match(/^([^<>]+)(.*)$/s)
-        const blankTag = xml.match(/^$/s)
+    while (remainder.length > 0) {
+        const openTag = remainder.match(/^<([\w]*:?[\w]+)(.*)$/s)
+        const closeTag = remainder.match(/^<\/([\w]*:?[\w]+)>(.*)$/s)
+        const dataTag = remainder.match(/^<!\[CDATA\[(.*?)\]\]>(.*)$/s)
+        const commentTag = remainder.match(/^<!--(.*?)-->(.*)$/s)
+        const piTag = remainder.match(/^<\?(\w+=?)\s+(.*?)\?>(.*)$/s)
+        const textTag = remainder.match(/^([^<>]+)(.*)$/s)
+        const blankTag = remainder.match(/^$/s)
 
         if (openTag !== null) {
             const openTagNsName = nsNameSplit(openTag[1])
             const attributes = getAttributes(openTag[2])
-            xml = attributes['xml']
+            remainder = attributes['remainder']
 
             const snac: SNACElement = {
                 ...openTagNsName,
@@ -47,12 +51,12 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
             })
 
             if (attributes['hasChildren']) {
-                const kids = _render(xml, stack)
-                snac['C'] = kids['out']
-                xml = kids['xml']
+                const kids = _render(remainder, stack)
+                snac.C = kids['out']
+                remainder = kids['remainder']
                 out.push(snac)
-            } 
-            
+            }
+
             else {
                 out.push(snac)
                 stack.pop()
@@ -63,19 +67,19 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
             const closeTagNsName = nsNameSplit(closeTag[1])
             const openTagNsName = stack.pop()
 
-            if(!openTagNsName || !closeTagNsName) {
+            if (!openTagNsName || !closeTagNsName) {
                 throw Error("Tag is empty\n")
             }
 
             const openTagText = nsNameJoin(openTagNsName)
             const closeTagText = nsNameJoin(closeTagNsName)
-            
+
             if (!openTagNsName || openTagText !== closeTagText) {
                 throw Error(`\n\nUNMATCHED TAG <${openTagText}></${closeTagText}>\n`)
             }
 
             return {
-                xml: closeTag[2],
+                remainder: closeTag[2],
                 out: out
             }
         }
@@ -88,9 +92,9 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                     q: false
                 })
             }
-            xml = dataTag[2]
-        } 
-        
+            remainder = dataTag[2]
+        }
+
         else if (commentTag !== null) {
             if (stack.length > 0) {
                 out.push({
@@ -99,9 +103,9 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                     q: false
                 })
             }
-            xml = commentTag[2]
-        } 
-        
+            remainder = commentTag[2]
+        }
+
         else if (piTag !== null) {
             if (stack.length > 0) {
                 out.push({
@@ -111,9 +115,9 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                     q: false
                 })
             }
-            xml = piTag[3]
-        } 
-        
+            remainder = piTag[3]
+        }
+
         else if (textTag !== null) {
             if (stack.length > 0) {
                 out.push({
@@ -122,9 +126,9 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                     q: false
                 })
             }
-            xml = textTag[2]
-        } 
-        
+            remainder = textTag[2]
+        }
+
         else if (blankTag !== null) {
             if (stack.length > 0) {
                 out.push({
@@ -133,41 +137,47 @@ const _render = (xml: string, stack: SNACNamesNode[]) => {
                     q: false
                 })
             }
-            xml = ''
-        } 
-        
+            remainder = ''
+        }
+
         else {
-            throw Error(`INVALID TAG ${xml}\n`)
+            throw Error(`INVALID TAG ${remainder}\n`)
         }
     }
 
     return {
-        xml: '',
+        remainder: '',
         out: out
     }
 }
 
-const getAttributes = (xml: string): AttributesXMLhasChildrenType => {
+////////////////////////////////////////////////////////////////////////
+// ATTRIBUTES 
+////////////////////////////////////////////////////////////////////////
+
+// Get all attributes for the current tag
+const getAttributes = (remainder: string): AttributesXMLhasChildrenType => {
     let attributes: AttributesType = {}
 
-    while (xml.length > 0) {
-        const closingTag = xml.match(/^\s*(\/?>)(.*)$/s)
-        const nextAttribute = xml.match(/^\s*([\w]+:?[\w]+)=(['"])(.*)$/s)
+    while (remainder.length > 0) {
+        const closingTag = remainder.match(/^\s*(\/?>)(.*)$/s) // The next character is >
+        const nextAttribute = remainder.match(/^\s*([\w]+:?[\w]+)=(['"])(.*)$/s) // Get the next attribute
 
-        if (closingTag) {
-            let hasChildren = false
+        if (closingTag) { // space then >
+            let hasChildren = false // '/>'
 
-            if (closingTag[1] === '>') {
+            if (closingTag[1] === '>') { // Open tag. Has children.
                 hasChildren = true
             }
 
             return {
-                xml: closingTag[2],
-                hasChildren: hasChildren,
+                remainder: closingTag[2], // Remainder after >
+                hasChildren: hasChildren, 
                 attributes: attributes
             }
-        } 
-        
+        }
+
+        // next name="value" pair
         else if (nextAttribute) {
             const quoteChar = nextAttribute[2] as QuoteChar
             const att = addAttribute(
@@ -177,16 +187,16 @@ const getAttributes = (xml: string): AttributesXMLhasChildrenType => {
                 nextAttribute[3]
             )
             attributes = att['attributes']
-            xml = att['xml']
-        } 
-        
+            remainder = att['remainder']
+        }
+
         else {
-            throw Error(`INVALID ATTRIBUTE ${xml}\n`)
+            throw Error(`INVALID ATTRIBUTE ${remainder}\n`)
         }
     }
 
     return {
-        xml: xml,
+        remainder: remainder,
         hasChildren: false,
         attributes: {}
     }
@@ -196,46 +206,47 @@ const addAttribute = (
     attributes: AttributesType,
     nameStr: string,
     quoteChar: QuoteChar,
-    xml: string
+    remainder: string
 ): AttributeXMLType => {
 
-    const attVal = getAttributeValue(xml, quoteChar)
+    const attVal = getAttributeValue(remainder, quoteChar)
     attributes[nameStr] = attVal['value']
 
     return {
         attributes: attributes,
-        xml: attVal['xml']
+        remainder: attVal['remainder']
     }
 }
 
 const getAttributeValue = (
-    text: string,
+    remainder: string,
     quoteChar: QuoteChar
 ): AttributeValueType => {
 
-    const values = getValueString(text, quoteChar)
+    const values = getValueString(remainder, quoteChar)
     if (values === null) {
-        throw Error(`BAD XML ${text}`)
+        throw Error(`BAD XML ${remainder}`)
     }
 
     const re = new RegExp(`\\${quoteChar}`, 'g')
 
     return {
         value: unEscapeHtml(values['value'].replace(re, quoteChar)),
-        xml: values['xml']
+        remainder: values['remainder']
     }
 }
 
+// Get all the string up to the next quoteChar
 const getValueString = (
-    text: string,
+    remainder: string,
     quoteChar: QuoteChar
 ): AttributeValueType | null => {
 
-    for (let i = 0; i < text.length; i++) {
-        if (text.charAt(i) === quoteChar && text.charAt(i - 1) !== '\\') {
+    for (let i = 0; i < remainder.length; i++) {
+        if (remainder.charAt(i) === quoteChar && remainder.charAt(i - 1) !== '\\') {
             return {
-                value: text.substring(0, i),
-                xml: text.substring(i + 1)
+                value: remainder.substring(0, i),
+                remainder: remainder.substring(i + 1)
             }
         }
     }
