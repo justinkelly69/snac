@@ -1,7 +1,7 @@
-import {XMLOpts, SNACOpts } from "../snac/types"
+import { XMLOpts, SNACOpts } from "../snac/types"
 
 
-export const xmlOpts:XMLOpts = {
+export const xmlOpts: XMLOpts = {
     prefix_showPrefix: true,
     prefix_newLine: "\n",
     prefix_char: " ",
@@ -15,7 +15,7 @@ export const xmlOpts:XMLOpts = {
     xml_allowPIs: true,
 }
 
-export const snacOpts:SNACOpts = {
+export const snacOpts: SNACOpts = {
     prefix_showPrefix: true,
     prefix_newLine: "\n",
     prefix_startChar: ">",
@@ -64,4 +64,6 @@ export const snacOpts:SNACOpts = {
     xml_allowComments: true,
     xml_allowPIs: true,
     xml_ellipsis: '...',
+
+    //attribute_columnWidths: ''
 }

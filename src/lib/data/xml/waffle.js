@@ -1,6 +1,10 @@
 const xml = `
-<fo:breakfast_menu xmlns="http://br.com" xmlns:fo="http://fo.com" xmlns:co="http://co.com" 
-chef="&lt;ooohlala&amp;&gt;">
+<fo:breakfast_menu 
+xmlns="http://br.com" 
+xmlns:fo="http://fo.com" 
+xmlns:co="http://co.com" 
+xmlns:html="http://html.com"
+chef="ooohlala">
 the food starts here
     <empty />
     <fo:food co:nationality="BE" id="x999" class="noclass">
@@ -24,7 +28,7 @@ after
             deleteMemory($i);
         } ?>
         <price co:currency="USD" curse="Oh Noe!" fo:bs="Awesome">$5.95</price>
-        <description class="longtext">
+        <description xmlns:xy="http://boxxlox.com" class="longtext">
         <!-- THIS IS 
         A NICE 
         COMMENT !!!! -->

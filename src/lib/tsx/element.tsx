@@ -19,6 +19,7 @@ import {
 } from './prefix'
 
 import { Attributes, AttributesTable } from './attributes'
+import { attributeKeys } from '../snac/textutils'
 
 export const Tag = (props: {
     root: SNACItem[],
@@ -116,7 +117,7 @@ export const OpenTag = (props: {
             SwitchStates.OFF
     }
 
-    if (props.opts.xml_showAttributesOpen && Object.keys(props.node.A).length) {
+    if (props.opts.xml_showAttributesOpen && attributeKeys(props.node.A).length) {
         attributesOpenState = props.isAttributesOpen ?
             SwitchStates.ON :
             SwitchStates.OFF
@@ -259,7 +260,7 @@ const NSName = (props: {
     openClose?: Function
 }): JSX.Element => {
 
-    return props.node.S.length > 1 ?
+    return props.node.S.length > 0 ?
         <span onClick={e => props.openClose && props.openClose()}>
             <span className='element-ns'>
                 {props.node.S}
@@ -289,32 +290,26 @@ const NSNodeEdit = (props: {
     const [attributes, setAttributes] = useState(props.node.A)
     const [isNewMode, setIsNewMode] = useState(true)
     const [isEditMode, setIsEditMode] = useState(false)
+    const [isDeleteMode, setIsDeleteMode] = useState(false)
     const [index, setIndex] = useState(-1)
 
-    const keys = Object.keys(attributes)
+    const keys = attributeKeys(attributes)
     const numRows = keys.length + 2
     const height = numRows * 1.4
     const width = props.path.length * 1.2
 
-    console.log(JSON.stringify(attributes, null, 4))
-    console.log(JSON.stringify(keys, null, 4))
-
     let rows = ''
-    let values = []
     for (let i in keys) {
-        console.log(i, keys[i], attributes[keys[i]])
         rows += ' .6fr'
-        //values.push(props.attributes[i])
     }
 
     return (
         <>
             <span className='attributes-table' style={{
                 display: 'grid',
-                gridTemplateColumns: `${width}em 2em 4em 20em 20em 10em 10em`,
+                gridTemplateColumns: `${width}em 2em 4em 12em 20em 6em 6em`,
                 gridTemplateRows: `${rows}`,
                 height: `${height}em`,
-                width: 'auto'
             }}>
                 <span className='table-prefix'
                     style={{
@@ -351,6 +346,7 @@ const NSNodeEdit = (props: {
                     />
                 </span>
                 <span>
+                    {index}
                 </span>
                 <span>
                     <Button
@@ -379,9 +375,11 @@ const NSNodeEdit = (props: {
                     attributes={attributes}
                     isNewMode={isNewMode}
                     isEditMode={isEditMode}
+                    isDeleteMode={isDeleteMode} 
                     index={index}
                     setIsNewMode={setIsNewMode}
                     setIsEditMode={setIsEditMode}
+                    setIsDeleteMode={setIsDeleteMode}
                     setIndex={setIndex}
                     setAttributes={setAttributes}
                 />

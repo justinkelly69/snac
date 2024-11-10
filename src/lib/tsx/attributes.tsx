@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { Button, TextInput } from './widgets'
 
 import {
@@ -7,6 +7,7 @@ import {
 } from '../snac/types'
 
 import { Prefix } from './prefix'
+import { flushSync } from 'react-dom'
 
 export const Attributes = (props: {
     path: number[],
@@ -16,21 +17,26 @@ export const Attributes = (props: {
     return Object.keys(props.attributes).length > 0 ?
         <>
             <div>
-                {Object.keys(props.attributes).map((a, i) => {
-                    return (
-                        <span key={i}>
-                            {i > 0 ?
-                                <br /> :
-                                null
-                            }
-                            <Attribute
-                                path={props.path}
-                                name={a}
-                                value={props.attributes[a]}
-                                opts={props.opts}
-                            />
-                        </span>
-                    )
+                {Object.keys(props.attributes).map((ns, i) => {
+
+                    return Object.keys(props.attributes[ns]).map((name, j) => {
+                        let tagName = name
+                        if (ns !== '@') {
+                            tagName = `${ns}:${name}`
+                        }
+                        return (
+                            <span key={`${i}:${j}`}>
+                                {i > 0 || j > 0 ? <br /> : null}
+                                <Attribute
+                                    path={props.path}
+                                    name={tagName}
+                                    value={props.attributes[ns][name]}
+                                    opts={props.opts}
+                                />
+                            </span>
+                        )
+                    })
+
                 })}
             </div>
             {Object.keys(props.attributes).length > 0 ?
@@ -51,30 +57,34 @@ export const Attributes = (props: {
 const Attribute = (props: {
     path: number[],
     name: string,
-    value: string,
+    value: [string, boolean],
     opts: SNACOpts,
-}): JSX.Element =>
-    <span className='attribute'>
+}): JSX.Element => {
 
-        <Prefix
-            path={props.path}
-            opts={props.opts}
-        />
+    return (
+        <span className='attribute'>
 
-        {props.opts.prefix_attributePrefix}
+            <Prefix
+                path={props.path}
+                opts={props.opts}
+            />
 
-        <ANSName
-            name={props.name}
-            openClose={f => f}
-        />
+            {props.opts.prefix_attributePrefix}
 
-        =&quot;
-        <span className='attribute-value'>
-            {props.value}
+            <ANSName
+                name={props.name}
+                openClose={f => f}
+            />
+
+            =&quot;
+            <span className='attribute-value'>
+                {props.value[0]}
+            </span>
+            &quot;
+
         </span>
-        &quot;
-
-    </span>
+    )
+}
 
 export const AttributesTable = (props: {
     path: number[],
@@ -84,80 +94,39 @@ export const AttributesTable = (props: {
     index: number,
     setIsNewMode: Function,
     setIsEditMode: Function,
+    isDeleteMode: boolean,
+    setIsDeleteMode: Function,
     setIndex: Function,
     setAttributes: Function,
 }): JSX.Element => {
 
-    const keys = Object.keys(props.attributes)
+    let index = 0
 
     return (
         <>
-            {keys.map((attName, i) => {
+            {Object.keys(props.attributes).map((ns, i) => {
+                return Object.keys(props.attributes[ns]).map((name, j) => {
+                    index++
+                    return (
+                        <AttributeTableRow
+                            key={`${i}:${j}`}
+                            ns={ns}
+                            name={name}
+                            thisIndex={index}
+                            index={props.index}
+                            setIndex={props.setIndex}
+                            value={props.attributes[ns][name][0]}
+                            setValue={f => f}
+                            setIsEditMode={props.setIsEditMode}
+                            isEditMode={props.isEditMode}
+                            isDeleteMode={props.isDeleteMode}
+                            setIsDeleteMode={props.setIsDeleteMode}
+                        />
 
-                let tagANSName = attName.split(/:/)
-                if (tagANSName.length === 1) {
-                    tagANSName = ['', tagANSName[0]]
-                }
-                else {
-                    tagANSName[0] = `${tagANSName[0]}:`
-                }
-
-                return (
-                    <Fragment key={i}>
-                        <span>
-                            <Button
-                                className='button x-button'
-                                onClick={f => f}
-                                label='X'
-                            />
-                        </span>
-                        <span className='attribute-ns'
-                            onClick={e => props.setIsEditMode(true)}
-                        >
-                            {tagANSName[0]}
-                        </span>
-                        <span className='attribute-name'
-                            onClick={e => props.setIsEditMode(true)}
-                        >
-                            {tagANSName[1]}
-                        </span>
-                        <span>
-                            {props.isEditMode ?
-                                <>
-                                    <TextInput
-                                        name="ns"
-                                        className='text-input attribute-value-input'
-                                        value={props.attributes[attName]}
-                                        size={4}
-                                        placeholder='ns'
-                                        onChange={f=>f}
-                                    />
-                                </> :
-                                <>
-                                    <span className='attribute-value'>
-                                        {props.attributes[attName]}
-                                    </span>
-                                </>
-                            }
-
-                        </span>
-                        <span>
-                            <Button
-                                className='button text-button'
-                                onClick={f => f}
-                                label='Edit'
-                            />
-                        </span>
-                        <span>
-                            <Button
-                                className='button text-button'
-                                onClick={f => f}
-                                label='Delete'
-                            />
-                        </span>
-                    </Fragment>
-                )
+                    )
+                })
             })}
+
             {props.isNewMode &&
                 <>
                     <span className='attributes-table-cell'></span>
@@ -173,6 +142,89 @@ export const AttributesTable = (props: {
                     <span className='attributes-table-cell'></span>
                 </>
             }
+        </>
+    )
+}
+
+const AttributeTableRow = (props: {
+    ns: string
+    name: string
+    index: number
+    thisIndex: number
+    setIndex: Function
+    value: string
+    setValue: Function,
+    setIsEditMode: Function,
+    isEditMode: boolean
+    isDeleteMode: boolean
+    setIsDeleteMode: Function
+
+}) => {
+    const [thisIndex, setThisIndex] = useState(props.thisIndex)
+
+    const setEditMode = () => {
+        props.setIndex(thisIndex)
+        props.setIsEditMode(thisIndex === props.index)
+    }
+
+    const setDeleteMode = () => {
+        props.setIndex(thisIndex)
+        props.setIsDeleteMode(thisIndex === props.index)
+    }
+
+    return (
+        <>
+            <span>
+                <Button
+                    className='button x-button'
+                    onClick={f => f}
+                    label='X'
+                />
+            </span>
+            <span className='attribute-ns'
+                onClick={setEditMode}
+            >
+                {props.ns !== '@' ? `${props.ns}:` : ''}
+            </span>
+            <span className='attribute-name'
+                onClick={setEditMode}
+            >
+                {`${props.name} = ${props.index}`}
+            </span >
+            <span>
+                {props.isEditMode && thisIndex === props.index ?
+                    <>
+                        <TextInput
+                            name="ns"
+                            className='text-input attribute-value-input'
+                            value={`${props.isEditMode}:${thisIndex === props.index}:${thisIndex}:${props.index}:${props.value}`}
+                            size={4}
+                            placeholder='ns'
+                            onChange={f => f}
+                        />
+                    </> :
+                    <>
+                        <span className='attribute-value'>
+                            {props.value}
+                        </span>
+                    </>
+                }
+
+            </span>
+            <span>
+                <Button
+                    className='button text-button'
+                    onClick={e => props.setIndex(-1)}
+                    label='Edit'
+                />
+            </span>
+            <span>
+                <Button
+                    className='button text-button'
+                    onClick={f => f}
+                    label='Delete'
+                />
+            </span>
         </>
     )
 }

@@ -1,4 +1,8 @@
-<fo:breakfast_menu xmlns="http://br.com" xmlns:fo="http://fo.com" xmlns:co="http://co.com" xmlns:html="http://html.com"
+<fo:breakfast_menu 
+xmlns="http://br.com" 
+xmlns:fo="http://fo.com" 
+xmlns:html="http://html.com"
+xmlns:co="http://co.com" 
 chef="&lt;ooohlala&amp;&gt;">
 the food starts here
     <empty />

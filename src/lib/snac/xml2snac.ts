@@ -6,10 +6,12 @@ import {
     AttributesType,
     QuoteChar,
     AttributeXMLType,
-    AttributeValueType
+    AttributeValueType,
+    NamespaceAttributesType
 } from './types'
 
 import {
+    nsNameArray,
     nsNameJoin,
     nsNameSplit,
     unEscapeHtml
@@ -39,7 +41,7 @@ const _render = (remainder: string, stack: SNACNamesNode[]) => {
 
             const snac: SNACElement = {
                 ...openTagNsName,
-                A: attributes['attributes'],
+                ...getNamespaces(attributes['attributes']),
                 C: [],
                 a: true,
                 o: true,
@@ -151,6 +153,46 @@ const _render = (remainder: string, stack: SNACNamesNode[]) => {
     }
 }
 
+const getNamespaces = (attributes: AttributesType): NamespaceAttributesType => {
+    let X = {}
+    let A = {}
+
+    for (const S of Object.keys(attributes)) {
+        if (S === '@') {
+            for (const N of Object.keys(attributes[S])) {
+                if (N === 'xmlns') {
+                    X['@'] = attributes['@']['xmlns']['V']
+                }
+                else {
+                    if(!A['@']) {
+                        A['@'] = {}
+                    }
+                    A['@'][N] = attributes['@'][N]
+                }
+            }
+        }
+        else if (S === 'xmlns') {
+            for (const N of Object.keys(attributes['xmlns'])) {
+                X[N] = attributes['xmlns'][N]['V']
+            }
+        }
+        else {
+            for (const N of Object.keys(attributes[S])) {
+                console.log('S=', S, ' N=', N)
+                if(!A[S]) {
+                    A[S] = {}
+                }
+                A[S][N] = attributes[S][N]
+            }
+        }
+    }
+
+    return {
+        X: X,
+        A: A
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////
 // ATTRIBUTES 
 ////////////////////////////////////////////////////////////////////////
@@ -172,7 +214,7 @@ const getAttributes = (remainder: string): AttributesXMLhasChildrenType => {
 
             return {
                 remainder: closingTag[2], // Remainder after >
-                hasChildren: hasChildren, 
+                hasChildren: hasChildren,
                 attributes: attributes
             }
         }
@@ -195,6 +237,7 @@ const getAttributes = (remainder: string): AttributesXMLhasChildrenType => {
         }
     }
 
+    // End of file
     return {
         remainder: remainder,
         hasChildren: false,
@@ -210,7 +253,28 @@ const addAttribute = (
 ): AttributeXMLType => {
 
     const attVal = getAttributeValue(remainder, quoteChar)
-    attributes[nameStr] = attVal['value']
+    //attributes[nameStr] = attVal['value']
+
+    const [ns, name] = nsNameArray(nameStr)
+
+    if (ns === '') {
+        if (!attributes['@']) {
+            attributes['@'] = {}
+        }
+        attributes['@'][name] = {
+            V: attVal['value'],
+            D: false
+        }
+    }
+    else {
+        if (!attributes[ns]) {
+            attributes[ns] = {}
+        }
+        attributes[ns][name] = {
+            V: attVal['value'],
+            D: false
+        }
+    }
 
     return {
         attributes: attributes,
