@@ -87,9 +87,6 @@ const _render = (snac: SNACItem[], path: number[], opts: XMLOpts) => {
 const attributes = (prefix: string, atts: AttributesType, opts: XMLOpts) => {
     let out: string = ""
     const attPrefix = prefix + opts.prefix_attributePrefix
-    // for (const name of Object.keys(atts)) {
-    //     out += ` ${attPrefix}${name}="${escapeHtml(atts[name])}"`
-    // }
     for(const ns of Object.keys(atts)) {
         for(const name of Object.keys(atts[ns])) {
             if(ns === '@') {

@@ -32,7 +32,7 @@ after
         <!-- THIS IS 
         A NICE 
         COMMENT !!!! -->
-Two of our &lt;famous&gt; Belgian &quot;Waffles&quot; &amp; &apos;with&apos; plenty of real maple syrup
+Two of our &lt;famous&gt; <xy:country>Belgian</xy:country> &quot;Waffles&quot; &amp; &apos;with&apos; plenty of real maple syrup
         </description>
         <![CDATA[This is 
                 CDATA <html 

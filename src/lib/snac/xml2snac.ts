@@ -161,7 +161,7 @@ const getNamespaces = (attributes: AttributesType): NamespaceAttributesType => {
         if (S === '@') {
             for (const N of Object.keys(attributes[S])) {
                 if (N === 'xmlns') {
-                    X['@'] = attributes['@']['xmlns']['V']
+                    X['@'] = attributes['@']['xmlns']
                 }
                 else {
                     if(!A['@']) {
@@ -173,12 +173,11 @@ const getNamespaces = (attributes: AttributesType): NamespaceAttributesType => {
         }
         else if (S === 'xmlns') {
             for (const N of Object.keys(attributes['xmlns'])) {
-                X[N] = attributes['xmlns'][N]['V']
+                X[N] = attributes['xmlns'][N]
             }
         }
         else {
             for (const N of Object.keys(attributes[S])) {
-                console.log('S=', S, ' N=', N)
                 if(!A[S]) {
                     A[S] = {}
                 }
@@ -261,19 +260,23 @@ const addAttribute = (
         if (!attributes['@']) {
             attributes['@'] = {}
         }
-        attributes['@'][name] = {
-            V: attVal['value'],
-            D: false
-        }
+        // attributes['@'][name] = {
+        //     V: attVal['value'],
+        //     d: false
+        // }
+
+        attributes['@'][name] =  attVal['value']
     }
     else {
         if (!attributes[ns]) {
             attributes[ns] = {}
         }
-        attributes[ns][name] = {
-            V: attVal['value'],
-            D: false
-        }
+        // attributes[ns][name] = {
+        //     V: attVal['value'],
+        //     d: false
+        // }
+
+        attributes[ns][name] = attVal['value']
     }
 
     return {

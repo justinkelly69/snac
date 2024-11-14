@@ -244,11 +244,19 @@ export interface NamespaceType {
 }
 
 export interface AttributesType {
-    [name: string]: {
-        V?: string,
-        D?: boolean,
-    }
+    [name: string]: AttributeType
 }
+
+export interface AttributeType {
+    [name: string]: string
+}
+
+// export interface AttributesType {
+//     [name: string]: {
+//         V?: string,
+//         d?: boolean,
+//     }
+// }
 
 export type SNACNamesNode = {
     S: string,

@@ -57,7 +57,7 @@ export const Attributes = (props: {
 const Attribute = (props: {
     path: number[],
     name: string,
-    value: [string, boolean],
+    value: string,
     opts: SNACOpts,
 }): JSX.Element => {
 
