@@ -1,4 +1,4 @@
-import { EditAttributesType, AttributesType } from "./types"
+import { EditAttributesType, AttributesType, EditAttributesPayloadType } from "./types"
 
 export const snac2EditAttributes = (
     attributes: AttributesType
@@ -13,7 +13,8 @@ export const snac2EditAttributes = (
             if (!editAttributes[ns][name]) {
                 editAttributes[ns][name] = {
                     V: attributes[ns][name],
-                    d: false
+                    d: false,
+                    q: false,
                 }
             }
         }
@@ -42,41 +43,145 @@ export const editAttributes2snac = (
 }
 
 export const selectAttribute = (
-    editAttributes: EditAttributesType,
-    ns: string,
-    name: string
+    state: EditAttributesType,
+    payload: EditAttributesPayloadType,
 ): EditAttributesType => {
     const newAttrbutes: EditAttributesType = {}
+
+    for (const ns of Object.keys(state)) {
+        if (!newAttrbutes[ns]) {
+            newAttrbutes[ns] = {}
+        }
+        for (const name of Object.keys(state[ns])) {
+            if (
+                payload.newNS === ns &&
+                payload.newName === name &&
+                !state[ns][name].d
+            ) {
+                newAttrbutes[ns][name] = {
+                    ...state[ns][name],
+                    q: !state[ns][name].q,
+                }
+            }
+            else {
+                newAttrbutes[ns][name] = {
+                    ...state[ns][name],
+                    q: false,
+                }
+            }
+        }
+    }
 
     return newAttrbutes
 }
 
-export const updateAttribute = (
-    editAttributes: EditAttributesType,
-    ns: string,
-    name: string
+export const saveAttribute = (
+    state: EditAttributesType,
+    payload: EditAttributesPayloadType,
 ): EditAttributesType => {
+
     const newAttrbutes: EditAttributesType = {}
+
+    for (const ns of Object.keys(state)) {
+        if (!newAttrbutes[ns]) {
+            newAttrbutes[ns] = {}
+        }
+        for (const name of Object.keys(state[ns])) {
+            if (payload.newNS === ns && payload.newName === name && payload.newValue) {
+                newAttrbutes[ns][name] = {
+                    V: payload.newValue,
+                    d: false,
+                    q: false,
+                }
+            }
+            else {
+                newAttrbutes[ns][name] = state[ns][name]
+            }
+        }
+    }
+
+    return newAttrbutes
+}
+
+export const cancelAttribute = (
+    state: EditAttributesType,
+): EditAttributesType => {
+
+    const newAttrbutes: EditAttributesType = {}
+
+    for (const ns of Object.keys(state)) {
+        if (!newAttrbutes[ns]) {
+            newAttrbutes[ns] = {}
+        }
+        for (const name of Object.keys(state[ns])) {
+            newAttrbutes[ns][name] = {
+                ...state[ns][name],
+                q: false,
+            }
+        }
+    }
 
     return newAttrbutes
 }
 
 export const deleteAttribute = (
-    editAttributes: EditAttributesType,
-    ns: string,
-    name: string
+    state: EditAttributesType,
+    payload: EditAttributesPayloadType,
 ): EditAttributesType => {
     const newAttrbutes: EditAttributesType = {}
+
+    for (const ns of Object.keys(state)) {
+        if (!newAttrbutes[ns]) {
+            newAttrbutes[ns] = {}
+        }
+        for (const name of Object.keys(state[ns])) {
+            if (payload.newNS === ns && payload.newName === name) {
+                newAttrbutes[ns][name] = {
+                    ...state[ns][name],
+                    d: !state[ns][name].d,
+                }
+            }
+            else {
+                newAttrbutes[ns][name] = state[ns][name]
+            }
+        }
+    }
 
     return newAttrbutes
 }
 
 export const newAttribute = (
-    editAttributes: EditAttributesType,
-    ns: string,
-    name: string
+    state: EditAttributesType,
+    payload: EditAttributesPayloadType,
 ): EditAttributesType => {
+
     const newAttrbutes: EditAttributesType = {}
+
+    for (const ns of Object.keys(state)) {
+        if (!newAttrbutes[ns]) {
+            newAttrbutes[ns] = {}
+        }
+        for (const name of Object.keys(state[ns])) {
+            if (payload.newNS === ns && payload.newName === name) {
+                continue
+            }
+            else {
+                newAttrbutes[ns][name] = state[ns][name]
+            }
+        }
+    }
+
+    if (payload.newNS && payload.newName && payload.newValue) {
+        if (!newAttrbutes[payload.newNS]) {
+            newAttrbutes[payload.newNS] = {}
+        }
+
+        newAttrbutes[payload.newNS][payload.newName] = {
+            V: payload.newValue,
+            d: false,
+            q: false,
+        }
+    }
 
     return newAttrbutes
 }

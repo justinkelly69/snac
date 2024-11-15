@@ -3,11 +3,20 @@ import { Button, TextInput } from './widgets'
 
 import {
     AttributesType,
+    EditAttributesActionType,
+    EditAttributesType,
     SNACOpts
 } from '../snac/types'
 
 import { Prefix } from './prefix'
-import { flushSync } from 'react-dom'
+
+import {
+    selectAttribute,
+    saveAttribute,
+    cancelAttribute,
+    deleteAttribute,
+    newAttribute
+} from '../snac/attributeutils'
 
 export const Attributes = (props: {
     path: number[],
@@ -101,6 +110,29 @@ export const AttributesTable = (props: {
 }): JSX.Element => {
 
     let index = 0
+
+    const reducer = (state: EditAttributesType, action: EditAttributesActionType) => {
+
+        switch (action.type) {
+            case "selectAttribute":
+                return selectAttribute(state, action.payload)
+
+            case "saveAttribute":
+                return saveAttribute(state, action.payload)
+
+            case "cancelAttribute":
+                return cancelAttribute(state)
+
+            case "deleteAttribute":
+                return deleteAttribute(state, action.payload)
+
+            case "newAttribute":
+                return newAttribute(state, action.payload)
+
+            default:
+                return state
+        }
+    }
 
     return (
         <>

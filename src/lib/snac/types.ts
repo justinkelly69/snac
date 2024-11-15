@@ -259,7 +259,19 @@ export interface EditAttributeType {
     [name: string]: {
         V: string,
         d: boolean,
+        q: boolean,
     }
+}
+
+export interface EditAttributesActionType {
+    type: string,
+    payload: EditAttributesPayloadType,
+}
+
+export interface EditAttributesPayloadType {
+    newNS?: string,
+    newName?: string,
+    newValue?: string,
 }
 
 export type SNACNamesNode = {
