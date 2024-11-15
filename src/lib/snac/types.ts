@@ -251,12 +251,16 @@ export interface AttributeType {
     [name: string]: string
 }
 
-// export interface AttributesType {
-//     [name: string]: {
-//         V?: string,
-//         d?: boolean,
-//     }
-// }
+export interface EditAttributesType {
+    [name: string]: EditAttributeType
+}
+
+export interface EditAttributeType {
+    [name: string]: {
+        V: string,
+        d: boolean,
+    }
+}
 
 export type SNACNamesNode = {
     S: string,

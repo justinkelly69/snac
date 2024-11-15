@@ -252,30 +252,18 @@ const addAttribute = (
 ): AttributeXMLType => {
 
     const attVal = getAttributeValue(remainder, quoteChar)
-    //attributes[nameStr] = attVal['value']
-
     const [ns, name] = nsNameArray(nameStr)
 
     if (ns === '') {
         if (!attributes['@']) {
             attributes['@'] = {}
         }
-        // attributes['@'][name] = {
-        //     V: attVal['value'],
-        //     d: false
-        // }
-
         attributes['@'][name] =  attVal['value']
     }
     else {
         if (!attributes[ns]) {
             attributes[ns] = {}
         }
-        // attributes[ns][name] = {
-        //     V: attVal['value'],
-        //     d: false
-        // }
-
         attributes[ns][name] = attVal['value']
     }
 
