@@ -44,21 +44,39 @@
 .attribute-ns-input {
   width: 3.6em;
   color: darkred;
-  border: 1px solid darkred;
+  outline: none !important;
+  border: 1px solid rgb(192, 130, 130);
   text-align: right;
+}
+
+.attribute-ns-input:focus {
+  outline: none !important;
+  border: 2px solid rgb(192, 130, 130);
 }
 
 .attribute-name-input {
   width: 12em;
-  color: darkorchid;
-  border: 1px solid darkorchid;
+  color: darkorchid;  
+  outline: none !important;
+  border: 1px solid rgb(180, 129, 205);
   margin-right: 0.1em;
+}
+
+.attribute-name-input:focus{
+  outline: none !important;
+  border: 2px solid rgb(180, 129, 205);
 }
 
 .attribute-value-input {
   width: 20em;
   color: darkgreen;
-  border-color: darkgreen;
+  outline: none !important;
+  border-color: rgb(131, 189, 131);
+}
+
+.attribute-value-input:focus {
+  outline: none !important;
+  border: 2px solid rgb(131, 189, 131);
 }
 
 .attributes-table-box {
@@ -66,6 +84,10 @@
   height: fit-content;
   width: fit-content;
   background-color: aliceblue;
+}
+
+.attributes-table-cell {
+
 }
 
 .table-prefix {
@@ -128,13 +150,23 @@
   width: 3.6em;
   text-align: right;
   color: red;
-  border-color: darkred;
+  border-color: lightgray;
+}
+
+.ns-input:focus {
+  outline: none !important;
+  border: 2px solid rgb(206, 121, 121);
 }
 
 .name-input {
   width: 12em;
   color: blue;
-  border-color: darkblue;
+  border-color: lightgray;
+}
+
+.name-input:focus {
+  outline: none !important;
+  border: 2px solid rgb(111, 117, 204);
 }
 
 .button {

@@ -288,9 +288,6 @@ const NSNodeEdit = (props: {
     const [ns, setNs] = useState(props.node.S)
     const [name, setName] = useState(props.node.N)
     const [attributes, setAttributes] = useState(props.node.A)
-    const [isNewMode, setIsNewMode] = useState(true)
-    const [isEditMode, setIsEditMode] = useState(false)
-    const [isDeleteMode, setIsDeleteMode] = useState(false)
 
     const keys = attributeKeys(attributes)
     const [numRows, setNumRows] = useState(keys.length + 2)
@@ -306,8 +303,9 @@ const NSNodeEdit = (props: {
         <>
             <span className='attributes-table' style={{
                 display: 'grid',
-                gridTemplateColumns: `${width}em 2em 4em 12em 20em 6em 6em`,
-                gridTemplateRows: `${rows}`,
+                //gridTemplateColumns: `${width}em 2em 4em 12em 20em 6em 6em`,
+                gridTemplateColumns: `${width}em min-content min-content min-content min-content 6em 6em`,
+                gridAutoRows: `${rows}`,
                 height: `${height}em`,
             }}>
                 <span className='table-prefix'
@@ -345,6 +343,10 @@ const NSNodeEdit = (props: {
                     />
                 </span>
                 <span>
+                    <span style={{
+                        display: 'block',
+                        width:'12em'
+                        }}></span>
                 </span>
                 <span>
                     <Button
@@ -371,9 +373,6 @@ const NSNodeEdit = (props: {
                 <AttributesTable
                     path={props.path}
                     attributes={attributes}
-                    isNewMode={isNewMode}
-                    isEditMode={isEditMode}
-                    isDeleteMode={isDeleteMode} 
                     setAttributes={setAttributes}
                     numRows={numRows}
                     setNumRows={setNumRows}

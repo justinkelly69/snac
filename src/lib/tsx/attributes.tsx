@@ -1,9 +1,8 @@
-import React, { Fragment, useEffect, useReducer, useState } from 'react'
+import React, { useReducer, useState } from 'react'
 import { Button, TextInput } from './widgets'
 
 import {
     AttributesType,
-    EditAttributesActionType,
     EditAttributesType,
     SNACOpts
 } from '../snac/types'
@@ -12,11 +11,6 @@ import { Prefix } from './prefix'
 
 import {
     attributesEditReducer,
-    selectAttribute,
-    saveAttribute,
-    cancelAttribute,
-    deleteAttribute,
-    newAttribute,
     snac2EditAttributes,
     attributeIsSelected,
     setSelectedAttribute,
@@ -26,9 +20,7 @@ import {
     setCancelAttribute,
     attributeGetValue,
     setNewAttribute,
-    attributeGetNumRows
 } from '../snac/attributeutils'
-import { networkInterfaces } from 'os'
 
 export const Attributes = (props: {
     path: number[],
@@ -84,25 +76,20 @@ const Attribute = (props: {
 
     return (
         <span className='attribute'>
-
             <Prefix
                 path={props.path}
                 opts={props.opts}
             />
-
             {props.opts.prefix_attributePrefix}
-
             <ANSName
                 name={props.name}
                 openClose={f => f}
             />
-
             =&quot;
             <span className='attribute-value'>
                 {props.value}
             </span>
             &quot;
-
         </span>
     )
 }
@@ -110,9 +97,6 @@ const Attribute = (props: {
 export const AttributesTable = (props: {
     path: number[],
     attributes: AttributesType,
-    isNewMode: boolean,
-    isEditMode: boolean,
-    isDeleteMode: boolean,
     setAttributes: Function,
     numRows: number
     setNumRows: Function
@@ -168,8 +152,6 @@ export const AttributesTable = (props: {
     )
 }
 
-
-
 const AttributeTableRow = (props: {
     ns: string
     name: string
@@ -196,7 +178,7 @@ const AttributeTableRow = (props: {
             <span>
                 {props.mode === 'LIST_MODE' &&
                     <Button
-                        className='button'
+                        className='button x-button'
                         onClick={e => {
                             setDeletedAttribute(
                                 props.dispatch,
@@ -332,7 +314,7 @@ const AttributeNewRow = (props: {
             <span className='attributes-table-cell'>
                 <TextInput
                     name="ns"
-                    className=' text-input attribute-ns-input'
+                    className='text-input attribute-ns-input'
                     value={ns}
                     size={4}
                     placeholder='ns'
@@ -403,11 +385,18 @@ const AttributeNewRow = (props: {
         <>
             <span className='attributes-table-cell'></span>
             <span className='attributes-table-cell'>
-                <Button
-                    className='button'
-                    onClick={e => props.setMode('INSERT_MODE')}
-                    label='+'
-                />
+                {props.mode === 'LIST_MODE' &&
+                    <Button
+                        className='button x-button'
+                        onClick={e => {
+                            setNs('')
+                            setName('')
+                            setValue('')
+                            props.setMode('INSERT_MODE')
+                        }}
+                        label='+'
+                    />
+                }
             </span>
             <span className='attributes-table-cell'></span>
             <span className='attributes-table-cell'></span>
