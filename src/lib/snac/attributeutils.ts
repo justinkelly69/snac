@@ -1,8 +1,15 @@
-import { EditAttributesType, AttributesType, EditAttributesPayloadType, EditAttributesActionType, EditAttributesNSNameType } from "./types"
+import {
+    EditAttributesType,
+    AttributesType,
+    EditAttributesPayloadType,
+    EditAttributesActionType,
+    EditAttributesNSNameType
+} from "./types"
 
 export const snac2EditAttributes = (
     attributes: AttributesType
 ): EditAttributesType => {
+
     const editAttributes: EditAttributesType = {}
 
     for (const ns of Object.keys(attributes)) {
@@ -26,6 +33,7 @@ export const snac2EditAttributes = (
 export const editAttributes2snac = (
     editAttributes: EditAttributesType
 ): AttributesType => {
+
     const attributes: AttributesType = {}
 
     for (const ns of Object.keys(editAttributes)) {
@@ -68,41 +76,56 @@ export const attributesEditReducer = (
     }
 }
 
+export const attributeGetValue = (
+    state: EditAttributesType,
+    ns: string,
+    name: string,
+): string => {
+    return state[ns][name]['V']
+}
+
 export const setSelectedAttribute = (
     setMode: Function,
     setSelected: Function,
     isSelected: boolean,
+    isDeleted: boolean,
     dispatch: Function,
     ns: string,
     name: string,
 ) => {
-    if (isSelected) {
-        setSelected({
-            ns: '#',
-            name: '#',
-        })
-        setMode('READY')
-    }
-    else {
-        setSelected({
-            ns: ns,
-            name: name,
-        })
-        setMode('EDIT')
-    }
-    dispatch({
-        type: "selectAttribute",
-        payload: {
-            newNS: ns,
-            newName: name,
+
+    if (!isDeleted) {
+
+        if (isSelected) {
+            setSelected({
+                ns: '#',
+                name: '#',
+            })
+            setMode('READY')
         }
-    })
+
+        else {
+            setSelected({
+                ns: ns,
+                name: name,
+            })
+            setMode('EDIT')
+        }
+        
+        dispatch({
+            type: "selectAttribute",
+            payload: {
+                newNS: ns,
+                newName: name,
+            }
+        })
+    }
 }
 
 export const attributeIsSelected = (
+    selected: EditAttributesNSNameType,
     ns: string,
     name: string,
-    selected: EditAttributesNSNameType,
 ): boolean => {
     return selected.ns === ns && selected.name === name
 }
@@ -147,6 +170,7 @@ export const setSaveAttribute = (
     dispatch: Function,
     ns: string,
     name: string,
+    value: string,
 ) => {
 
     dispatch({
@@ -154,7 +178,7 @@ export const setSaveAttribute = (
         payload: {
             newNS: ns,
             newName: name,
-            newValue: 'value',
+            newValue: value,
         }
     })
     setSelected({
@@ -198,12 +222,15 @@ export const setCancelAttribute = (
     dispatch: Function,
     ns: string,
     name: string,
+    oldValue: string,
 ) => {
+    console.log('oldValue', oldValue)
     dispatch({
         type: "cancelAttribute",
         payload: {
             newNS: ns,
             newName: name,
+            value: oldValue,
         }
     })
     setSelected({

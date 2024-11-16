@@ -23,7 +23,8 @@ import {
     attributeIsDeleted,
     setDeletedAttribute,
     setSaveAttribute,
-    setCancelAttribute
+    setCancelAttribute,
+    attributeGetValue
 } from '../snac/attributeutils'
 
 export const Attributes = (props: {
@@ -95,7 +96,7 @@ const Attribute = (props: {
 
             =&quot;
             <span className='attribute-value'>
-                {props.value[0]}
+                {props.value}
             </span>
             &quot;
 
@@ -109,10 +110,7 @@ export const AttributesTable = (props: {
     isNewMode: boolean,
     isEditMode: boolean,
     index: number,
-    setIsNewMode: Function,
-    setIsEditMode: Function,
     isDeleteMode: boolean,
-    setIsDeleteMode: Function,
     setIndex: Function,
     setAttributes: Function,
 }): JSX.Element => {
@@ -131,72 +129,74 @@ export const AttributesTable = (props: {
         <>
             {Object.keys(state).map((ns, i) => {
                 return Object.keys(state[ns]).map((name, j) => {
-                    const isSelected = attributeIsSelected(ns, name, selected)
-                    const isDeleted = attributeIsDeleted(state, ns, name)
                     return (
                         <AttributeTableRow
                             key={`${i}:${j}`}
                             ns={ns}
                             name={name}
-                            value={state[ns][name]['V']}
+                            value={attributeGetValue(state, ns, name)}
                             mode={mode}
-                            deleted={isDeleted}
-                            deleteAttribute={e => {
-                                setDeletedAttribute(
-                                    dispatch,
-                                    ns,
-                                    name,
-                                )
-                            }}
-                            selected={isSelected}
-                            selectAttribute={e => {
-                                setSelectedAttribute(
-                                    setMode,
-                                    setSelected,
-                                    isSelected,
-                                    dispatch,
-                                    ns,
-                                    name,
-                                )
-                            }}
-                            saveAttribute={e => {
-                                setSaveAttribute(
-                                    setMode,
-                                    setSelected,
-                                    dispatch,
-                                    ns,
-                                    name,
-                                )
-                            }}
-                            cancelAttribute={e => {
-                                setCancelAttribute  (
-                                    setMode,
-                                    setSelected,
-                                    dispatch,
-                                    ns,
-                                    name,
-                                )
-                            }}
+                            setMode={setMode}
+                            dispatch={dispatch}
+                            isDeleted={attributeIsDeleted(state, ns, name)}
+                            isSelected={attributeIsSelected(selected, ns, name)}
+                            setSelected={setSelected}
                         />
                     )
                 })
             })}
 
-            {props.isNewMode &&
-                <>
-                    <span className='attributes-table-cell'></span>
-                    <span className='attributes-table-cell'>
-                        <Button
-                            className='button text-button'
-                            onClick={f => f}
-                            label='New'
-                        />
-                    </span>
-                    <span className='attributes-table-cell'></span>
-                    <span className='attributes-table-cell'></span>
-                    <span className='attributes-table-cell'></span>
-                </>
-            }
+            <AttributeNewRow
+                state={state}
+                mode={mode}
+                setMode={setMode}
+                dispatch={dispatch}
+            />
+        </>
+    )
+}
+
+const AttributeNewRow = (props: {
+    state: EditAttributesType
+    mode: string
+    setMode: Function
+    dispatch: Function
+}) => {
+    return (props.mode === 'NEW_ATTRIBUTE' ?
+        <>
+            <span className='attributes-table-cell'></span>
+            <span className='attributes-table-cell'></span>
+            <span className='attributes-table-cell'></span>
+            <span className='attributes-table-cell'></span>
+            <span className='attributes-table-cell'></span>
+
+            <span className='attributes-table-cell'>
+                <Button
+                    className='button text-button'
+                    onClick={e => props.setMode('READY')}
+                    label='Save'
+                />
+            </span>
+            <span className='attributes-table-cell'>
+                <Button
+                    className='button text-button'
+                    onClick={e => props.setMode('READY')}
+                    label='Cancel'
+                />
+            </span>
+        </> :
+        <>
+            <span className='attributes-table-cell'></span>
+            <span className='attributes-table-cell'>
+                <Button
+                    className='button'
+                    onClick={e => props.setMode('NEW_ATTRIBUTE')}
+                    label='+'
+                />
+            </span>
+            <span className='attributes-table-cell'></span>
+            <span className='attributes-table-cell'></span>
+            <span className='attributes-table-cell'></span>
         </>
     )
 }
@@ -206,44 +206,66 @@ const AttributeTableRow = (props: {
     name: string
     value: string
     mode: string
-    deleted: boolean
-    deleteAttribute: Function
-    selected: boolean
-    selectAttribute: Function
-    saveAttribute: Function
-    cancelAttribute: Function
+    setMode: Function
+    dispatch: Function
+    isDeleted: boolean
+    isSelected: boolean
+    setSelected: Function
 }) => {
 
-    const classDeleted = props.deleted ? 'attribute-deleted' : ''
-    const deletedLabel = props.deleted ? 'Undelete' : 'Delete'
+    const classDeleted = props.isDeleted ? 'attribute-deleted' : ''
+    const deletedLabel = props.isDeleted ? 'O' : 'X'
 
     const [value, setValue] = useState(props.value)
+    const [oldValue, setOldValue] = useState(props.value)
 
     return (
         <>
             <span>
-                <Button
-                    className='button x-button'
-                    onClick={f => f}
-                    label='X'
-                />
+                {props.mode === 'READY' &&
+                    <Button
+                        className='button'
+                        onClick={e => setDeletedAttribute(
+                            props.dispatch,
+                            props.ns,
+                            props.name,
+                        )}
+                        label={deletedLabel}
+                    />
+                }
             </span>
             <span className={`attribute-ns ${classDeleted}`}
                 onClick={e => {
-                    !props.deleted && props.selectAttribute()
+                    setSelectedAttribute(
+                        props.setMode,
+                        props.setSelected,
+                        props.isSelected,
+                        props.isDeleted,
+                        props.dispatch,
+                        props.ns,
+                        props.name,
+                    )
                 }}
             >
                 {props.ns !== '@' ? `${props.ns}:` : ''}
             </span>
             <span className={`attribute-name ${classDeleted}`}
                 onClick={e => {
-                    !props.deleted && props.selectAttribute()
+                    setSelectedAttribute(
+                        props.setMode,
+                        props.setSelected,
+                        props.isSelected,
+                        props.isDeleted,
+                        props.dispatch,
+                        props.ns,
+                        props.name,
+                    )
                 }}
             >
                 {props.name}
             </span >
 
-            {props.selected ?
+            {props.isSelected ?
                 <>
                     <span>
                         <TextInput
@@ -259,7 +281,16 @@ const AttributeTableRow = (props: {
                         <Button
                             className='button text-button'
                             onClick={e => {
-                                props.saveAttribute(value)
+                                console.log(value)
+                                setOldValue(value)
+                                setSaveAttribute(
+                                    props.setMode,
+                                    props.setSelected,
+                                    props.dispatch,
+                                    props.ns,
+                                    props.name,
+                                    value
+                                )
                             }}
                             label='Save'
                         />
@@ -268,7 +299,15 @@ const AttributeTableRow = (props: {
                         <Button
                             className='button text-button'
                             onClick={e => {
-                                props.cancelAttribute()
+                                setValue(oldValue)
+                                setCancelAttribute(
+                                    props.setMode,
+                                    props.setSelected,
+                                    props.dispatch,
+                                    props.ns,
+                                    props.name,
+                                    oldValue,
+                                )
                             }}
                             label='Cancel'
                         />
@@ -278,22 +317,21 @@ const AttributeTableRow = (props: {
                     <span>
                         <span className={`attribute-value  ${classDeleted}`}
                             onClick={e => {
-                                !props.deleted && props.selectAttribute()
+                                setSelectedAttribute(
+                                    props.setMode,
+                                    props.setSelected,
+                                    props.isSelected,
+                                    props.isDeleted,
+                                    props.dispatch,
+                                    props.ns,
+                                    props.name,
+                                )
                             }}>
-                            {props.value}
+                            {value}
                         </span>
                     </span>
-                    <span>
-                    </span>
-                    <span>
-                        {props.mode === 'READY' &&
-                            <Button
-                                className='button text-button'
-                                onClick={e => props.deleteAttribute()}
-                                label={deletedLabel}
-                            />
-                        }
-                    </span>
+                    <span></span>
+                    <span></span>
                 </>
             }
 

@@ -377,9 +377,6 @@ const NSNodeEdit = (props: {
                     isEditMode={isEditMode}
                     isDeleteMode={isDeleteMode} 
                     index={index}
-                    setIsNewMode={setIsNewMode}
-                    setIsEditMode={setIsEditMode}
-                    setIsDeleteMode={setIsDeleteMode}
                     setIndex={setIndex}
                     setAttributes={setAttributes}
                 />
