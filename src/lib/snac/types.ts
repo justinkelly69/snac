@@ -274,6 +274,11 @@ export interface EditAttributesPayloadType {
     newValue?: string,
 }
 
+export interface EditAttributesNSNameType {
+    ns: string,
+    name: string,
+}
+
 export type SNACNamesNode = {
     S: string,
     N: string,

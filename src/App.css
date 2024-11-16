@@ -37,6 +37,10 @@
   color: darkgreen
 }
 
+.attribute-deleted {
+  text-decoration: line-through;
+}
+
 .attribute-value-input {
   width: 20em;
   color: darkgreen;

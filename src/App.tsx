@@ -33,7 +33,7 @@ function App() {
         snacOpts
     )
 
-    console.log(JSON.stringify(snac, null, 4))
+    //console.log(JSON.stringify(snac, null, 4))
 
     return (
         <>
