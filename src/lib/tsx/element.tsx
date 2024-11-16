@@ -291,7 +291,6 @@ const NSNodeEdit = (props: {
     const [isNewMode, setIsNewMode] = useState(true)
     const [isEditMode, setIsEditMode] = useState(false)
     const [isDeleteMode, setIsDeleteMode] = useState(false)
-    const [index, setIndex] = useState(-1)
 
     const keys = attributeKeys(attributes)
     const [numRows, setNumRows] = useState(keys.length + 2)
@@ -346,7 +345,6 @@ const NSNodeEdit = (props: {
                     />
                 </span>
                 <span>
-                    {index}
                 </span>
                 <span>
                     <Button
@@ -376,8 +374,6 @@ const NSNodeEdit = (props: {
                     isNewMode={isNewMode}
                     isEditMode={isEditMode}
                     isDeleteMode={isDeleteMode} 
-                    index={index}
-                    setIndex={setIndex}
                     setAttributes={setAttributes}
                     numRows={numRows}
                     setNumRows={setNumRows}

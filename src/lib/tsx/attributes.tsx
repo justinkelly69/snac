@@ -112,9 +112,7 @@ export const AttributesTable = (props: {
     attributes: AttributesType,
     isNewMode: boolean,
     isEditMode: boolean,
-    index: number,
     isDeleteMode: boolean,
-    setIndex: Function,
     setAttributes: Function,
     numRows: number
     setNumRows: Function
@@ -128,7 +126,7 @@ export const AttributesTable = (props: {
         ns: '#',
         name: '#',
     })
-    const [mode, setMode] = useState('READY')
+    const [mode, setMode] = useState('LIST_MODE')
 
     //console.clear()
     console.log(JSON.stringify(state, null, 4))
@@ -196,14 +194,16 @@ const AttributeTableRow = (props: {
     return (
         <>
             <span>
-                {props.mode === 'READY' &&
+                {props.mode === 'LIST_MODE' &&
                     <Button
                         className='button'
-                        onClick={e => setDeletedAttribute(
-                            props.dispatch,
-                            props.ns,
-                            props.name,
-                        )}
+                        onClick={e => {
+                            setDeletedAttribute(
+                                props.dispatch,
+                                props.ns,
+                                props.name,
+                            )
+                        }}
                         label={deletedLabel}
                     />
                 }
@@ -237,9 +237,9 @@ const AttributeTableRow = (props: {
                 }}
             >
                 {props.name}
-            </span >
+            </span>
 
-            {props.isSelected ?
+            {props.mode === 'EDIT_MODE' && props.isSelected ?
                 <>
                     <span>
                         <TextInput
@@ -325,7 +325,7 @@ const AttributeNewRow = (props: {
     const [name, setName] = useState('')
     const [value, setValue] = useState('')
 
-    return (props.mode === 'NEW_ATTRIBUTE' ?
+    return (props.mode === 'INSERT_MODE' ?
         <>
             <span className='attributes-table-cell'></span>
             <span className='attributes-table-cell'></span>
@@ -382,7 +382,7 @@ const AttributeNewRow = (props: {
                         setNs('')
                         setName('')
                         setValue('')
-                        props.setMode('READY')
+                        props.setMode('LIST_MODE')
                     }}
                     label='Save'
                 />
@@ -391,11 +391,10 @@ const AttributeNewRow = (props: {
                 <Button
                     className='button text-button'
                     onClick={e => {
-
                         setNs('')
                         setName('')
                         setValue('')
-                        props.setMode('READY')
+                        props.setMode('LIST_MODE')
                     }}
                     label='Cancel'
                 />
@@ -406,7 +405,7 @@ const AttributeNewRow = (props: {
             <span className='attributes-table-cell'>
                 <Button
                     className='button'
-                    onClick={e => props.setMode('NEW_ATTRIBUTE')}
+                    onClick={e => props.setMode('INSERT_MODE')}
                     label='+'
                 />
             </span>

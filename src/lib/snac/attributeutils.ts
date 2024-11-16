@@ -104,23 +104,20 @@ export const setSelectedAttribute = (
 ) => {
 
     if (!isDeleted) {
-
         if (isSelected) {
             setSelected({
                 ns: '#',
                 name: '#',
             })
-            setMode('READY')
+            setMode('LIST_MODE')
         }
-
         else {
             setSelected({
                 ns: ns,
                 name: name,
             })
-            setMode('EDIT')
+            setMode('EDIT_MODE')
         }
-        
         dispatch({
             type: "selectAttribute",
             payload: {
@@ -194,7 +191,7 @@ export const setSaveAttribute = (
         ns: '#',
         name: '#',
     })
-    setMode('READY')
+    setMode('LIST_MODE')
 }
 
 export const saveAttribute = (
@@ -245,7 +242,7 @@ export const setCancelAttribute = (
         ns: '#',
         name: '#',
     })
-    setMode('READY')
+    setMode('LIST_MODE')
 }
 
 export const cancelAttribute = (
