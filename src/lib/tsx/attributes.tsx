@@ -25,7 +25,8 @@ import {
     setSaveAttribute,
     setCancelAttribute,
     attributeGetValue,
-    setNewAttribute
+    setNewAttribute,
+    attributeGetNumRows
 } from '../snac/attributeutils'
 import { networkInterfaces } from 'os'
 
@@ -115,12 +116,14 @@ export const AttributesTable = (props: {
     isDeleteMode: boolean,
     setIndex: Function,
     setAttributes: Function,
+    numRows: number
+    setNumRows: Function
 }): JSX.Element => {
 
     const [state, dispatch] = useReducer(
-        attributesEditReducer, 
+        attributesEditReducer,
         snac2EditAttributes(props.attributes))
-        
+
     const [selected, setSelected] = useState({
         ns: '#',
         name: '#',
@@ -146,6 +149,9 @@ export const AttributesTable = (props: {
                             isDeleted={attributeIsDeleted(state, ns, name)}
                             isSelected={attributeIsSelected(selected, ns, name)}
                             setSelected={setSelected}
+                            setAttributes={props.setAttributes}
+                            numRows={props.numRows}
+                            setNumRows={props.setNumRows}
                         />
                     )
                 })
@@ -156,6 +162,9 @@ export const AttributesTable = (props: {
                 mode={mode}
                 setMode={setMode}
                 dispatch={dispatch}
+                setAttributes={props.setAttributes}
+                numRows={props.numRows}
+                setNumRows={props.setNumRows}
             />
         </>
     )
@@ -173,6 +182,9 @@ const AttributeTableRow = (props: {
     isDeleted: boolean
     isSelected: boolean
     setSelected: Function
+    setAttributes: Function
+    numRows: number
+    setNumRows: Function
 }) => {
 
     const classDeleted = props.isDeleted ? 'attribute-deleted' : ''
@@ -304,6 +316,9 @@ const AttributeNewRow = (props: {
     mode: string
     setMode: Function
     dispatch: Function
+    setAttributes: Function
+    numRows: number
+    setNumRows: Function
 }) => {
 
     const [ns, setNs] = useState('')
@@ -334,7 +349,7 @@ const AttributeNewRow = (props: {
                     onChange={e => setName(e.target.value)}
                 />
             </span>
-            <span className=' text-input attributes-table-cell'>
+            <span className='attributes-table-cell'>
                 <TextInput
                     name="value"
                     className='text-input attribute-value-input'
@@ -349,12 +364,21 @@ const AttributeNewRow = (props: {
                 <Button
                     className='button text-button'
                     onClick={e => {
-                        setNewAttribute(
-                            props.dispatch,
-                            ns,
-                            name,
-                            value
-                        )
+                        const newNs = ns.length === 0 ? '@' : ns
+
+                        if (name.length > 0 &&
+                            value.length > 0 &&
+                            !(newNs in props.state
+                                && name in props.state[newNs]
+                            )) {
+                            setNewAttribute(
+                                props.dispatch,
+                                newNs,
+                                name,
+                                value
+                            )
+                            props.setNumRows(props.numRows + 1)
+                        }
                         setNs('')
                         setName('')
                         setValue('')
@@ -367,6 +391,7 @@ const AttributeNewRow = (props: {
                 <Button
                     className='button text-button'
                     onClick={e => {
+
                         setNs('')
                         setName('')
                         setValue('')

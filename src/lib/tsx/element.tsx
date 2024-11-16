@@ -294,7 +294,7 @@ const NSNodeEdit = (props: {
     const [index, setIndex] = useState(-1)
 
     const keys = attributeKeys(attributes)
-    const numRows = keys.length + 2
+    const [numRows, setNumRows] = useState(keys.length + 2)
     const height = numRows * 1.4
     const width = props.path.length * 1.2
 
@@ -379,6 +379,8 @@ const NSNodeEdit = (props: {
                     index={index}
                     setIndex={setIndex}
                     setAttributes={setAttributes}
+                    numRows={numRows}
+                    setNumRows={setNumRows}
                 />
             </span>
         </>

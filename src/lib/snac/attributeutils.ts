@@ -76,6 +76,15 @@ export const attributesEditReducer = (
     }
 }
 
+export const attributeGetNumRows = (state: EditAttributesType):number => {
+    let numRows = 0
+
+    for(const key of Object.keys(state)){
+        numRows += Object.keys(state[key]).length
+    }
+    return numRows
+}
+
 export const attributeGetValue = (
     state: EditAttributesType,
     ns: string,
@@ -224,7 +233,6 @@ export const setCancelAttribute = (
     name: string,
     oldValue: string,
 ) => {
-    console.log('oldValue', oldValue)
     dispatch({
         type: "cancelAttribute",
         payload: {
