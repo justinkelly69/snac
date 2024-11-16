@@ -24,8 +24,10 @@ import {
     setDeletedAttribute,
     setSaveAttribute,
     setCancelAttribute,
-    attributeGetValue
+    attributeGetValue,
+    setNewAttribute
 } from '../snac/attributeutils'
+import { networkInterfaces } from 'os'
 
 export const Attributes = (props: {
     path: number[],
@@ -115,7 +117,10 @@ export const AttributesTable = (props: {
     setAttributes: Function,
 }): JSX.Element => {
 
-    const [state, dispatch] = useReducer(attributesEditReducer, snac2EditAttributes(props.attributes))
+    const [state, dispatch] = useReducer(
+        attributesEditReducer, 
+        snac2EditAttributes(props.attributes))
+        
     const [selected, setSelected] = useState({
         ns: '#',
         name: '#',
@@ -156,50 +161,7 @@ export const AttributesTable = (props: {
     )
 }
 
-const AttributeNewRow = (props: {
-    state: EditAttributesType
-    mode: string
-    setMode: Function
-    dispatch: Function
-}) => {
-    return (props.mode === 'NEW_ATTRIBUTE' ?
-        <>
-            <span className='attributes-table-cell'></span>
-            <span className='attributes-table-cell'></span>
-            <span className='attributes-table-cell'></span>
-            <span className='attributes-table-cell'></span>
-            <span className='attributes-table-cell'></span>
 
-            <span className='attributes-table-cell'>
-                <Button
-                    className='button text-button'
-                    onClick={e => props.setMode('READY')}
-                    label='Save'
-                />
-            </span>
-            <span className='attributes-table-cell'>
-                <Button
-                    className='button text-button'
-                    onClick={e => props.setMode('READY')}
-                    label='Cancel'
-                />
-            </span>
-        </> :
-        <>
-            <span className='attributes-table-cell'></span>
-            <span className='attributes-table-cell'>
-                <Button
-                    className='button'
-                    onClick={e => props.setMode('NEW_ATTRIBUTE')}
-                    label='+'
-                />
-            </span>
-            <span className='attributes-table-cell'></span>
-            <span className='attributes-table-cell'></span>
-            <span className='attributes-table-cell'></span>
-        </>
-    )
-}
 
 const AttributeTableRow = (props: {
     ns: string
@@ -281,7 +243,6 @@ const AttributeTableRow = (props: {
                         <Button
                             className='button text-button'
                             onClick={e => {
-                                console.log(value)
                                 setOldValue(value)
                                 setSaveAttribute(
                                     props.setMode,
@@ -334,9 +295,100 @@ const AttributeTableRow = (props: {
                     <span></span>
                 </>
             }
+        </>
+    )
+}
 
+const AttributeNewRow = (props: {
+    state: EditAttributesType
+    mode: string
+    setMode: Function
+    dispatch: Function
+}) => {
 
+    const [ns, setNs] = useState('')
+    const [name, setName] = useState('')
+    const [value, setValue] = useState('')
 
+    return (props.mode === 'NEW_ATTRIBUTE' ?
+        <>
+            <span className='attributes-table-cell'></span>
+            <span className='attributes-table-cell'></span>
+            <span className='attributes-table-cell'>
+                <TextInput
+                    name="ns"
+                    className=' text-input attribute-ns-input'
+                    value={ns}
+                    size={4}
+                    placeholder='ns'
+                    onChange={e => setNs(e.target.value)}
+                />
+            </span>
+            <span className='attributes-table-cell'>
+                <TextInput
+                    name="name"
+                    className='text-input attribute-name-input'
+                    value={name}
+                    size={4}
+                    placeholder='name'
+                    onChange={e => setName(e.target.value)}
+                />
+            </span>
+            <span className=' text-input attributes-table-cell'>
+                <TextInput
+                    name="value"
+                    className='text-input attribute-value-input'
+                    value={value}
+                    size={4}
+                    placeholder='value'
+                    onChange={e => setValue(e.target.value)}
+                />
+            </span>
+
+            <span className='attributes-table-cell'>
+                <Button
+                    className='button text-button'
+                    onClick={e => {
+                        setNewAttribute(
+                            props.dispatch,
+                            ns,
+                            name,
+                            value
+                        )
+                        setNs('')
+                        setName('')
+                        setValue('')
+                        props.setMode('READY')
+                    }}
+                    label='Save'
+                />
+            </span>
+            <span className='attributes-table-cell'>
+                <Button
+                    className='button text-button'
+                    onClick={e => {
+                        setNs('')
+                        setName('')
+                        setValue('')
+                        props.setMode('READY')
+                    }}
+                    label='Cancel'
+                />
+            </span>
+        </> :
+        <>
+            <span className='attributes-table-cell'></span>
+            <span className='attributes-table-cell'>
+                <Button
+                    className='button'
+                    onClick={e => props.setMode('NEW_ATTRIBUTE')}
+                    label='+'
+                />
+            </span>
+            <span className='attributes-table-cell'></span>
+            <span className='attributes-table-cell'></span>
+            <span className='attributes-table-cell'></span>
+            <span className='attributes-table-cell'></span>
         </>
     )
 }

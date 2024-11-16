@@ -310,6 +310,22 @@ export const deleteAttribute = (
     return newAttrbutes
 }
 
+export const setNewAttribute = (
+    dispatch: Function,
+    ns: string,
+    name: string,
+    value: string,
+) => {
+    dispatch({
+        type: "newAttribute",
+        payload: {
+            newNS: ns,
+            newName: name,
+            newValue: value,
+        }
+    })
+}
+
 export const newAttribute = (
     state: EditAttributesType,
     payload: EditAttributesPayloadType,

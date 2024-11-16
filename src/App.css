@@ -41,6 +41,20 @@
   text-decoration: line-through;
 }
 
+.attribute-ns-input {
+  width: 3.6em;
+  color: darkred;
+  border: 1px solid darkred;
+  text-align: right;
+}
+
+.attribute-name-input {
+  width: 12em;
+  color: darkorchid;
+  border: 1px solid darkorchid;
+  margin-right: 0.1em;
+}
+
 .attribute-value-input {
   width: 20em;
   color: darkgreen;
