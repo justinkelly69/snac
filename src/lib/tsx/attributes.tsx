@@ -113,7 +113,7 @@ export const AttributesTable = (props: {
     const [mode, setMode] = useState('LIST_MODE')
 
     //console.clear()
-    console.log(JSON.stringify(state, null, 4))
+    //console.log(JSON.stringify(state, null, 4))
 
     return (
         <>

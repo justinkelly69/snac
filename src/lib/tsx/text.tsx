@@ -14,13 +14,15 @@ export const Text = (props: {
 
     const [isSelected, setSelected] = useState(false)
     const [isChildrenOpen, setChildrenOpen] = useState(false)
-    const [isEditMode, setEditMode] = useState(false)
-    const [insertMode, setInsertMode] = useState(false)
+
+    const [mode, setMode] = useState('VIEW_MODE') // VIEW_MODE, EDIT_MODE, INSERT_MODE
 
     const [nsText, setNSText] = useState('')
     const [nameText, setNameText] = useState('')
-    const [valueText, setValueText] = useState(props.node.T)
-    const [text, setText] = useState(props.node.T)
+
+    const [oldText, setOldText] = useState(props.node.T)
+    const [newText, setNewText] = useState(props.node.T)
+
     const [beforeText, setBeforeText] = useState('')
     const [duringText, setDuringText] = useState('')
     const [afterText, setAfterText] = useState('')
@@ -35,11 +37,6 @@ export const Text = (props: {
     }
     if (props.showOpen) {
         openState = isChildrenOpen ? SwitchStates.ON : SwitchStates.OFF
-    }
-
-    let tmpText = props.node.T
-    if (!isChildrenOpen && text.length > props.opts.xml_trimTextLength) {
-        tmpText = `${text.trim().substring(0, props.opts.xml_trimTextLength)} ${props.opts.xml_ellipsis}`
     }
 
     const prefix = <Prefix path={props.path} opts={props.opts} />
@@ -60,43 +57,52 @@ export const Text = (props: {
             {openState === SwitchStates.ON ?
                 <>
                     <span className='text-editor'>
-                        {isEditMode ?
+                        {mode === 'EDIT_MODE' ?
                             <>
                                 <span className='text-editor-controls'>
                                     <Button
-                                        className='text-button text-cancel'
+                                        className='button x-button'
                                         onClick={e => {
-                                            setEditMode(false)
+                                            setMode('VIEW_MODE')
                                             setChildrenOpen(false)
                                         }}
                                         label='X'
                                     />
                                     <Button
-                                        className='text-button text-save'
+                                        className='button text-button'
                                         onClick={e => {
-                                            setEditMode(false)
-                                            setChildrenOpen(false)
-                                            console.log(valueText)
+                                            setMode('VIEW_MODE')
+                                            setChildrenOpen(true)
+                                            setOldText(newText)
+                                            console.log(newText)
                                         }}
                                         label='Save'
+                                    />
+                                    <Button
+                                        className='button text-button'
+                                        onClick={e => {
+                                            setMode('VIEW_MODE')
+                                            setChildrenOpen(true)
+                                            setNewText(oldText)
+                                        }}
+                                        label='Cancel'
                                     />
                                 </span>
                                 <TextArea
                                     readOnly={false}
-                                    className='text-editor-text'
-                                    value={valueText}
-                                    onChange={e => setValueText(e.target.value)}
+                                    className='text-editor-rw'
+                                    value={newText}
+                                    onChange={e => setNewText(e.target.value)}
                                 />
                             </> :
                             <>
-                                {insertMode ?
+                                {mode === 'INSERT_MODE' ?
                                     <>
                                         <span className='text-editor-controls'>
                                             <Button
-                                                className='text-button text-cancel'
+                                                className='button x-button'
                                                 onClick={e => {
-                                                    setEditMode(false)
-                                                    setInsertMode(false)
+                                                    setMode('VIEW_MODE')
                                                     setChildrenOpen(false)
                                                 }}
                                                 label='X'
@@ -114,7 +120,7 @@ export const Text = (props: {
                                                 onChange={e => setNameText(e.target.value)}
                                             />
                                             <Button
-                                                className='text-button text-insert'
+                                                className='button text-button'
                                                 onClick={e => {
                                                     if (nsText.length > 0 && nameText.length > 0) {
                                                         const tag = `${nsText}:${nameText}`
@@ -125,7 +131,7 @@ export const Text = (props: {
                                                         console.log(`${props.path}:${beforeText}<${tag}>${duringText}</${tag}>${afterText}`)
                                                     }
                                                     setChildrenOpen(false)
-                                                    setInsertMode(false)
+                                                    setMode('VIEW_MODE')
                                                     setNSText('')
                                                     setNameText('')
                                                     setBeforeText('')
@@ -134,11 +140,19 @@ export const Text = (props: {
                                                 }}
                                                 label='Insert Here'
                                             />
+                                            <Button
+                                                className='button text-button'
+                                                onClick={e => {
+                                                    setMode('VIEW_MODE')
+                                                    setChildrenOpen(true)
+                                                }}
+                                                label='Cancel'
+                                            />
                                         </span>
                                         <TextArea
                                             readOnly={true}
-                                            className='text-editor-text'
-                                            value={valueText}
+                                            className='text-editor-ro'
+                                            value={newText}
                                             onSelect={e => {
                                                 const value = e.target.value
                                                 const start = e.target.selectionStart
@@ -153,27 +167,30 @@ export const Text = (props: {
                                     <>
                                         <span className='text-editor-controls'>
                                             <Button
-                                                className='text-button text-cancel'
+                                                className='button x-button'
                                                 onClick={e => {
-                                                    setEditMode(false)
-                                                    setInsertMode(false)
+                                                    setMode('VIEW_MODE')
                                                     setChildrenOpen(false)
                                                 }}
                                                 label='X'
                                             />
                                             <Button
-                                                className='text-button text-edit'
-                                                onClick={e => setEditMode(true)}
+                                                className='button text-button'
+                                                onClick={e => {
+                                                    setMode('EDIT_MODE')
+                                                }}
                                                 label='Edit'
                                             />
                                             <Button
-                                                className='text-button text-insert'
-                                                onClick={e => setInsertMode(true)}
+                                                className='button text-button'
+                                                onClick={e => {
+                                                    setMode('INSERT_MODE')
+                                                }}
                                                 label='Insert Mode'
                                             />
                                         </span>
                                         <span className='text-editor-text' >
-                                            {text.trim()}
+                                            {newText.trim()}
                                         </span>
                                     </>
                                 }
@@ -187,7 +204,7 @@ export const Text = (props: {
                     setChildrenOpen(true)
                 }}>
                     <span className='text-bracket'>[</span>
-                    {text}
+                    {newText}
                     <span className='text-bracket'>]</span>
                 </span>
             }

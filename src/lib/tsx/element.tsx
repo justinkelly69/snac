@@ -292,7 +292,7 @@ const NSNodeEdit = (props: {
     const keys = attributeKeys(attributes)
     const [numRows, setNumRows] = useState(keys.length + 2)
     const height = numRows * 1.4
-    const width = props.path.length * 1.2
+    const pathWidth = props.path.length * 1.2
 
     let rows = ''
     for (let i in keys) {
@@ -304,7 +304,7 @@ const NSNodeEdit = (props: {
             <span className='attributes-table' style={{
                 display: 'grid',
                 //gridTemplateColumns: `${width}em 2em 4em 12em 20em 6em 6em`,
-                gridTemplateColumns: `${width}em min-content min-content min-content min-content 6em 6em`,
+                gridTemplateColumns: `${pathWidth}em min-content min-content min-content min-content 6em 6em`,
                 gridAutoRows: `${rows}`,
                 height: `${height}em`,
             }}>
