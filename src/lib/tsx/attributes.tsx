@@ -132,6 +132,7 @@ export const AttributesTable = (props: {
                             isDeleted={attributeIsDeleted(state, ns, name)}
                             isSelected={attributeIsSelected(selected, ns, name)}
                             setSelected={setSelected}
+                            editAttributes={props.editAttributes}
                             setAttributes={props.setAttributes}
                             numRows={props.numRows}
                             setNumRows={props.setNumRows}
@@ -140,15 +141,18 @@ export const AttributesTable = (props: {
                 })
             })}
 
-            <AttributeNewRow
-                state={state}
-                mode={mode}
-                setMode={setMode}
-                dispatch={dispatch}
-                setAttributes={props.setAttributes}
-                numRows={props.numRows}
-                setNumRows={props.setNumRows}
-            />
+            {props.editAttributes ?
+                <AttributeNewRow
+                    state={state}
+                    mode={mode}
+                    setMode={setMode}
+                    dispatch={dispatch}
+                    setAttributes={props.setAttributes}
+                    numRows={props.numRows}
+                    setNumRows={props.setNumRows}
+                /> :
+                <span></span>
+            }
         </>
     )
 }
@@ -163,6 +167,7 @@ const AttributeTableRow = (props: {
     isDeleted: boolean
     isSelected: boolean
     setSelected: Function
+    editAttributes: boolean
     setAttributes: Function
     numRows: number
     setNumRows: Function
@@ -177,7 +182,7 @@ const AttributeTableRow = (props: {
     return (
         <>
             <span>
-                {props.mode === 'LIST_MODE' &&
+                {props.editAttributes && props.mode === 'LIST_MODE' &&
                     <Button
                         className='button x-button'
                         onClick={e => {
@@ -193,7 +198,7 @@ const AttributeTableRow = (props: {
             </span>
             <span className={`attribute-ns ${classDeleted}`}
                 onClick={e => {
-                    setSelectedAttribute(
+                    props.editAttributes && setSelectedAttribute(
                         props.setMode,
                         props.setSelected,
                         props.isSelected,
@@ -208,7 +213,7 @@ const AttributeTableRow = (props: {
             </span>
             <span className={`attribute-name ${classDeleted}`}
                 onClick={e => {
-                    setSelectedAttribute(
+                    props.editAttributes && setSelectedAttribute(
                         props.setMode,
                         props.setSelected,
                         props.isSelected,
@@ -273,7 +278,7 @@ const AttributeTableRow = (props: {
                     <span>
                         <span className={`attribute-value  ${classDeleted}`}
                             onClick={e => {
-                                setSelectedAttribute(
+                                props.editAttributes && setSelectedAttribute(
                                     props.setMode,
                                     props.setSelected,
                                     props.isSelected,

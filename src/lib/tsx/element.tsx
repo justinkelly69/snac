@@ -342,6 +342,9 @@ const NSNodeEdit = (props: {
                                 }}
                                 label='Edit'
                             />
+                            <span style={{display:'block',width:'6em'}}>
+
+                            </span>
                         </span>
                     </> :
                     <>
