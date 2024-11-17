@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { SNACItem, SNACPINode, SNACOpts, SwitchStates } from "../snac/types"
 import { Prefix, ShowHideSwitch } from './prefix'
-import { Button, TextArea } from './widgets'
+import { Button, TextArea, TextInput } from './widgets'
 import { escapePIBody } from '../snac/textutils'
 
 export const PI = (props: {
@@ -18,9 +18,10 @@ export const PI = (props: {
     const [isChildrenOpen, setChildrenOpen] = useState(false)
     const [isEditable, setIsEditable] = useState(false)
 
-    const [valuePILang, setValuePILang] = useState(props.node.L)
-    const [valuePIBody, setValuePIBody] = useState(props.node.B)
-    const [tmpValuePIBody, setTmpValuePIBody] = useState(props.node.B)
+    const [piLang, setPiLang] = useState(props.node.L)
+    const [piBody, setPiBody] = useState(props.node.B)
+    const [oldPiLang, setOldPiLang] = useState(props.node.L)
+    const [oldPiBody, setOldPiBody] = useState(props.node.B)
 
     let selectState = SwitchStates.HIDDEN
     let openState = SwitchStates.HIDDEN
@@ -42,7 +43,7 @@ export const PI = (props: {
             SwitchStates.OFF
     }
 
-    let body = valuePIBody
+    let body = piBody
     if (!isChildrenOpen && body.length > props.opts.xml_trimTextLength) {
         body = `${props.opts.xml_ellipsis}`
     }
@@ -63,53 +64,63 @@ export const PI = (props: {
                 openClose={e => setSelected(!isSelected)}
             />
             {prefix}
-
             {openState === SwitchStates.ON ?
                 <>
-                    <br /> {prefix}
                     <span className='pi-body'>
                         {isEditable ?
                             <>
                                 <span className='text-editor-controls'>
+                                    <PiOpenBracket />
+                                    <TextInput
+                                        name="value"
+                                        className='pi-lang-input'
+                                        value={piLang}
+                                        size={2}
+                                        placeholder='value'
+                                        onChange={e => setPiLang(e.target.value)}
+                                    />
                                     <Button
-                                        className='text-button text-save'
+                                        className='button text-button'
                                         onClick={e => {
                                             setIsEditable(false)
                                             setChildrenOpen(false)
-                                            setValuePIBody(tmpValuePIBody)
-                                            console.log(`<?${valuePILang} ${tmpValuePIBody} ?>`)
+                                            setOldPiLang(piLang)
+                                            setOldPiBody(piBody)
+                                            console.log(`<?${piLang} ${oldPiBody} ?>`)
                                         }}
                                         label='Save'
                                     />
                                     <Button
-                                        className='text-button text-cancel'
+                                        className='button text-button'
                                         onClick={e => {
                                             setIsEditable(false)
                                             setChildrenOpen(false)
-                                            setTmpValuePIBody('')
+                                            setPiLang(oldPiLang)
+                                            setPiBody(oldPiBody)
                                         }}
                                         label='Cancel'
                                     />
                                 </span>
                                 <TextArea
                                     readOnly={false}
-                                    className='text-editor-text'
-                                    value={tmpValuePIBody}
-                                    onChange={e => setTmpValuePIBody(e.target.value)}
+                                    className='pi-body-input'
+                                    value={piBody}
+                                    onChange={e => setPiBody(e.target.value)}
                                 />
                             </> :
                             <>
                                 <span className='text-editor-controls'>
+                                    <PiOpenBracket />{`${piLang} `}
                                     <Button
-                                        className='text-button text-edit'
+                                        className='button text-button'
                                         onClick={e => {
                                             setIsEditable(true)
-                                            setTmpValuePIBody(valuePIBody)
+                                            setOldPiBody(piBody)
                                         }}
                                         label='Edit'
                                     />
                                     <Button
-                                        className='text-button text-remove'
+                                        className='button text-button'
                                         onClick={e => {
                                             setIsEditable(false)
                                             setChildrenOpen(false)
@@ -117,33 +128,38 @@ export const PI = (props: {
                                         label='Remove'
                                     />
                                 </span>
-                                <span className='text-editor-text' >
-                                    {escapePIBody(body.trim())}
+                                <span className='pi-body-input' >
+                                    {escapePIBody(piBody.trim())}
                                 </span>
+
                             </>
                         }
                     </span>
-                    <br /> {prefix}
+                    <br />
+                    {prefix}<PiCloseBracket />
                 </> :
-                <span className='pi-body' onClick={e => {
-                    setChildrenOpen(true)
-                }}>
-                    {escapePIBody(body)}
-                </span>
+                <>
+                    <PiOpenBracket />
+                    <span className='pi-lang'>{piLang}</span>
+                    <span className='pi-body'
+                        onClick={e => {
+                            setChildrenOpen(true)
+                        }}>
+                        {escapePIBody(body)}
+                    </span>
+                    <PiCloseBracket />
+                </>
             }
-
         </div>
     )
 }
 
-export const PI_OPEN_BRACKET = (props) =>
+export const PiOpenBracket = () =>
     <span className='pi-bracket'>
         &lt;?
-        <span className='pi-lang'>{props.node.L}</span>
-        {" "}
     </span>
 
-export const PI_CLOSE_BRACKET = () =>
+export const PiCloseBracket = () =>
     <span className='pi-bracket'>
         {" "}?&gt;
     </span>

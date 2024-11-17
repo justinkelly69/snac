@@ -66,7 +66,7 @@ export const CDATA = (props: {
                 opts={props.opts}
             />
 
-            <CDATA_OPEN_BRACKET />
+            <CDATAOpenBracket />
             {openState === SwitchStates.ON ?
                 <>
                     <br /> {prefix}
@@ -75,7 +75,7 @@ export const CDATA = (props: {
                             <>
                                 <span className='text-editor-controls'>
                                     <Button
-                                        className='text-button text-save'
+                                        className='button text-button'
                                         onClick={e => {
                                             setIsEditable(false)
                                             setChildrenOpen(false)
@@ -85,7 +85,7 @@ export const CDATA = (props: {
                                         label='Save'
                                     />
                                     <Button
-                                        className='text-button text-cancel'
+                                        className='button text-button'
                                         onClick={e => {
                                             setIsEditable(false)
                                             setChildrenOpen(false)
@@ -104,7 +104,7 @@ export const CDATA = (props: {
                             <>
                                 <span className='text-editor-controls'>
                                     <Button
-                                        className='text-button text-edit'
+                                        className='button text-button'
                                         onClick={e => {
                                             setIsEditable(true)
                                             setTmpValueCDATA(valueCDATA)
@@ -112,7 +112,7 @@ export const CDATA = (props: {
                                         label='Edit'
                                     />
                                     <Button
-                                        className='text-button text-remove'
+                                        className='button text-button'
                                         onClick={e => {
                                             setIsEditable(false)
                                             setChildrenOpen(false)
@@ -134,12 +134,12 @@ export const CDATA = (props: {
                     {escapeCDATA(cdata)}
                 </span>
             }
-            <CDATA_CLOSE_BRACKET />
+            <CDATACloseBracket />
         </div>
     )
 }
 
-export const CDATA_OPEN_BRACKET = () =>
+export const CDATAOpenBracket = () =>
     <span className='cdata-brackets'>
         &lt;![
         <span className='cdata-label'>
@@ -148,7 +148,7 @@ export const CDATA_OPEN_BRACKET = () =>
         [
     </span>
 
-export const CDATA_CLOSE_BRACKET = () =>
+export const CDATACloseBracket = () =>
     <span className='cdata-brackets'>
         ]]&gt;
     </span>

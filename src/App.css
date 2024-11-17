@@ -151,7 +151,6 @@
   height: 5em;
   overflow: scroll;
   resize: both;
-
 }
 
 .text-editor-rw {
@@ -164,7 +163,6 @@
   height: 5em;
   overflow: scroll;
   resize: both;
-
 }
 
 .text-input {
@@ -280,7 +278,11 @@
 }
 
 .pi-lang {
-  color: darkcyan
+  color: rgb(13, 168, 5)
+}
+
+.pi-bracket {
+  color: rgb(8, 84, 4)
 }
 
 .pi-body {
@@ -288,6 +290,25 @@
   display: inline-block;
   padding: .25em;
   white-space: nowrap;
+}
+
+.pi-lang-input {
+  width: 6em;
+  color: darkgreen;
+  outline: none !important;
+  border-color: rgb(131, 189, 131);
+}
+
+.pi-body-input {
+  color: darkgreen;
+  float: left;
+  border: 1px solid darkgreen;
+  padding: .25em;
+  white-space: break-spaces;
+  width: 20em;
+  height: 5em;
+  overflow: scroll;
+  resize: both;
 }
 
 .prefix {}

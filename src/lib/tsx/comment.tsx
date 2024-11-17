@@ -62,7 +62,7 @@ export const Comment = (props: {
             />
             {prefix}
 
-            <COMMENT_OPEN_BRACKET />
+            <CommentOpenBracket />
             {openState === SwitchStates.ON ?
                 <>
                     <br /> {prefix}
@@ -71,7 +71,7 @@ export const Comment = (props: {
                             <>
                                 <span className='text-editor-controls'>
                                     <Button
-                                        className='text-button text-save'
+                                        className='button text-button'
                                         onClick={e => {
                                             setIsEditable(false)
                                             setChildrenOpen(false)
@@ -81,7 +81,7 @@ export const Comment = (props: {
                                         label='Save'
                                     />
                                     <Button
-                                        className='text-button text-cancel'
+                                        className='button text-button'
                                         onClick={e => {
                                             setIsEditable(false)
                                             setChildrenOpen(false)
@@ -100,7 +100,7 @@ export const Comment = (props: {
                             <>
                                 <span className='text-editor-controls'>
                                     <Button
-                                        className='text-button text-edit'
+                                        className='button text-button'
                                         onClick={e => {
                                             setIsEditable(true)
                                             setTmpValueComment(valueComment)
@@ -108,7 +108,7 @@ export const Comment = (props: {
                                         label='Edit'
                                     />
                                     <Button
-                                        className='text-button text-remove'
+                                        className='button text-button'
                                         onClick={e => {
                                             setIsEditable(false)
                                             setChildrenOpen(false)
@@ -130,17 +130,17 @@ export const Comment = (props: {
                     {escapeComment(comment)}
                 </span>
             }
-            <COMMENT_CLOSE_BRACKET />
+            <CommentCloseBracket />
         </div>
     )
 }
 
-export const COMMENT_OPEN_BRACKET = () =>
+export const CommentOpenBracket = () =>
     <span className='comment-brackets'>
         &lt;!--
     </span>
 
-export const COMMENT_CLOSE_BRACKET = () =>
+export const CommentCloseBracket = () =>
     <span className='comment-brackets'>
         --&gt;
     </span>
