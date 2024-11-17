@@ -135,7 +135,10 @@
   border: 1px solid darkgrey;
   padding: .25em;
   white-space: break-spaces;
-  width: 50%;
+  width: 20em;
+  height: 5em;
+  overflow: scroll;
+  resize: both;
 }
 
 .text-editor-ro {
@@ -144,7 +147,11 @@
   border: 1px solid darkgrey;
   padding: .25em;
   white-space: break-spaces;
-  width: 50%;
+  width: 20em;
+  height: 5em;
+  overflow: scroll;
+  resize: both;
+
 }
 
 .text-editor-rw {
@@ -153,7 +160,11 @@
   border: 1px solid black;
   padding: .25em;
   white-space: break-spaces;
-  width: 50%;
+  width: 20em;
+  height: 5em;
+  overflow: scroll;
+  resize: both;
+
 }
 
 .text-input {

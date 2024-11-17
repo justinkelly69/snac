@@ -285,9 +285,13 @@ const NSNodeEdit = (props: {
     openClose?: Function
 }): JSX.Element => {
 
+    const [oldNs, setOldNs] = useState(props.node.S)
+    const [oldName, setOldName] = useState(props.node.N)
     const [ns, setNs] = useState(props.node.S)
     const [name, setName] = useState(props.node.N)
+
     const [attributes, setAttributes] = useState(props.node.A)
+    const [editAttributes, setEditAttributes] = useState(true)
 
     const keys = attributeKeys(attributes)
     const [numRows, setNumRows] = useState(keys.length + 2)
@@ -303,8 +307,8 @@ const NSNodeEdit = (props: {
         <>
             <span className='attributes-table' style={{
                 display: 'grid',
-                //gridTemplateColumns: `${width}em 2em 4em 12em 20em 6em 6em`,
-                gridTemplateColumns: `${pathWidth}em min-content min-content min-content min-content 6em 6em`,
+                gridTemplateColumns:
+                    `${pathWidth}em min-content min-content min-content min-content 6em 6em`,
                 gridAutoRows: `${rows}`,
                 height: `${height}em`,
             }}>
@@ -322,32 +326,69 @@ const NSNodeEdit = (props: {
                         label='X'
                     />
                 </span>
-                <span>
-                    <TextInput
-                        name="ns"
-                        className='text-input ns-input'
-                        value={ns}
-                        size={4}
-                        placeholder='ns'
-                        onChange={e => setNs(e.target.value)}
-                    />
-                </span>
-                <span>
-                    <TextInput
-                        name="name"
-                        className='text-input name-input'
-                        value={name}
-                        size={10}
-                        placeholder='name'
-                        onChange={e => setName(e.target.value)}
-                    />
-                </span>
-                <span>
-                    <span style={{
-                        display: 'block',
-                        width:'12em'
-                        }}></span>
-                </span>
+                {editAttributes ?
+                    <>
+                        <span className='element-ns'>
+                            {ns}:
+                        </span>
+                        <span className='element-name'>
+                            {name}
+                        </span>
+                        <span>
+                            <Button
+                                className='button text-button'
+                                onClick={e => {
+                                    setEditAttributes(false)
+                                }}
+                                label='Edit'
+                            />
+                        </span>
+                    </> :
+                    <>
+                        <span>
+                            <TextInput
+                                name="ns"
+                                className='text-input ns-input'
+                                value={ns}
+                                size={4}
+                                placeholder='ns'
+                                onChange={e => setNs(e.target.value)}
+                            />
+                            :
+                        </span>
+                        <span>
+                            <TextInput
+                                name="name"
+                                className='text-input name-input'
+                                value={name}
+                                size={10}
+                                placeholder='name'
+                                onChange={e => setName(e.target.value)}
+                            />
+                        </span>
+                        <span>
+                            <Button
+                                className='button text-button'
+                                onClick={e => {
+                                    setOldNs(ns)
+                                    setOldName(name)
+                                    setEditAttributes(true)
+                                    console.log(`<${ns}:${name}>`)
+                                }}
+                                label='Save'
+                            />
+                            <Button
+                                className='button text-button'
+                                onClick={e => {
+                                    setNs(oldNs)
+                                    setName(oldName)
+                                    setEditAttributes(true)
+                                }}
+                                label='Cancel'
+                            />
+                        </span>
+                    </>
+                }
                 <span>
                     <Button
                         className='button text-button'
@@ -374,6 +415,7 @@ const NSNodeEdit = (props: {
                     path={props.path}
                     attributes={attributes}
                     setAttributes={setAttributes}
+                    editAttributes={editAttributes}
                     numRows={numRows}
                     setNumRows={setNumRows}
                 />

@@ -98,6 +98,7 @@ export const AttributesTable = (props: {
     path: number[],
     attributes: AttributesType,
     setAttributes: Function,
+    editAttributes: boolean,
     numRows: number
     setNumRows: Function
 }): JSX.Element => {
