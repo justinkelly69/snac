@@ -136,7 +136,8 @@ export const PI = (props: {
                         }
                     </span>
                     <br />
-                    {prefix}<PiCloseBracket />
+                    {prefix}
+                    <PiCloseBracket />
                 </> :
                 <>
                     <PiOpenBracket />

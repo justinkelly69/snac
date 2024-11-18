@@ -35,14 +35,15 @@ export const editAttributes2snac = (
 ): AttributesType => {
 
     const attributes: AttributesType = {}
-
     for (const ns of Object.keys(editAttributes)) {
         if (!attributes[ns]) {
             attributes[ns] = {}
         }
         for (const name of Object.keys(editAttributes[ns])) {
             if (!attributes[ns][name]) {
-                attributes[ns][name] = editAttributes[ns][name]['V']
+                if (!editAttributes[ns][name]['d']) {
+                    attributes[ns][name] = editAttributes[ns][name]['V']
+                }
             }
         }
     }
@@ -76,10 +77,10 @@ export const attributesEditReducer = (
     }
 }
 
-export const attributeGetNumRows = (state: EditAttributesType):number => {
+export const attributeGetNumRows = (state: EditAttributesType): number => {
     let numRows = 0
 
-    for(const key of Object.keys(state)){
+    for (const key of Object.keys(state)) {
         numRows += Object.keys(state[key]).length
     }
     return numRows
@@ -168,6 +169,11 @@ export const selectAttribute = (
     }
 
     return newAttrbutes
+}
+
+export const saveAttributes = (newAttrbutes: EditAttributesType) => {
+
+
 }
 
 export const setSaveAttribute = (

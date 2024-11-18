@@ -11,6 +11,19 @@ import {
 } from './types'
 
 import {
+    isOpenTag,
+    isCloseTag,
+    isCDATATag,
+    isCommentTag,
+    isPITag,
+    isText,
+    isBlank,
+    isEndOfAttributes,
+    nextAttribute,
+    lastAttribute,
+} from './match'
+
+import {
     nsNameArray,
     nsNameJoin,
     nsNameSplit,
@@ -26,13 +39,13 @@ const _render = (remainder: string, stack: SNACNamesNode[]) => {
     const out: SNACItem[] = []
 
     while (remainder.length > 0) {
-        const openTag = remainder.match(/^<([\w]*:?[\w]+)(.*)$/s)
-        const closeTag = remainder.match(/^<\/([\w]*:?[\w]+)>(.*)$/s)
-        const dataTag = remainder.match(/^<!\[CDATA\[(.*?)\]\]>(.*)$/s)
-        const commentTag = remainder.match(/^<!--(.*?)-->(.*)$/s)
-        const piTag = remainder.match(/^<\?(\w+=?)\s+(.*?)\?>(.*)$/s)
-        const textTag = remainder.match(/^([^<>]+)(.*)$/s)
-        const blankTag = remainder.match(/^$/s)
+        const openTag = isOpenTag(remainder)
+        const closeTag = isCloseTag(remainder)
+        const dataTag = isCDATATag(remainder)
+        const commentTag = isCommentTag(remainder)
+        const piTag = isPITag(remainder)
+        const textTag = isText(remainder)
+        const blankTag = isBlank(remainder)
 
         if (openTag !== null) {
             const openTagNsName = nsNameSplit(openTag[1])
@@ -164,7 +177,7 @@ const getNamespaces = (attributes: AttributesType): NamespaceAttributesType => {
                     X['@'] = attributes['@']['xmlns']
                 }
                 else {
-                    if(!A['@']) {
+                    if (!A['@']) {
                         A['@'] = {}
                     }
                     A['@'][N] = attributes['@'][N]
@@ -178,7 +191,7 @@ const getNamespaces = (attributes: AttributesType): NamespaceAttributesType => {
         }
         else {
             for (const N of Object.keys(attributes[S])) {
-                if(!A[S]) {
+                if (!A[S]) {
                     A[S] = {}
                 }
                 A[S][N] = attributes[S][N]
@@ -201,31 +214,25 @@ const getAttributes = (remainder: string): AttributesXMLhasChildrenType => {
     let attributes: AttributesType = {}
 
     while (remainder.length > 0) {
-        const closingTag = remainder.match(/^\s*(\/?>)(.*)$/s) // The next character is >
-        const nextAttribute = remainder.match(/^\s*([\w]+:?[\w]+)=(['"])(.*)$/s) // Get the next attribute
+        const isLastAttribute = isEndOfAttributes(remainder)
+        const hasNextAttribute = nextAttribute(remainder)
 
-        if (closingTag) { // space then >
-            let hasChildren = false // '/>'
-
-            if (closingTag[1] === '>') { // Open tag. Has children.
-                hasChildren = true
-            }
-
+        if (isLastAttribute) { // space then >
             return {
-                remainder: closingTag[2], // Remainder after >
-                hasChildren: hasChildren,
+                remainder: isLastAttribute[2], // Remainder after >
+                hasChildren: lastAttribute(isLastAttribute[1]),
                 attributes: attributes
             }
         }
 
         // next name="value" pair
-        else if (nextAttribute) {
-            const quoteChar = nextAttribute[2] as QuoteChar
+        else if (hasNextAttribute) {
+            const quoteChar = hasNextAttribute[2] as QuoteChar
             const att = addAttribute(
                 attributes,
-                nextAttribute[1],
+                hasNextAttribute[1],
                 quoteChar,
-                nextAttribute[3]
+                hasNextAttribute[3]
             )
             attributes = att['attributes']
             remainder = att['remainder']
@@ -258,7 +265,7 @@ const addAttribute = (
         if (!attributes['@']) {
             attributes['@'] = {}
         }
-        attributes['@'][name] =  attVal['value']
+        attributes['@'][name] = attVal['value']
     }
     else {
         if (!attributes[ns]) {

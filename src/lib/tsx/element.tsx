@@ -20,6 +20,7 @@ import {
 
 import { Attributes, AttributesTable } from './attributes'
 import { attributeKeys } from '../snac/textutils'
+import { editAttributes2snac } from '../snac/attributeutils'
 
 export const Tag = (props: {
     root: SNACItem[],
@@ -377,6 +378,7 @@ const NSNodeEdit = (props: {
                                     setOldName(name)
                                     setEditAttributes(true)
                                     console.log(`<${ns}:${name}>`)
+                                    //setAttributes()
                                 }}
                                 label='Save'
                             />
