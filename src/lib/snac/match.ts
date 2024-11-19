@@ -26,7 +26,7 @@ export const isBlank = (xml: string):RegExpMatchArray | null => {
     return xml.match(/^$/s)
 }
 
-export const isEndOfAttributes = (xml: string):RegExpMatchArray | null => {
+export const lastAttribute = (xml: string):RegExpMatchArray | null => {
     return xml.match(/^\s*(\/?>)(.*)$/s)
 }
 
@@ -34,6 +34,6 @@ export const nextAttribute = (xml: string):RegExpMatchArray | null => {
     return xml.match(/^\s*([\w]+:?[\w]+)=(['"])(.*)$/s)
 }
 
-export const lastAttribute = (lastTag:string) => {
+export const hasChildren = (lastTag:string) => {
     return lastTag === '>' ? true : false
 }

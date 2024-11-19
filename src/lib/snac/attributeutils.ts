@@ -11,7 +11,6 @@ export const snac2EditAttributes = (
 ): EditAttributesType => {
 
     const editAttributes: EditAttributesType = {}
-
     for (const ns of Object.keys(attributes)) {
         if (!editAttributes[ns]) {
             editAttributes[ns] = {}
@@ -78,8 +77,8 @@ export const attributesEditReducer = (
 }
 
 export const attributeGetNumRows = (state: EditAttributesType): number => {
-    let numRows = 0
 
+    let numRows = 0
     for (const key of Object.keys(state)) {
         numRows += Object.keys(state[key]).length
     }
@@ -91,6 +90,7 @@ export const attributeGetValue = (
     ns: string,
     name: string,
 ): string => {
+    
     return state[ns][name]['V']
 }
 
@@ -143,7 +143,6 @@ export const selectAttribute = (
 ): EditAttributesType => {
 
     const newAttrbutes: EditAttributesType = {}
-
     for (const ns of Object.keys(state)) {
         if (!newAttrbutes[ns]) {
             newAttrbutes[ns] = {}
@@ -172,8 +171,6 @@ export const selectAttribute = (
 }
 
 export const saveAttributes = (newAttrbutes: EditAttributesType) => {
-
-
 }
 
 export const setSaveAttribute = (
@@ -184,7 +181,6 @@ export const setSaveAttribute = (
     name: string,
     value: string,
 ) => {
-
     dispatch({
         type: "saveAttribute",
         payload: {
@@ -206,7 +202,6 @@ export const saveAttribute = (
 ): EditAttributesType => {
 
     const newAttrbutes: EditAttributesType = {}
-
     for (const ns of Object.keys(state)) {
         if (!newAttrbutes[ns]) {
             newAttrbutes[ns] = {}
@@ -256,7 +251,6 @@ export const cancelAttribute = (
 ): EditAttributesType => {
 
     const newAttrbutes: EditAttributesType = {}
-
     for (const ns of Object.keys(state)) {
         if (!newAttrbutes[ns]) {
             newAttrbutes[ns] = {}
@@ -277,6 +271,7 @@ export const attributeIsDeleted = (
     ns: string,
     name: string,
 ): boolean => {
+
     return state[ns][name]['d']
 }
 
@@ -300,7 +295,6 @@ export const deleteAttribute = (
 ): EditAttributesType => {
 
     const newAttrbutes: EditAttributesType = {}
-
     for (const ns of Object.keys(state)) {
         if (!newAttrbutes[ns]) {
             newAttrbutes[ns] = {}
@@ -343,7 +337,6 @@ export const newAttribute = (
 ): EditAttributesType => {
 
     const newAttrbutes: EditAttributesType = {}
-
     for (const ns of Object.keys(state)) {
         if (!newAttrbutes[ns]) {
             newAttrbutes[ns] = {}
@@ -362,7 +355,6 @@ export const newAttribute = (
         if (!newAttrbutes[payload.newNS]) {
             newAttrbutes[payload.newNS] = {}
         }
-
         newAttrbutes[payload.newNS][payload.newName] = {
             V: payload.newValue,
             d: false,

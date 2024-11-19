@@ -2,11 +2,7 @@ import {
     SNACNamesNode,
     SNACItem,
     SNACElement,
-    AttributesXMLhasChildrenType,
     AttributesType,
-    QuoteChar,
-    AttributeXMLType,
-    AttributeValueType,
     NamespaceAttributesType
 } from './types'
 
@@ -18,17 +14,14 @@ import {
     isPITag,
     isText,
     isBlank,
-    isEndOfAttributes,
-    nextAttribute,
-    lastAttribute,
 } from './match'
 
 import {
-    nsNameArray,
     nsNameJoin,
     nsNameSplit,
     unEscapeHtml
 } from './textutils'
+import { getAllAttributes } from './atts2snac'
 
 const render = (xml: string) => {
     const stack: SNACNamesNode[] = []
@@ -41,15 +34,15 @@ const _render = (remainder: string, stack: SNACNamesNode[]) => {
     while (remainder.length > 0) {
         const openTag = isOpenTag(remainder)
         const closeTag = isCloseTag(remainder)
-        const dataTag = isCDATATag(remainder)
+        const CDATATag = isCDATATag(remainder)
         const commentTag = isCommentTag(remainder)
-        const piTag = isPITag(remainder)
+        const PITag = isPITag(remainder)
         const textTag = isText(remainder)
         const blankTag = isBlank(remainder)
 
         if (openTag !== null) {
             const openTagNsName = nsNameSplit(openTag[1])
-            const attributes = getAttributes(openTag[2])
+            const attributes = getAllAttributes(openTag[2])
             remainder = attributes['remainder']
 
             const snac: SNACElement = {
@@ -99,15 +92,15 @@ const _render = (remainder: string, stack: SNACNamesNode[]) => {
             }
         }
 
-        else if (dataTag !== null) {
+        else if (CDATATag !== null) {
             if (stack.length > 0) {
                 out.push({
-                    D: dataTag[1],
+                    D: CDATATag[1],
                     o: true,
                     q: false
                 })
             }
-            remainder = dataTag[2]
+            remainder = CDATATag[2]
         }
 
         else if (commentTag !== null) {
@@ -121,16 +114,16 @@ const _render = (remainder: string, stack: SNACNamesNode[]) => {
             remainder = commentTag[2]
         }
 
-        else if (piTag !== null) {
+        else if (PITag !== null) {
             if (stack.length > 0) {
                 out.push({
-                    L: piTag[1],
-                    B: piTag[2],
+                    L: PITag[1],
+                    B: PITag[2],
                     o: true,
                     q: false
                 })
             }
-            remainder = piTag[3]
+            remainder = PITag[3]
         }
 
         else if (textTag !== null) {
@@ -203,116 +196,6 @@ const getNamespaces = (attributes: AttributesType): NamespaceAttributesType => {
         X: X,
         A: A
     }
-}
-
-////////////////////////////////////////////////////////////////////////
-// ATTRIBUTES 
-////////////////////////////////////////////////////////////////////////
-
-// Get all attributes for the current tag
-const getAttributes = (remainder: string): AttributesXMLhasChildrenType => {
-    let attributes: AttributesType = {}
-
-    while (remainder.length > 0) {
-        const isLastAttribute = isEndOfAttributes(remainder)
-        const hasNextAttribute = nextAttribute(remainder)
-
-        if (isLastAttribute) { // space then >
-            return {
-                remainder: isLastAttribute[2], // Remainder after >
-                hasChildren: lastAttribute(isLastAttribute[1]),
-                attributes: attributes
-            }
-        }
-
-        // next name="value" pair
-        else if (hasNextAttribute) {
-            const quoteChar = hasNextAttribute[2] as QuoteChar
-            const att = addAttribute(
-                attributes,
-                hasNextAttribute[1],
-                quoteChar,
-                hasNextAttribute[3]
-            )
-            attributes = att['attributes']
-            remainder = att['remainder']
-        }
-
-        else {
-            throw Error(`INVALID ATTRIBUTE ${remainder}\n`)
-        }
-    }
-
-    // End of file
-    return {
-        remainder: remainder,
-        hasChildren: false,
-        attributes: {}
-    }
-}
-
-const addAttribute = (
-    attributes: AttributesType,
-    nameStr: string,
-    quoteChar: QuoteChar,
-    remainder: string
-): AttributeXMLType => {
-
-    const attVal = getAttributeValue(remainder, quoteChar)
-    const [ns, name] = nsNameArray(nameStr)
-
-    if (ns === '') {
-        if (!attributes['@']) {
-            attributes['@'] = {}
-        }
-        attributes['@'][name] = attVal['value']
-    }
-    else {
-        if (!attributes[ns]) {
-            attributes[ns] = {}
-        }
-        attributes[ns][name] = attVal['value']
-    }
-
-    return {
-        attributes: attributes,
-        remainder: attVal['remainder']
-    }
-}
-
-const getAttributeValue = (
-    remainder: string,
-    quoteChar: QuoteChar
-): AttributeValueType => {
-
-    const values = getValueString(remainder, quoteChar)
-    if (values === null) {
-        throw Error(`BAD XML ${remainder}`)
-    }
-
-    const re = new RegExp(`\\${quoteChar}`, 'g')
-
-    return {
-        value: unEscapeHtml(values['value'].replace(re, quoteChar)),
-        remainder: values['remainder']
-    }
-}
-
-// Get all the string up to the next quoteChar
-const getValueString = (
-    remainder: string,
-    quoteChar: QuoteChar
-): AttributeValueType | null => {
-
-    for (let i = 0; i < remainder.length; i++) {
-        if (remainder.charAt(i) === quoteChar && remainder.charAt(i - 1) !== '\\') {
-            return {
-                value: remainder.substring(0, i),
-                remainder: remainder.substring(i + 1)
-            }
-        }
-    }
-    return null
 }
 
 export default render
