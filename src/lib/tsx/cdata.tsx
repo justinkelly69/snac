@@ -9,21 +9,17 @@ export const CDATA = (props: {
     node: SNACCDATA,
     path: number[],
     showSelected: boolean,
-    showOpen: boolean,
     snacOpts: SNACOpts,
 }): JSX.Element => {
 
     const [isSelected, setSelected] = useState(false)
     const [isChildrenOpen, setChildrenOpen] = useState(false)
     const [isEditable, setIsEditable] = useState(false)
-    const [mode, setMode] = useState<SwitchModes>('VIEW_MODE') // VIEW_MODE, EDIT_MODE, INSERT_MODE
-
 
     const [valueCDATA, setValueCDATA] = useState(props.node.D)
     const [tmpValueCDATA, setTmpValueCDATA] = useState(props.node.D)
 
     let selectState = SwitchStates.HIDDEN
-    let openState = SwitchStates.OFF
     let selectedClassName = 'cdata'
 
     if (props.showSelected) {
@@ -34,12 +30,6 @@ export const CDATA = (props: {
         selectedClassName = isSelected ?
             'cdata selected' :
             'cdata'
-    }
-
-    if (props.showOpen) {
-        openState = isChildrenOpen ?
-            SwitchStates.ON :
-            SwitchStates.OFF
     }
 
     let cdata = valueCDATA
@@ -58,7 +48,7 @@ export const CDATA = (props: {
                 root={props.root}
                 path={props.path}
                 selected={selectState}
-                visible={openState !== SwitchStates.ON}
+                visible={!isChildrenOpen}
                 chars={props.snacOpts.switch_selectChars}
                 className='selected-show-hide'
                 openClose={e => setSelected(!isSelected)}
@@ -70,7 +60,7 @@ export const CDATA = (props: {
             />
 
             <CDATAOpenBracket />
-            {openState === SwitchStates.ON ?
+            {isChildrenOpen ?
                 <>
                     <br /> {prefix}
                     <span className='cdata-body'>

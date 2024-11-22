@@ -10,14 +10,12 @@ export const PI = (props: {
     node: SNACPINode,
     path: number[],
     showSelected: boolean,
-    showOpen: boolean,
     snacOpts: SNACOpts,
 }): JSX.Element | null => {
 
     const [isSelected, setSelected] = useState(false)
     const [isChildrenOpen, setChildrenOpen] = useState(false)
     const [isEditable, setIsEditable] = useState(false)
-    const [mode, setMode] = useState<SwitchModes>('VIEW_MODE') // VIEW_MODE, EDIT_MODE, INSERT_MODE
 
     const [piLang, setPiLang] = useState(props.node.L)
     const [piBody, setPiBody] = useState(props.node.B)
@@ -38,12 +36,6 @@ export const PI = (props: {
             'pi'
     }
 
-    if (props.showOpen) {
-        openState = isChildrenOpen ?
-            SwitchStates.ON :
-            SwitchStates.OFF
-    }
-
     let body = piBody
     if (!isChildrenOpen && body.length > props.snacOpts.xml_trimTextLength) {
         body = `${props.snacOpts.xml_ellipsis}`
@@ -60,13 +52,13 @@ export const PI = (props: {
                 root={props.root}
                 path={props.path}
                 selected={selectState}
-                visible={openState !== SwitchStates.ON}
+                visible={!isChildrenOpen}
                 chars={props.snacOpts.switch_selectChars}
                 className='selected-show-hide'
                 openClose={e => setSelected(!isSelected)}
             />
             {prefix}
-            {openState === SwitchStates.ON ?
+            {isChildrenOpen ?
                 <>
                     <span className='pi-body'>
                         {isEditable ?

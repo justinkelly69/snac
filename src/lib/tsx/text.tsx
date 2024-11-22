@@ -8,7 +8,7 @@ export const Text = (props: {
     node: SNACText,
     path: number[],
     showSelected: boolean,
-    showOpen: boolean,
+    //showOpen: boolean,
     snacOpts: SNACOpts,
 }): JSX.Element => {
 
@@ -28,15 +28,11 @@ export const Text = (props: {
     const [afterText, setAfterText] = useState('')
 
     let selectState = SwitchStates.HIDDEN
-    let openState = SwitchStates.OFF
     let selectedClassName = 'text'
 
     if (props.showSelected) {
         selectState = isSelected ? SwitchStates.ON : SwitchStates.OFF
         selectedClassName = isSelected ? 'text selected' : 'text'
-    }
-    if (props.showOpen) {
-        openState = isChildrenOpen ? SwitchStates.ON : SwitchStates.OFF
     }
 
     const prefix = <Prefix path={props.path} snacOpts={props.snacOpts} />
@@ -48,14 +44,14 @@ export const Text = (props: {
                     root={props.root}
                     path={props.path}
                     selected={selectState}
-                    visible={openState !== SwitchStates.ON}
+                    visible={!isChildrenOpen}
                     chars={props.snacOpts.switch_selectChars}
                     className='selected-show-hide'
                     openClose={e => setSelected(!isSelected)}
                 />
                 {prefix}
             </span>
-            {openState === SwitchStates.ON ?
+            {isChildrenOpen ?
                 <>
                     <span className='text-editor'>
                         {mode === 'EDIT_MODE' ?

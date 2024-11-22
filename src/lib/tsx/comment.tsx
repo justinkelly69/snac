@@ -9,21 +9,17 @@ export const Comment = (props: {
     node: SNACComment,
     path: number[],
     showSelected: boolean,
-    showOpen: boolean,
     snacOpts: SNACOpts,
 }): JSX.Element | null => {
 
     const [isSelected, setSelected] = useState(false)
     const [isChildrenOpen, setChildrenOpen] = useState(false)
     const [isEditable, setIsEditable] = useState(false)
-    const [mode, setMode] = useState<SwitchModes>('VIEW_MODE') // VIEW_MODE, EDIT_MODE, INSERT_MODE
-
 
     const [valueComment, setValueComment] = useState(props.node.M)
     const [tmpValueComment, setTmpValueComment] = useState(props.node.M)
 
     let selectState = SwitchStates.HIDDEN
-    let openState = SwitchStates.HIDDEN
     let selectedClassName = 'comment'
 
     if (props.showSelected) {
@@ -34,12 +30,6 @@ export const Comment = (props: {
         selectedClassName = isSelected ?
             'comment selected' :
             'comment'
-    }
-
-    if (props.showOpen) {
-        openState = isChildrenOpen ?
-            SwitchStates.ON :
-            SwitchStates.OFF
     }
 
     let comment = valueComment
@@ -58,7 +48,7 @@ export const Comment = (props: {
                 root={props.root}
                 path={props.path}
                 selected={selectState}
-                visible={openState !== SwitchStates.ON}
+                visible={!isChildrenOpen}
                 chars={props.snacOpts.switch_selectChars}
                 className='selected-show-hide'
                 openClose={e => setSelected(!isSelected)}
@@ -66,7 +56,7 @@ export const Comment = (props: {
             {prefix}
 
             <CommentOpenBracket />
-            {openState === SwitchStates.ON ?
+            {isChildrenOpen ?
                 <>
                     <br /> {prefix}
                     <span className='comment-body'>
