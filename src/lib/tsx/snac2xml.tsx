@@ -7,107 +7,117 @@ import {
     escapeHtml
 } from '../snac/textutils'
 
-const snac2xml = (
-    root: SNACItem[], 
-    snac: SNACItem[], 
-    funcs: SNAC2XMLJSXFuncs, 
+const XMLOut = (
+    root: SNACItem[],
+    snac: SNACItem[],
+    funcs: SNAC2XMLJSXFuncs,
     opts: SNACOpts
 ) => {
-    return getChildren(root, snac, [], funcs, opts)
+    return Children({
+        root: root,
+        snac: snac,
+        path: [],
+        funcs: funcs,
+        opts: opts,
+    })
 }
 
-const getChildren = (
-    root: SNACItem[], 
-    snac: SNACItem[], 
-    path: number[], 
-    funcs: SNAC2XMLJSXFuncs, 
+const Children = (props: {
+    root: SNACItem[],
+    snac: SNACItem[],
+    path: number[],
+    funcs: SNAC2XMLJSXFuncs,
     opts: SNACOpts
-) => {
-    const { Tag, Text, CDATA, Comment, PI } = funcs
+}) => {
+    const { Tag, Text, CDATA, Comment, PI } = props.funcs
     let out: JSX.Element[] = []
 
-    for (let i in Object.keys(snac)) {
-        const newPath = [...path, parseInt(i)]
+    for (let i in Object.keys(props.snac)) {
+        const newPath = [...props.path, parseInt(i)]
 
-        if (snac[i].hasOwnProperty("N")) {
-            const snacElementNode: SNACElement = snac[i] as SNACElement;
+        if (props.snac[i].hasOwnProperty("N")) {
+            const snacElementNode: SNACElement = props.snac[i] as SNACElement;
 
             out = [...out, (
                 <Tag
                     key={i}
-                    root={root}
+                    root={props.root}
                     node={snacElementNode}
                     path={newPath}
-                    opts={opts}
-                    getChildren={getChildren}
-                    funcs={funcs}
+                    opts={props.opts}
+                    getChildren={() => Children({
+                        ...props,
+                        path: newPath,
+                        snac: snacElementNode.C,
+                    })}
+                    funcs={props.funcs}
                 />
             )]
         }
 
-        else if (snac[i].hasOwnProperty("T")) {
-            const snacTextNode: SNACText = snac[i] as SNACText
+        else if (props.snac[i].hasOwnProperty("T")) {
+            const snacTextNode: SNACText = props.snac[i] as SNACText
             let text = escapeHtml(snacTextNode["T"])
-            if (opts.xml_trimText) {
+            if (props.opts.xml_trimText) {
                 text = text.trim()
             }
             out = [...out, (
                 <Text
                     key={i}
-                    root={root}
+                    root={props.root}
                     node={snacTextNode}
                     path={newPath}
                     showSelected={true}
                     showOpen={true}
-                    opts={opts}
+                    opts={props.opts}
                 />
             )]
         }
 
-        else if (snac[i].hasOwnProperty("D")) {
-            const snacCDATANode: SNACCDATA = snac[i] as SNACCDATA
+        else if (props.snac[i].hasOwnProperty("D")) {
+            const snacCDATANode: SNACCDATA = props.snac[i] as SNACCDATA
             out = [...out, (
                 <CDATA
                     key={i}
-                    root={root}
+                    root={props.root}
                     node={snacCDATANode}
                     path={newPath}
                     showSelected={true}
                     showOpen={true}
-                    opts={opts}
+                    opts={props.opts}
                 />
             )]
         }
 
-        else if (snac[i].hasOwnProperty("M")) {
-            if (opts.xml_allowComments) {
-                const snacCommentNode: SNACComment = snac[i] as SNACComment
+        else if (props.snac[i].hasOwnProperty("M")) {
+            if (props.opts.xml_allowComments) {
+                const snacCommentNode: SNACComment = props.snac[i] as SNACComment
                 out = [...out, (
                     <Comment
                         key={i}
-                        root={root}
+                        root={props.root}
                         node={snacCommentNode}
                         path={newPath}
                         showSelected={true}
                         showOpen={true}
-                        opts={opts}
+                        opts={props.opts}
                     />
                 )]
             }
         }
 
-        else if (snac[i].hasOwnProperty("L")) {
-            if (opts.xml_allowPIs) {
-                const snacPINode: SNACPINode = snac[i] as SNACPINode
+        else if (props.snac[i].hasOwnProperty("L")) {
+            if (props.opts.xml_allowPIs) {
+                const snacPINode: SNACPINode = props.snac[i] as SNACPINode
                 out = [...out, (
                     <PI
                         key={i}
-                        root={root}
+                        root={props.root}
                         node={snacPINode}
                         path={newPath}
                         showSelected={true}
                         showOpen={true}
-                        opts={opts}
+                        opts={props.opts}
                     />
                 )]
             }
@@ -117,4 +127,4 @@ const getChildren = (
     return out
 }
 
-export default snac2xml
+export default XMLOut

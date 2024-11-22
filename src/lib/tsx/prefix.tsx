@@ -20,22 +20,24 @@ const getPrefixString = (path: number[], opts: SNACOpts): string => {
     return path.reduce((out, p) => out + opts.prefix_charOn, init)
 }
 
-export const ShowHideSwitch = (props:
-    {
-        root: SNACItem[],
-        path: number[],
-        chars: OnOffHiddenChars,
-        selected: SwitchStates,
-        className: string
-        openClose: Function
-    }): JSX.Element => {
+export const ShowHideSwitch = (props: {
+    root: SNACItem[],
+    path: number[],
+    chars: OnOffHiddenChars,
+    selected: SwitchStates,
+    visible: boolean,
+    className: string
+    openClose: Function
+}): JSX.Element => {
     let out = props.chars.hidden
-    switch (props.selected) {
-        case SwitchStates.OFF:
-            out = props.chars.on
-            break;
-        case SwitchStates.ON:
-            out = props.chars.off
+    if (props.visible) {
+        switch (props.selected) {
+            case SwitchStates.OFF:
+                out = props.chars.on
+                break;
+            case SwitchStates.ON:
+                out = props.chars.off
+        }
     }
     return (
         <span className={props.className} onClick={e => {

@@ -10,7 +10,7 @@ import {
     SNACElement,
     SwitchStates,
     SNACOpts,
-    AttributesType
+    SwitchModes
 } from '../snac/types'
 
 import {
@@ -20,7 +20,6 @@ import {
 
 import { Attributes, AttributesTable } from './attributes'
 import { attributeKeys } from '../snac/textutils'
-import { editAttributes2snac } from '../snac/attributeutils'
 
 export const Tag = (props: {
     root: SNACItem[],
@@ -106,6 +105,8 @@ export const OpenTag = (props: {
 }): JSX.Element => {
 
     const [isEditable, setIsEditable] = useState(false)
+    const [mode, setMode] = useState<SwitchModes>('VIEW_MODE') // VIEW_MODE, EDIT_MODE, INSERT_MODE
+
 
     let selectState = SwitchStates.HIDDEN
     let attributesOpenState = SwitchStates.HIDDEN
@@ -150,6 +151,7 @@ export const OpenTag = (props: {
                         root={props.root}
                         path={props.path}
                         selected={selectState}
+                        visible={mode === 'VIEW_MODE'}
                         chars={props.opts.switch_selectChars}
                         className='selected-show-hide'
                         openClose={e => props.setSelected(!props.isSelected)}
@@ -164,6 +166,7 @@ export const OpenTag = (props: {
                         root={props.root}
                         path={props.path}
                         selected={childrenOpenState}
+                        visible={mode === 'VIEW_MODE'}
                         chars={props.opts.switch_elementChars}
                         className='element-show-hide'
                         openClose={e => props.setChildrenOpen(!props.isChildrenOpen)}
@@ -188,6 +191,7 @@ export const OpenTag = (props: {
                         root={props.root}
                         path={props.path}
                         selected={attributesOpenState}
+                        visible={mode === 'VIEW_MODE'}
                         chars={props.opts.switch_attributeChars}
                         className='attributes-show-hide'
                         openClose={e => props.setAttributesOpen(!props.isAttributesOpen)}
@@ -211,6 +215,9 @@ export const CloseTag = (props: {
     opts: SNACOpts,
 }): JSX.Element | null => {
 
+    const [mode, setMode] = useState<SwitchModes>('VIEW_MODE') // VIEW_MODE, EDIT_MODE, INSERT_MODE
+
+
     let selectState = SwitchStates.HIDDEN
     let childrenOpenState = SwitchStates.HIDDEN
 
@@ -232,6 +239,7 @@ export const CloseTag = (props: {
                         root={props.root}
                         path={props.path}
                         selected={selectState}
+                        visible={mode === 'VIEW_MODE'}
                         chars={props.opts.switch_selectChars}
                         className='selected-show-hide'
                         openClose={e => props.setSelected(!props.isSelected)}
@@ -241,6 +249,7 @@ export const CloseTag = (props: {
                         root={props.root}
                         path={props.path}
                         selected={childrenOpenState}
+                        visible={mode === 'VIEW_MODE'}
                         chars={props.opts.switch_elementChars}
                         className='element-show-hide'
                         openClose={e => props.setChildrenOpen(!props.isChildrenOpen)}
@@ -316,6 +325,7 @@ const NSNodeEdit = (props: {
                 <span className='table-prefix'
                     style={{
                         gridArea: `1 / 1 / ${numRows} / 1`,
+                        backgroundColor: 'pink',
                     }}
                 ></span>
                 <span>
@@ -330,7 +340,7 @@ const NSNodeEdit = (props: {
                 {editAttributes ?
                     <>
                         <span className='element-ns'>
-                            {ns}:
+                            {ns.length > 0 && `${ns}:`}
                         </span>
                         <span className='element-name'>
                             {name}
@@ -399,10 +409,10 @@ const NSNodeEdit = (props: {
                         className='button text-button'
                         onClick={e => {
                             if (ns.length > 0 && name.length > 0) {
-                                console.log(`[${props.path}] <${ns}:${name} />`)
+                                console.log(`[${props.path}]:<${ns}:${name} />`)
                             }
                             else if (name.length > 0) {
-                                console.log(`[${props.path}] <${name} />`)
+                                console.log(`[${props.path}]:<${name} />`)
                             }
                             props.openClose && props.openClose()
                         }}

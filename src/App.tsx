@@ -3,7 +3,7 @@ import "./App.css";
 
 import xmlInput from './lib/data/xml/waffle'
 import xml2snac from './lib/snac/xml2snac'
-import xmlOut from './lib/tsx/snac2xml';
+import XMLOut from './lib/tsx/snac2xml';
 import { Tag, CloseTag, OpenTag } from './lib/tsx/element';
 import { Attributes } from './lib/tsx/attributes';
 import { Text } from './lib/tsx/text';
@@ -16,7 +16,7 @@ import { snacOpts } from './lib/snac/opts'
 
 function App() {
     const snac = xml2snac(xmlInput)[0]
-    const xml = xmlOut(
+    const xml = XMLOut(
         [snac],
         [snac],
         {
@@ -33,7 +33,7 @@ function App() {
         snacOpts
     )
 
-    console.log(JSON.stringify(snac, null, 4))
+    //console.log(JSON.stringify(snac, null, 4))
 
     return (
         <>

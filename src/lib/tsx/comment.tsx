@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { SNACComment, SNACItem, SNACOpts, SwitchStates } from '../snac/types'
+import { SNACComment, SNACItem, SNACOpts, SwitchModes, SwitchStates } from '../snac/types'
 import { Button, TextArea } from './widgets'
 import { Prefix, ShowHideSwitch } from './prefix'
 import { escapeComment } from '../snac/textutils'
@@ -16,6 +16,8 @@ export const Comment = (props: {
     const [isSelected, setSelected] = useState(false)
     const [isChildrenOpen, setChildrenOpen] = useState(false)
     const [isEditable, setIsEditable] = useState(false)
+    const [mode, setMode] = useState<SwitchModes>('VIEW_MODE') // VIEW_MODE, EDIT_MODE, INSERT_MODE
+
 
     const [valueComment, setValueComment] = useState(props.node.M)
     const [tmpValueComment, setTmpValueComment] = useState(props.node.M)
@@ -56,6 +58,7 @@ export const Comment = (props: {
                 root={props.root}
                 path={props.path}
                 selected={selectState}
+                visible={openState !== SwitchStates.ON}
                 chars={props.opts.switch_selectChars}
                 className='selected-show-hide'
                 openClose={e => setSelected(!isSelected)}
@@ -76,7 +79,7 @@ export const Comment = (props: {
                                             setIsEditable(false)
                                             setChildrenOpen(false)
                                             setValueComment(tmpValueComment)
-                                            console.log(`<!-- ${tmpValueComment} -->`)
+                                            console.log(`[${props.path}]:<!-- ${tmpValueComment} -->`)
                                         }}
                                         label='Save'
                                     />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { SNACItem, SNACPINode, SNACOpts, SwitchStates } from "../snac/types"
+import { SNACItem, SNACPINode, SNACOpts, SwitchStates, SwitchModes } from "../snac/types"
 import { Prefix, ShowHideSwitch } from './prefix'
 import { Button, TextArea, TextInput } from './widgets'
 import { escapePIBody } from '../snac/textutils'
@@ -17,6 +17,7 @@ export const PI = (props: {
     const [isSelected, setSelected] = useState(false)
     const [isChildrenOpen, setChildrenOpen] = useState(false)
     const [isEditable, setIsEditable] = useState(false)
+    const [mode, setMode] = useState<SwitchModes>('VIEW_MODE') // VIEW_MODE, EDIT_MODE, INSERT_MODE
 
     const [piLang, setPiLang] = useState(props.node.L)
     const [piBody, setPiBody] = useState(props.node.B)
@@ -59,6 +60,7 @@ export const PI = (props: {
                 root={props.root}
                 path={props.path}
                 selected={selectState}
+                visible={openState !== SwitchStates.ON}
                 chars={props.opts.switch_selectChars}
                 className='selected-show-hide'
                 openClose={e => setSelected(!isSelected)}
@@ -86,7 +88,7 @@ export const PI = (props: {
                                             setChildrenOpen(false)
                                             setOldPiLang(piLang)
                                             setOldPiBody(piBody)
-                                            console.log(`<?${piLang} ${oldPiBody} ?>`)
+                                            console.log(`[${props.path}]:<?${piLang} ${oldPiBody} ?>`)
                                         }}
                                         label='Save'
                                     />

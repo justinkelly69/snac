@@ -1,6 +1,7 @@
 //import React from 'react'
 
 export enum SwitchStates { 'ON', 'OFF', 'HIDDEN' }
+export type SwitchModes = 'VIEW_MODE' | 'EDIT_MODE' | 'INSERT_MODE'
 
 export type XMLOpts = {
     prefix_showPrefix: boolean,
@@ -129,7 +130,9 @@ export interface SNAC2XMLJSXFuncs {
     Prefix: PrefixJSXType,
 }
 
-export interface TagJSXType {
+export type ChildrenJSXType = TagJSXType | TextJSXType | CDATAJSXType| CommentJSXType | PIJSXType
+
+export type TagJSXType = {
     (props: {
         root: SNACItem[],
         node: SNACElement,
@@ -137,10 +140,10 @@ export interface TagJSXType {
         opts: SNACOpts,
         getChildren: Function,
         funcs: { [name: string]: any }
-    }): JSX.Element
+    })//: JSX.Element
 }
 
-export interface OpenTagJSXType {
+export type OpenTagJSXType = {
     (props: {
         root: SNACItem[],
         node: SNACElement
@@ -156,7 +159,7 @@ export interface OpenTagJSXType {
     }): JSX.Element
 }
 
-export interface CloseTagJSXType {
+export type CloseTagJSXType = {
     (props: {
         root: SNACItem[],
         node: SNACElement,
@@ -170,7 +173,7 @@ export interface CloseTagJSXType {
     }): JSX.Element | null
 }
 
-export interface TextJSXType {
+export type TextJSXType = {
     (props: {
         root: SNACItem[],
         node: SNACText,
@@ -178,9 +181,9 @@ export interface TextJSXType {
         showSelected: boolean,
         showOpen: boolean,
         opts: SNACOpts,
-    }): JSX.Element
+    })//: JSX.Element
 }
-export interface CDATAJSXType {
+export type CDATAJSXType = {
     (props: {
         root: SNACItem[],
         node: SNACCDATA,
@@ -188,9 +191,9 @@ export interface CDATAJSXType {
         showSelected: boolean,
         showOpen: boolean,
         opts: SNACOpts,
-    }): JSX.Element
+    })//: JSX.Element
 }
-export interface CommentJSXType {
+export type CommentJSXType = {
     (props: {
         root: SNACItem[],
         node: SNACComment,
@@ -198,9 +201,9 @@ export interface CommentJSXType {
         showSelected: boolean,
         showOpen: boolean,
         opts: SNACOpts,
-    }): JSX.Element | null
+    })//: JSX.Element
 }
-export interface PIJSXType {
+export type PIJSXType = {
     (props: {
         root: SNACItem[],
         node: SNACPINode,
@@ -208,9 +211,9 @@ export interface PIJSXType {
         showSelected: boolean,
         showOpen: boolean,
         opts: SNACOpts,
-    }): JSX.Element | null
+    })//: JSX.Element
 }
-export interface AttributesJSXType {
+export type AttributesJSXType = {
     (props: {
         path: number[],
         attributes: AttributesType,
@@ -218,16 +221,16 @@ export interface AttributesJSXType {
     }): JSX.Element | null
 }
 
-export interface AttributeJSXType {
+export type AttributeJSXType = {
     (props: {
         path: number[],
         name: string,
         value: string,
         opts: SNACOpts
-    }): JSX.Element
+    }): JSX.Element | null
 }
 
-export interface PrefixJSXType {
+export type PrefixJSXType = {
     (props: {
         path: number[],
         opts: SNACOpts

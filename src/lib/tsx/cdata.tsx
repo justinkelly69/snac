@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { SNACCDATA, SNACItem, SNACOpts, SwitchStates } from '../snac/types'
+import { SNACCDATA, SNACItem, SNACOpts, SwitchModes, SwitchStates } from '../snac/types'
 import { Prefix, ShowHideSwitch } from './prefix'
 import { Button, TextArea } from './widgets'
 import { escapeCDATA } from '../snac/textutils'
@@ -16,6 +16,8 @@ export const CDATA = (props: {
     const [isSelected, setSelected] = useState(false)
     const [isChildrenOpen, setChildrenOpen] = useState(false)
     const [isEditable, setIsEditable] = useState(false)
+    const [mode, setMode] = useState<SwitchModes>('VIEW_MODE') // VIEW_MODE, EDIT_MODE, INSERT_MODE
+
 
     const [valueCDATA, setValueCDATA] = useState(props.node.D)
     const [tmpValueCDATA, setTmpValueCDATA] = useState(props.node.D)
@@ -56,6 +58,7 @@ export const CDATA = (props: {
                 root={props.root}
                 path={props.path}
                 selected={selectState}
+                visible={openState !== SwitchStates.ON}
                 chars={props.opts.switch_selectChars}
                 className='selected-show-hide'
                 openClose={e => setSelected(!isSelected)}
@@ -80,7 +83,7 @@ export const CDATA = (props: {
                                             setIsEditable(false)
                                             setChildrenOpen(false)
                                             setValueCDATA(tmpValueCDATA)
-                                            console.log(`<![CDATA[ ${tmpValueCDATA} ]]>`)
+                                            console.log(`[${props.path}]:<![CDATA[ ${tmpValueCDATA} ]]>`)
                                         }}
                                         label='Save'
                                     />

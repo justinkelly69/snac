@@ -20,7 +20,7 @@ import {
     setCancelAttribute,
     attributeGetValue,
     setNewAttribute,
-} from '../snac/attributeutils'
+} from '../snac/attsutils'
 
 export const Attributes = (props: {
     path: number[],

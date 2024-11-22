@@ -1,6 +1,21 @@
-import { hasChildren, lastAttribute, nextAttribute } from "./match"
-import { nsNameArray, unEscapeHtml } from "./textutils"
-import { AttributesType, AttributesXMLhasChildrenType, AttributeValueType, AttributeXMLType, QuoteChar } from "./types"
+import {
+    hasChildren,
+    lastAttribute,
+    nextAttribute
+} from "./match"
+
+import {
+    nsNameArray,
+    unEscapeHtml
+} from "./textutils"
+
+import {
+    AttributesType,
+    AttributesXMLhasChildrenType,
+    AttributeValueType,
+    AttributeXMLType,
+    QuoteChar
+} from "./types"
 
 // Get all attributes for the current tag
 export const getAllAttributes = (remainder: string): AttributesXMLhasChildrenType => {
@@ -84,7 +99,7 @@ const newAttributeValue = (
     }
 
     const re = new RegExp(`\\${quoteChar}`, 'g')
-    
+
     return {
         value: unEscapeHtml(values['value'].replace(re, quoteChar)),
         remainder: values['remainder']

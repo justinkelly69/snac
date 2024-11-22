@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { SNACItem, SNACOpts, SNACText, SwitchStates } from '../snac/types'
+import { SNACItem, SNACOpts, SNACText, SwitchModes, SwitchStates } from '../snac/types'
 import { Prefix, ShowHideSwitch } from './prefix'
 import { Button, TextArea, TextInput } from './widgets'
 
@@ -15,7 +15,7 @@ export const Text = (props: {
     const [isSelected, setSelected] = useState(false)
     const [isChildrenOpen, setChildrenOpen] = useState(false)
 
-    const [mode, setMode] = useState('VIEW_MODE') // VIEW_MODE, EDIT_MODE, INSERT_MODE
+    const [mode, setMode] = useState<SwitchModes>('VIEW_MODE') // VIEW_MODE, EDIT_MODE, INSERT_MODE
 
     const [nsText, setNSText] = useState('')
     const [nameText, setNameText] = useState('')
@@ -48,6 +48,7 @@ export const Text = (props: {
                     root={props.root}
                     path={props.path}
                     selected={selectState}
+                    visible={openState !== SwitchStates.ON}
                     chars={props.opts.switch_selectChars}
                     className='selected-show-hide'
                     openClose={e => setSelected(!isSelected)}
@@ -74,7 +75,7 @@ export const Text = (props: {
                                             setMode('VIEW_MODE')
                                             setChildrenOpen(true)
                                             setOldText(newText)
-                                            console.log(newText)
+                                            console.log(`[${props.path}]:${newText}`)
                                         }}
                                         label='Save'
                                     />
@@ -198,7 +199,6 @@ export const Text = (props: {
                             </>
                         }
                     </span>
-                    <br />
                 </> :
                 <span className='text-body' onClick={e => {
                     setChildrenOpen(true)
