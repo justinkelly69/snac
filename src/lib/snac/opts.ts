@@ -60,7 +60,7 @@ export const snacOpts: SNACOpts = {
     xml_trimCDATALength: 100,
     xml_trimComment: true,
     xml_trimCommentLength: 100,
-    xml_showCloseTags: false,
+    xml_showCloseTags: true,
     xml_allowComments: true,
     xml_allowPIs: true,
     xml_ellipsis: '...',

@@ -11,7 +11,7 @@ export const PI = (props: {
     path: number[],
     showSelected: boolean,
     showOpen: boolean,
-    opts: SNACOpts,
+    snacOpts: SNACOpts,
 }): JSX.Element | null => {
 
     const [isSelected, setSelected] = useState(false)
@@ -45,13 +45,13 @@ export const PI = (props: {
     }
 
     let body = piBody
-    if (!isChildrenOpen && body.length > props.opts.xml_trimTextLength) {
-        body = `${props.opts.xml_ellipsis}`
+    if (!isChildrenOpen && body.length > props.snacOpts.xml_trimTextLength) {
+        body = `${props.snacOpts.xml_ellipsis}`
     }
 
     const prefix = <Prefix
         path={props.path}
-        opts={props.opts}
+        snacOpts={props.snacOpts}
     />
 
     return (
@@ -61,7 +61,7 @@ export const PI = (props: {
                 path={props.path}
                 selected={selectState}
                 visible={openState !== SwitchStates.ON}
-                chars={props.opts.switch_selectChars}
+                chars={props.snacOpts.switch_selectChars}
                 className='selected-show-hide'
                 openClose={e => setSelected(!isSelected)}
             />

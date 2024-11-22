@@ -25,9 +25,9 @@ export const Tag = (props: {
     root: SNACItem[],
     node: SNACElement,
     path: number[],
-    opts: SNACOpts,
+    snacOpts: SNACOpts,
     getChildren: Function,
-    funcs: { [name: string]: Function }
+    //funcs: { [name: string]: Function }
 }): JSX.Element => {
 
     const [isSelected, setSelected] = useState(props.node.q)
@@ -36,7 +36,7 @@ export const Tag = (props: {
 
     let selectedClassName = 'element'
 
-    if (props.opts.xml_showSelected) {
+    if (props.snacOpts.xml_showSelected) {
         selectedClassName = isSelected ? 'element selected' : 'element'
     }
 
@@ -52,7 +52,7 @@ export const Tag = (props: {
                 node={props.node}
                 path={props.path}
                 isEmpty={isEmpty}
-                opts={props.opts}
+                snacOpts={props.snacOpts}
                 isSelected={isSelected}
                 setSelected={setSelected}
                 isAttributesOpen={isAttributesOpen}
@@ -65,19 +65,19 @@ export const Tag = (props: {
                 props.root,
                 props.node["C"],
                 props.path,
-                props.funcs,
-                props.opts
+                //props.funcs,
+                props.snacOpts
             ) :
-                props.opts.xml_ellipsis
+                props.snacOpts.xml_ellipsis
             }
 
-            {!isEmpty && props.opts.xml_showCloseTags ? (
+            {!isEmpty && props.snacOpts.xml_showCloseTags ? (
                 <CloseTag
                     root={props.root}
                     node={props.node}
                     path={props.path}
                     isEmpty={isEmpty}
-                    opts={props.opts}
+                    snacOpts={props.snacOpts}
                     isSelected={isSelected}
                     setSelected={setSelected}
                     isChildrenOpen={isChildrenOpen}
@@ -95,7 +95,7 @@ export const OpenTag = (props: {
     node: SNACElement,
     path: number[],
     isEmpty: boolean,
-    opts: SNACOpts,
+    snacOpts: SNACOpts,
     isSelected: boolean,
     setSelected: Function
     isAttributesOpen: boolean,
@@ -113,20 +113,20 @@ export const OpenTag = (props: {
     let childrenOpenState = SwitchStates.HIDDEN
     let closeSlash = "/"
 
-    if (props.opts.xml_showSelected) {
+    if (props.snacOpts.xml_showSelected) {
         selectState = props.isSelected ?
             SwitchStates.ON :
             SwitchStates.OFF
     }
 
-    if (props.opts.xml_showAttributesOpen && attributeKeys(props.node.A).length) {
+    if (props.snacOpts.xml_showAttributesOpen && attributeKeys(props.node.A).length) {
         attributesOpenState = props.isAttributesOpen ?
             SwitchStates.ON :
             SwitchStates.OFF
     }
 
     if (!props.isEmpty) {
-        if (props.opts.xml_showChildrenOpen) {
+        if (props.snacOpts.xml_showChildrenOpen) {
             childrenOpenState = props.isChildrenOpen ?
                 SwitchStates.ON :
                 SwitchStates.OFF
@@ -142,7 +142,7 @@ export const OpenTag = (props: {
                         node={props.node}
                         type='element'
                         path={props.path}
-                        opts={props.opts}
+                        snacOpts={props.snacOpts}
                         openClose={e => { setIsEditable(false) }}
                     />
                 </> :
@@ -152,14 +152,14 @@ export const OpenTag = (props: {
                         path={props.path}
                         selected={selectState}
                         visible={mode === 'VIEW_MODE'}
-                        chars={props.opts.switch_selectChars}
+                        chars={props.snacOpts.switch_selectChars}
                         className='selected-show-hide'
                         openClose={e => props.setSelected(!props.isSelected)}
                     />
 
                     <Prefix
                         path={props.path}
-                        opts={props.opts}
+                        snacOpts={props.snacOpts}
                     />
 
                     <ShowHideSwitch
@@ -167,7 +167,7 @@ export const OpenTag = (props: {
                         path={props.path}
                         selected={childrenOpenState}
                         visible={mode === 'VIEW_MODE'}
-                        chars={props.opts.switch_elementChars}
+                        chars={props.snacOpts.switch_elementChars}
                         className='element-show-hide'
                         openClose={e => props.setChildrenOpen(!props.isChildrenOpen)}
                     />
@@ -181,7 +181,7 @@ export const OpenTag = (props: {
                             <Attributes
                                 attributes={props.node.A}
                                 path={props.path}
-                                opts={props.opts}
+                                snacOpts={props.snacOpts}
                             /> :
                             null
                         }
@@ -192,7 +192,7 @@ export const OpenTag = (props: {
                         path={props.path}
                         selected={attributesOpenState}
                         visible={mode === 'VIEW_MODE'}
-                        chars={props.opts.switch_attributeChars}
+                        chars={props.snacOpts.switch_attributeChars}
                         className='attributes-show-hide'
                         openClose={e => props.setAttributesOpen(!props.isAttributesOpen)}
                     />
@@ -212,7 +212,7 @@ export const CloseTag = (props: {
     setSelected: Function
     isChildrenOpen: boolean,
     setChildrenOpen: Function
-    opts: SNACOpts,
+    snacOpts: SNACOpts,
 }): JSX.Element | null => {
 
     const [mode, setMode] = useState<SwitchModes>('VIEW_MODE') // VIEW_MODE, EDIT_MODE, INSERT_MODE
@@ -221,12 +221,12 @@ export const CloseTag = (props: {
     let selectState = SwitchStates.HIDDEN
     let childrenOpenState = SwitchStates.HIDDEN
 
-    if (props.opts.xml_showSelected) {
+    if (props.snacOpts.xml_showSelected) {
         selectState = props.isSelected ? SwitchStates.ON : SwitchStates.OFF
     }
 
     if (props.isEmpty) {
-        if (props.opts.xml_showChildrenOpen) {
+        if (props.snacOpts.xml_showChildrenOpen) {
             childrenOpenState = props.isChildrenOpen ? SwitchStates.ON : SwitchStates.OFF
         }
     }
@@ -240,17 +240,17 @@ export const CloseTag = (props: {
                         path={props.path}
                         selected={selectState}
                         visible={mode === 'VIEW_MODE'}
-                        chars={props.opts.switch_selectChars}
+                        chars={props.snacOpts.switch_selectChars}
                         className='selected-show-hide'
                         openClose={e => props.setSelected(!props.isSelected)}
                     />
-                    <Prefix path={props.path} opts={props.opts} />
+                    <Prefix path={props.path} snacOpts={props.snacOpts} />
                     <ShowHideSwitch
                         root={props.root}
                         path={props.path}
                         selected={childrenOpenState}
                         visible={mode === 'VIEW_MODE'}
-                        chars={props.opts.switch_elementChars}
+                        chars={props.snacOpts.switch_elementChars}
                         className='element-show-hide'
                         openClose={e => props.setChildrenOpen(!props.isChildrenOpen)}
                     />
@@ -291,7 +291,7 @@ const NSNodeEdit = (props: {
     node: SNACElement,
     type: string,
     path: number[],
-    opts: SNACOpts,
+    snacOpts: SNACOpts,
     openClose?: Function
 }): JSX.Element => {
 

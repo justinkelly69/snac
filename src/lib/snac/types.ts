@@ -114,7 +114,7 @@ export interface SNAC2XMLFuncs {
     getPrefix: (
         path: number[],
         isAttribute: boolean,
-        opts: SNACOpts
+        snacOpts: SNACOpts
     ) => string,
 }
 
@@ -137,7 +137,7 @@ export type TagJSXType = {
         root: SNACItem[],
         node: SNACElement,
         path: number[],
-        opts: SNACOpts,
+        snacOpts: SNACOpts,
         getChildren: Function,
         funcs: { [name: string]: any }
     })//: JSX.Element
@@ -149,7 +149,7 @@ export type OpenTagJSXType = {
         node: SNACElement
         path: number[],
         isEmpty: boolean,
-        opts: SNACOpts,
+        snacOpts: SNACOpts,
         isSelected: boolean,
         setSelected: Function,
         isAttributesOpen: boolean,
@@ -169,7 +169,7 @@ export type CloseTagJSXType = {
         setSelected: Function
         isChildrenOpen: boolean,
         setChildrenOpen: Function
-        opts: SNACOpts,
+        snacOpts: SNACOpts,
     }): JSX.Element | null
 }
 
@@ -180,7 +180,7 @@ export type TextJSXType = {
         path: number[],
         showSelected: boolean,
         showOpen: boolean,
-        opts: SNACOpts,
+        snacOpts: SNACOpts,
     })//: JSX.Element
 }
 export type CDATAJSXType = {
@@ -190,7 +190,7 @@ export type CDATAJSXType = {
         path: number[],
         showSelected: boolean,
         showOpen: boolean,
-        opts: SNACOpts,
+        snacOpts: SNACOpts,
     })//: JSX.Element
 }
 export type CommentJSXType = {
@@ -200,7 +200,7 @@ export type CommentJSXType = {
         path: number[],
         showSelected: boolean,
         showOpen: boolean,
-        opts: SNACOpts,
+        snacOpts: SNACOpts,
     })//: JSX.Element
 }
 export type PIJSXType = {
@@ -210,14 +210,14 @@ export type PIJSXType = {
         path: number[],
         showSelected: boolean,
         showOpen: boolean,
-        opts: SNACOpts,
+        snacOpts: SNACOpts,
     })//: JSX.Element
 }
 export type AttributesJSXType = {
     (props: {
         path: number[],
         attributes: AttributesType,
-        opts: SNACOpts
+        snacOpts: SNACOpts
     }): JSX.Element | null
 }
 
@@ -226,14 +226,14 @@ export type AttributeJSXType = {
         path: number[],
         name: string,
         value: string,
-        opts: SNACOpts
+        snacOpts: SNACOpts
     }): JSX.Element | null
 }
 
 export type PrefixJSXType = {
     (props: {
         path: number[],
-        opts: SNACOpts
+        snacOpts: SNACOpts
     }): JSX.Element | null
 }
 

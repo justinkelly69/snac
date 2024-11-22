@@ -25,7 +25,7 @@ import {
 export const Attributes = (props: {
     path: number[],
     attributes: AttributesType,
-    opts: SNACOpts
+    snacOpts: SNACOpts
 }): JSX.Element | null => {
     return Object.keys(props.attributes).length > 0 ?
         <>
@@ -44,7 +44,7 @@ export const Attributes = (props: {
                                     path={props.path}
                                     name={tagName}
                                     value={props.attributes[ns][name]}
-                                    opts={props.opts}
+                                    snacOpts={props.snacOpts}
                                 />
                             </span>
                         )
@@ -54,12 +54,12 @@ export const Attributes = (props: {
             </div>
             {Object.keys(props.attributes).length > 0 ?
                 <>
-                    {props.opts.prefix_spaceBefore}
+                    {props.snacOpts.prefix_spaceBefore}
                     <Prefix
                         path={props.path}
-                        opts={props.opts}
+                        snacOpts={props.snacOpts}
                     />
-                    {props.opts.prefix_spaceAfter}
+                    {props.snacOpts.prefix_spaceAfter}
                 </>
                 : null
             }
@@ -71,16 +71,16 @@ const Attribute = (props: {
     path: number[],
     name: string,
     value: string,
-    opts: SNACOpts,
+    snacOpts: SNACOpts,
 }): JSX.Element => {
 
     return (
         <span className='attribute'>
             <Prefix
                 path={props.path}
-                opts={props.opts}
+                snacOpts={props.snacOpts}
             />
-            {props.opts.prefix_attributePrefix}
+            {props.snacOpts.prefix_attributePrefix}
             <ANSName
                 name={props.name}
                 openClose={f => f}

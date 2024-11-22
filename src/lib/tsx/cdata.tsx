@@ -10,7 +10,7 @@ export const CDATA = (props: {
     path: number[],
     showSelected: boolean,
     showOpen: boolean,
-    opts: SNACOpts,
+    snacOpts: SNACOpts,
 }): JSX.Element => {
 
     const [isSelected, setSelected] = useState(false)
@@ -43,13 +43,13 @@ export const CDATA = (props: {
     }
 
     let cdata = valueCDATA
-    if (!isChildrenOpen && cdata.length > props.opts.xml_trimTextLength) {
-        cdata = `${cdata.substring(0, props.opts.xml_trimCDATALength)} ${props.opts.xml_ellipsis}`
+    if (!isChildrenOpen && cdata.length > props.snacOpts.xml_trimTextLength) {
+        cdata = `${cdata.substring(0, props.snacOpts.xml_trimCDATALength)} ${props.snacOpts.xml_ellipsis}`
     }
 
     const prefix = <Prefix
         path={props.path}
-        opts={props.opts}
+        snacOpts={props.snacOpts}
     />
 
     return (
@@ -59,14 +59,14 @@ export const CDATA = (props: {
                 path={props.path}
                 selected={selectState}
                 visible={openState !== SwitchStates.ON}
-                chars={props.opts.switch_selectChars}
+                chars={props.snacOpts.switch_selectChars}
                 className='selected-show-hide'
                 openClose={e => setSelected(!isSelected)}
             />
 
             <Prefix
                 path={props.path}
-                opts={props.opts}
+                snacOpts={props.snacOpts}
             />
 
             <CDATAOpenBracket />

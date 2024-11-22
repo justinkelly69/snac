@@ -10,7 +10,7 @@ export const Comment = (props: {
     path: number[],
     showSelected: boolean,
     showOpen: boolean,
-    opts: SNACOpts,
+    snacOpts: SNACOpts,
 }): JSX.Element | null => {
 
     const [isSelected, setSelected] = useState(false)
@@ -43,13 +43,13 @@ export const Comment = (props: {
     }
 
     let comment = valueComment
-    if (!isChildrenOpen && comment.length > props.opts.xml_trimTextLength) {
-        comment = `${comment.substring(0, props.opts.xml_trimCommentLength)} ${props.opts.xml_ellipsis}`
+    if (!isChildrenOpen && comment.length > props.snacOpts.xml_trimTextLength) {
+        comment = `${comment.substring(0, props.snacOpts.xml_trimCommentLength)} ${props.snacOpts.xml_ellipsis}`
     }
 
     const prefix = <Prefix
         path={props.path}
-        opts={props.opts}
+        snacOpts={props.snacOpts}
     />
 
     return (
@@ -59,7 +59,7 @@ export const Comment = (props: {
                 path={props.path}
                 selected={selectState}
                 visible={openState !== SwitchStates.ON}
-                chars={props.opts.switch_selectChars}
+                chars={props.snacOpts.switch_selectChars}
                 className='selected-show-hide'
                 openClose={e => setSelected(!isSelected)}
             />

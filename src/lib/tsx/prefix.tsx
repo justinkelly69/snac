@@ -2,12 +2,12 @@ import { OnOffHiddenChars, SNACItem, SNACOpts, SwitchStates } from "../snac/type
 
 export const Prefix = (props: {
     path: number[],
-    opts: SNACOpts
+    snacOpts: SNACOpts
 }): JSX.Element | null => {
-    if (props.opts.prefix_showPrefix) {
+    if (props.snacOpts.prefix_showPrefix) {
         return (
             <span className="prefix">
-                {getPrefixString(props.path, props.opts)}
+                {getPrefixString(props.path, props.snacOpts)}
             </span>)
     }
     else {

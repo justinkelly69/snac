@@ -9,7 +9,7 @@ export const Text = (props: {
     path: number[],
     showSelected: boolean,
     showOpen: boolean,
-    opts: SNACOpts,
+    snacOpts: SNACOpts,
 }): JSX.Element => {
 
     const [isSelected, setSelected] = useState(false)
@@ -39,7 +39,7 @@ export const Text = (props: {
         openState = isChildrenOpen ? SwitchStates.ON : SwitchStates.OFF
     }
 
-    const prefix = <Prefix path={props.path} opts={props.opts} />
+    const prefix = <Prefix path={props.path} snacOpts={props.snacOpts} />
 
     return (
         <div className={selectedClassName}>
@@ -49,7 +49,7 @@ export const Text = (props: {
                     path={props.path}
                     selected={selectState}
                     visible={openState !== SwitchStates.ON}
-                    chars={props.opts.switch_selectChars}
+                    chars={props.snacOpts.switch_selectChars}
                     className='selected-show-hide'
                     openClose={e => setSelected(!isSelected)}
                 />
