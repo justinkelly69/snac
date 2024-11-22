@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { SNACComment, SNACItem, SNACOpts, SwitchModes, SwitchStates } from '../snac/types'
+import { SNACComment, SNACItem, SNACOpts, SwitchStates } from '../snac/types'
 import { Button, TextArea } from './widgets'
 import { Prefix, ShowHideSwitch } from './prefix'
 import { escapeComment } from '../snac/textutils'

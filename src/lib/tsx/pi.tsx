@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { SNACItem, SNACPINode, SNACOpts, SwitchStates, SwitchModes } from "../snac/types"
+import { SNACItem, SNACPINode, SNACOpts, SwitchStates } from "../snac/types"
 import { Prefix, ShowHideSwitch } from './prefix'
 import { Button, TextArea, TextInput } from './widgets'
 import { escapePIBody } from '../snac/textutils'
@@ -23,7 +23,6 @@ export const PI = (props: {
     const [oldPiBody, setOldPiBody] = useState(props.node.B)
 
     let selectState = SwitchStates.HIDDEN
-    let openState = SwitchStates.HIDDEN
     let selectedClassName = 'pi'
 
     if (props.showSelected) {
