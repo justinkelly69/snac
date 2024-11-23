@@ -63,6 +63,8 @@ export type SNACOpts = {
 
     styles_attributeGridRowWidth: string,
     styles_attributeGridButtonWidth: string,
+
+    pi_languages: string[],
 }
 
 export interface SNAC2XMLFuncs {

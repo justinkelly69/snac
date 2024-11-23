@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 export const Button = props =>
     <button
@@ -32,5 +32,20 @@ export const TextArea = props =>
         onSelect={props.onSelect}
     />
 
+export const DropDownList = props => {    
+    return (
+        <select
+            ref={props.ref}
+            className={props.className}
+            value={props.value}
+            onChange={props.onChange}
+            onSelect={f=>f}
+        >
+            {props.opts.map((opt: string, index: number) =>
+                <option value={index}>{opt}</option>
+            )}
+        </select>
+    )
+}
 
 

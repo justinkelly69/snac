@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
-import { SNACComment, SNACItem, SNACOpts, SwitchStates } from '../snac/types'
+import { SNACComment, SNACItem, SwitchStates } from '../snac/types'
 import { Button, TextArea } from './widgets'
 import { Prefix, ShowHideSwitch } from './prefix'
 import { escapeComment } from '../snac/textutils'
-import {
-    snacOpts
-} from '../snac/opts'
+import { snacOpts } from '../snac/opts'
 import { commentsGridStyle } from '../snac/styles'
 
 export const Comment = (props: {

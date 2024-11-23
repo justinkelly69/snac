@@ -67,4 +67,6 @@ export const snacOpts: SNACOpts = {
 
     styles_attributeGridRowWidth: ' .6fr',
     styles_attributeGridButtonWidth: '6em',
+
+    pi_languages: ['php', 'php='],
 }

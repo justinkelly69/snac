@@ -23,7 +23,41 @@ export const attributesGridStyle = (
     }
 }
 
+export const CDATAGridStyle = (
+    props: {
+        pathWidth: number,
+        xButtonWidth: number,
+        buttonWidth: number,
+    }) => {
+    return {
+        gridTemplateColumns: `
+            ${props.pathWidth}em
+            ${props.xButtonWidth}em 
+            ${props.buttonWidth}em 
+            ${props.buttonWidth}em
+            min-content
+            `,
+    }
+}
+
 export const commentsGridStyle = (
+    props: {
+        pathWidth: number,
+        xButtonWidth: number,
+        buttonWidth: number,
+    }) => {
+    return {
+        gridTemplateColumns: `
+            ${props.pathWidth}em
+            ${props.xButtonWidth}em 
+            ${props.buttonWidth}em 
+            ${props.buttonWidth}em
+            min-content
+            `,
+    }
+}
+
+export const PIGridStyle = (
     props: {
         pathWidth: number,
         xButtonWidth: number,
@@ -38,5 +72,4 @@ export const commentsGridStyle = (
             min-content
             `,
         }
-
 }
