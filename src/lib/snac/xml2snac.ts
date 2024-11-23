@@ -49,9 +49,6 @@ const _render = (remainder: string, stack: SNACNamesNode[]) => {
                 ...openTagNsName,
                 ...getNamespaces(attributes['attributes']),
                 C: [],
-                a: true,
-                o: true,
-                q: false
             }
 
             stack.push({
@@ -96,8 +93,6 @@ const _render = (remainder: string, stack: SNACNamesNode[]) => {
             if (stack.length > 0) {
                 out.push({
                     D: CDATATag[1],
-                    o: true,
-                    q: false
                 })
             }
             remainder = CDATATag[2]
@@ -107,8 +102,6 @@ const _render = (remainder: string, stack: SNACNamesNode[]) => {
             if (stack.length > 0) {
                 out.push({
                     M: commentTag[1],
-                    o: true,
-                    q: false
                 })
             }
             remainder = commentTag[2]
@@ -119,8 +112,6 @@ const _render = (remainder: string, stack: SNACNamesNode[]) => {
                 out.push({
                     L: PITag[1],
                     B: PITag[2],
-                    o: true,
-                    q: false
                 })
             }
             remainder = PITag[3]
@@ -130,8 +121,6 @@ const _render = (remainder: string, stack: SNACNamesNode[]) => {
             if (stack.length > 0) {
                 out.push({
                     T: unEscapeHtml(textTag[1]),
-                    o: true,
-                    q: false
                 })
             }
             remainder = textTag[2]
@@ -141,8 +130,6 @@ const _render = (remainder: string, stack: SNACNamesNode[]) => {
             if (stack.length > 0) {
                 out.push({
                     T: '',
-                    o: true,
-                    q: false
                 })
             }
             remainder = ''

@@ -1,13 +1,21 @@
-import { OnOffHiddenChars, SNACItem, SNACOpts, SwitchStates } from "../snac/types"
+import {
+    OnOffHiddenChars,
+    SNACItem,
+    SwitchStates
+} from "../snac/types"
+
+import {
+    snacOpts
+} from '../snac/opts'
 
 export const Prefix = (props: {
     path: number[],
-    snacOpts: SNACOpts
 }): JSX.Element | null => {
-    if (props.snacOpts.prefix_showPrefix) {
+
+    if (snacOpts.prefix_showPrefix) {
         return (
             <span className="prefix">
-                {getPrefixString(props.path, props.snacOpts)}
+                {getPrefixString(props.path)}
             </span>)
     }
     else {
@@ -15,9 +23,9 @@ export const Prefix = (props: {
     }
 }
 
-const getPrefixString = (path: number[], opts: SNACOpts): string => {
+const getPrefixString = (path: number[]): string => {
     const init = ""
-    return path.reduce((out, p) => out + opts.prefix_charOn, init)
+    return path.reduce((out, p) => out + snacOpts.prefix_charOn, init)
 }
 
 export const ShowHideSwitch = (props: {
@@ -29,7 +37,9 @@ export const ShowHideSwitch = (props: {
     className: string
     openClose: Function
 }): JSX.Element => {
+
     let out = props.chars.hidden
+
     if (props.visible) {
         switch (props.selected) {
             case SwitchStates.OFF:
@@ -40,8 +50,13 @@ export const ShowHideSwitch = (props: {
         }
     }
     return (
-        <span className={props.className} onClick={e => {
-            props.selected !== SwitchStates.HIDDEN && props.openClose()
-        }}>{out}</span>
+        <span
+            className={props.className}
+            onClick={e => {
+                props.selected !== SwitchStates.HIDDEN && props.openClose()
+            }}
+        >
+            {out}
+        </span>
     )
 }

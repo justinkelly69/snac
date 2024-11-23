@@ -7,6 +7,10 @@ import {
     SNACOpts
 } from '../snac/types'
 
+import {
+    snacOpts
+} from '../snac/opts'
+
 import { Prefix } from './prefix'
 
 import {
@@ -25,7 +29,6 @@ import {
 export const Attributes = (props: {
     path: number[],
     attributes: AttributesType,
-    snacOpts: SNACOpts
 }): JSX.Element | null => {
     return Object.keys(props.attributes).length > 0 ?
         <>
@@ -44,7 +47,6 @@ export const Attributes = (props: {
                                     path={props.path}
                                     name={tagName}
                                     value={props.attributes[ns][name]}
-                                    snacOpts={props.snacOpts}
                                 />
                             </span>
                         )
@@ -54,12 +56,11 @@ export const Attributes = (props: {
             </div>
             {Object.keys(props.attributes).length > 0 ?
                 <>
-                    {props.snacOpts.prefix_spaceBefore}
+                    {snacOpts.prefix_spaceBefore}
                     <Prefix
                         path={props.path}
-                        snacOpts={props.snacOpts}
                     />
-                    {props.snacOpts.prefix_spaceAfter}
+                    {snacOpts.prefix_spaceAfter}
                 </>
                 : null
             }
@@ -71,16 +72,14 @@ const Attribute = (props: {
     path: number[],
     name: string,
     value: string,
-    snacOpts: SNACOpts,
 }): JSX.Element => {
 
     return (
         <span className='attribute'>
             <Prefix
                 path={props.path}
-                snacOpts={props.snacOpts}
             />
-            {props.snacOpts.prefix_attributePrefix}
+            {snacOpts.prefix_attributePrefix}
             <ANSName
                 name={props.name}
                 openClose={f => f}

@@ -9,9 +9,12 @@ import {
     SNACItem,
     SNACElement,
     SwitchStates,
-    SNACOpts,
     SwitchModes
 } from '../snac/types'
+
+import {
+    snacOpts
+} from '../snac/opts'
 
 import {
     Prefix,
@@ -20,23 +23,22 @@ import {
 
 import { Attributes, AttributesTable } from './attributes'
 import { attributeKeys } from '../snac/textutils'
+import { attributesGridStyle } from '../snac/styles'
 
 export const Tag = (props: {
     root: SNACItem[],
     node: SNACElement,
     path: number[],
-    snacOpts: SNACOpts,
     getChildren: Function,
-    //funcs: { [name: string]: Function }
 }): JSX.Element => {
 
-    const [isSelected, setSelected] = useState(props.node.q)
-    const [isAttributesOpen, setAttributesOpen] = useState(props.node.a)
-    const [isChildrenOpen, setChildrenOpen] = useState(props.node.o)
+    const [isSelected, setSelected] = useState(false)
+    const [isAttributesOpen, setAttributesOpen] = useState(false)
+    const [isChildrenOpen, setChildrenOpen] = useState(true)
 
     let selectedClassName = 'element'
 
-    if (props.snacOpts.xml_showSelected) {
+    if (snacOpts.xml_showSelected) {
         selectedClassName = isSelected ? 'element selected' : 'element'
     }
 
@@ -52,7 +54,6 @@ export const Tag = (props: {
                 node={props.node}
                 path={props.path}
                 isEmpty={isEmpty}
-                snacOpts={props.snacOpts}
                 isSelected={isSelected}
                 setSelected={setSelected}
                 isAttributesOpen={isAttributesOpen}
@@ -61,23 +62,21 @@ export const Tag = (props: {
                 setChildrenOpen={setChildrenOpen}
             />
 
-            {isChildrenOpen ? props.getChildren(
-                props.root,
-                props.node["C"],
-                props.path,
-                //props.funcs,
-                props.snacOpts
-            ) :
-                props.snacOpts.xml_ellipsis
+            {isChildrenOpen ?
+                props.getChildren(
+                    props.root,
+                    props.node.C,
+                    props.path,
+                ) :
+                snacOpts.xml_ellipsis
             }
 
-            {!isEmpty && props.snacOpts.xml_showCloseTags ? (
+            {!isEmpty && snacOpts.xml_showCloseTags ? (
                 <CloseTag
                     root={props.root}
                     node={props.node}
                     path={props.path}
                     isEmpty={isEmpty}
-                    snacOpts={props.snacOpts}
                     isSelected={isSelected}
                     setSelected={setSelected}
                     isChildrenOpen={isChildrenOpen}
@@ -95,7 +94,6 @@ export const OpenTag = (props: {
     node: SNACElement,
     path: number[],
     isEmpty: boolean,
-    snacOpts: SNACOpts,
     isSelected: boolean,
     setSelected: Function
     isAttributesOpen: boolean,
@@ -113,20 +111,20 @@ export const OpenTag = (props: {
     let childrenOpenState = SwitchStates.HIDDEN
     let closeSlash = "/"
 
-    if (props.snacOpts.xml_showSelected) {
+    if (snacOpts.xml_showSelected) {
         selectState = props.isSelected ?
             SwitchStates.ON :
             SwitchStates.OFF
     }
 
-    if (props.snacOpts.xml_showAttributesOpen && attributeKeys(props.node.A).length) {
+    if (snacOpts.xml_showAttributesOpen && attributeKeys(props.node.A).length) {
         attributesOpenState = props.isAttributesOpen ?
             SwitchStates.ON :
             SwitchStates.OFF
     }
 
     if (!props.isEmpty) {
-        if (props.snacOpts.xml_showChildrenOpen) {
+        if (snacOpts.xml_showChildrenOpen) {
             childrenOpenState = props.isChildrenOpen ?
                 SwitchStates.ON :
                 SwitchStates.OFF
@@ -142,7 +140,6 @@ export const OpenTag = (props: {
                         node={props.node}
                         type='element'
                         path={props.path}
-                        snacOpts={props.snacOpts}
                         openClose={e => { setIsEditable(false) }}
                     />
                 </> :
@@ -152,14 +149,13 @@ export const OpenTag = (props: {
                         path={props.path}
                         selected={selectState}
                         visible={mode === 'VIEW_MODE'}
-                        chars={props.snacOpts.switch_selectChars}
+                        chars={snacOpts.switch_selectChars}
                         className='selected-show-hide'
                         openClose={e => props.setSelected(!props.isSelected)}
                     />
 
                     <Prefix
                         path={props.path}
-                        snacOpts={props.snacOpts}
                     />
 
                     <ShowHideSwitch
@@ -167,7 +163,7 @@ export const OpenTag = (props: {
                         path={props.path}
                         selected={childrenOpenState}
                         visible={mode === 'VIEW_MODE'}
-                        chars={props.snacOpts.switch_elementChars}
+                        chars={snacOpts.switch_elementChars}
                         className='element-show-hide'
                         openClose={e => props.setChildrenOpen(!props.isChildrenOpen)}
                     />
@@ -181,7 +177,6 @@ export const OpenTag = (props: {
                             <Attributes
                                 attributes={props.node.A}
                                 path={props.path}
-                                snacOpts={props.snacOpts}
                             /> :
                             null
                         }
@@ -192,7 +187,7 @@ export const OpenTag = (props: {
                         path={props.path}
                         selected={attributesOpenState}
                         visible={mode === 'VIEW_MODE'}
-                        chars={props.snacOpts.switch_attributeChars}
+                        chars={snacOpts.switch_attributeChars}
                         className='attributes-show-hide'
                         openClose={e => props.setAttributesOpen(!props.isAttributesOpen)}
                     />
@@ -212,7 +207,6 @@ export const CloseTag = (props: {
     setSelected: Function
     isChildrenOpen: boolean,
     setChildrenOpen: Function
-    snacOpts: SNACOpts,
 }): JSX.Element | null => {
 
     const [mode, setMode] = useState<SwitchModes>('VIEW_MODE') // VIEW_MODE, EDIT_MODE, INSERT_MODE
@@ -221,12 +215,12 @@ export const CloseTag = (props: {
     let selectState = SwitchStates.HIDDEN
     let childrenOpenState = SwitchStates.HIDDEN
 
-    if (props.snacOpts.xml_showSelected) {
+    if (snacOpts.xml_showSelected) {
         selectState = props.isSelected ? SwitchStates.ON : SwitchStates.OFF
     }
 
     if (props.isEmpty) {
-        if (props.snacOpts.xml_showChildrenOpen) {
+        if (snacOpts.xml_showChildrenOpen) {
             childrenOpenState = props.isChildrenOpen ? SwitchStates.ON : SwitchStates.OFF
         }
     }
@@ -240,17 +234,17 @@ export const CloseTag = (props: {
                         path={props.path}
                         selected={selectState}
                         visible={mode === 'VIEW_MODE'}
-                        chars={props.snacOpts.switch_selectChars}
+                        chars={snacOpts.switch_selectChars}
                         className='selected-show-hide'
                         openClose={e => props.setSelected(!props.isSelected)}
                     />
-                    <Prefix path={props.path} snacOpts={props.snacOpts} />
+                    <Prefix path={props.path} />
                     <ShowHideSwitch
                         root={props.root}
                         path={props.path}
                         selected={childrenOpenState}
                         visible={mode === 'VIEW_MODE'}
-                        chars={props.snacOpts.switch_elementChars}
+                        chars={snacOpts.switch_elementChars}
                         className='element-show-hide'
                         openClose={e => props.setChildrenOpen(!props.isChildrenOpen)}
                     />
@@ -287,11 +281,12 @@ const NSName = (props: {
         </span>
 }
 
+
+
 const NSNodeEdit = (props: {
     node: SNACElement,
     type: string,
     path: number[],
-    snacOpts: SNACOpts,
     openClose?: Function
 }): JSX.Element => {
 
@@ -305,23 +300,19 @@ const NSNodeEdit = (props: {
 
     const keys = attributeKeys(attributes)
     const [numRows, setNumRows] = useState(keys.length + 2)
-    const height = numRows * 1.4
-    const pathWidth = props.path.length * 1.2
-
-    let rows = ''
-    for (let i in keys) {
-        rows += ' .6fr'
-    }
 
     return (
         <>
-            <span className='attributes-table' style={{
-                display: 'grid',
-                gridTemplateColumns:
-                    `${pathWidth}em min-content min-content min-content min-content 6em 6em`,
-                gridAutoRows: `${rows}`,
-                height: `${height}em`,
-            }}>
+            <span
+                className='attributes-table'
+                style={attributesGridStyle({
+                    keys: keys, 
+                    pathWidth: props.path.length * 1.2, 
+                    buttonWidth: 6,
+                    cellWidth: 6,
+                    height: numRows * 1.4,
+                })}
+            >
                 <span className='table-prefix'
                     style={{
                         gridArea: `1 / 1 / ${numRows} / 1`,
@@ -353,8 +344,7 @@ const NSNodeEdit = (props: {
                                 }}
                                 label='Edit'
                             />
-                            <span style={{display:'block',width:'6em'}}>
-
+                            <span style={{ display: 'block', width: '6em' }}>
                             </span>
                         </span>
                     </> :
@@ -388,7 +378,6 @@ const NSNodeEdit = (props: {
                                     setOldName(name)
                                     setEditAttributes(true)
                                     console.log(`<${ns}:${name}>`)
-                                    //setAttributes()
                                 }}
                                 label='Save'
                             />

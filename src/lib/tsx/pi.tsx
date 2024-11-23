@@ -1,16 +1,18 @@
 import React, { useState } from 'react'
 
-import { SNACItem, SNACPINode, SNACOpts, SwitchStates } from "../snac/types"
+import { SNACItem, SNACPINode, SwitchStates } from "../snac/types"
 import { Prefix, ShowHideSwitch } from './prefix'
 import { Button, TextArea, TextInput } from './widgets'
 import { escapePIBody } from '../snac/textutils'
+import {
+    snacOpts
+} from '../snac/opts'
 
 export const PI = (props: {
     root: SNACItem[],
     node: SNACPINode,
     path: number[],
     showSelected: boolean,
-    snacOpts: SNACOpts,
 }): JSX.Element | null => {
 
     const [isSelected, setSelected] = useState(false)
@@ -36,13 +38,12 @@ export const PI = (props: {
     }
 
     let body = piBody
-    if (!isChildrenOpen && body.length > props.snacOpts.xml_trimTextLength) {
-        body = `${props.snacOpts.xml_ellipsis}`
+    if (!isChildrenOpen && body.length > snacOpts.xml_trimTextLength) {
+        body = `${snacOpts.xml_ellipsis}`
     }
 
     const prefix = <Prefix
         path={props.path}
-        snacOpts={props.snacOpts}
     />
 
     return (
@@ -52,7 +53,7 @@ export const PI = (props: {
                 path={props.path}
                 selected={selectState}
                 visible={!isChildrenOpen}
-                chars={props.snacOpts.switch_selectChars}
+                chars={snacOpts.switch_selectChars}
                 className='selected-show-hide'
                 openClose={e => setSelected(!isSelected)}
             />

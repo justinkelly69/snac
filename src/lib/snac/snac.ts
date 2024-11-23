@@ -14,12 +14,10 @@ const find = (
 
     const element: SNACItem = {
         S: "", 
-        N: "", 
+        N: "",
+        X: {},
         A: {}, 
         C: snac, 
-        a: true, 
-        o: true, 
-        q: false 
     }
 
     return _find(element, path)

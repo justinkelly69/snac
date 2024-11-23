@@ -1,3 +1,4 @@
+import { repeatString } from "./helpers"
 import {
     EditAttributesType,
     AttributesType,
@@ -90,7 +91,7 @@ export const attributeGetValue = (
     ns: string,
     name: string,
 ): string => {
-    
+
     return state[ns][name]['V']
 }
 
@@ -364,3 +365,4 @@ export const newAttribute = (
 
     return newAttrbutes
 }
+

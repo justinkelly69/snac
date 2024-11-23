@@ -5,9 +5,9 @@ import {
     SNACCDATA,
     SNACComment,
     SNACPINode,
-    SNACOpts,
     SwitchModes,
 } from '../snac/types'
+
 
 import { Tag } from './element';
 import { Text } from './text';
@@ -19,7 +19,6 @@ import { Fragment, useState } from 'react';
 const XMLOut = (props: {
     root: SNACItem[],
     snac: SNACItem[],
-    snacOpts: SNACOpts
 }) => {
 
     const [mode, setMode] = useState<SwitchModes>('VIEW_MODE') // 'VIEW_MODE' | 'EDIT_MODE' | 'INSERT_MODE'
@@ -30,7 +29,6 @@ const XMLOut = (props: {
             root={props.root}
             snac={props.snac}
             path={[]}
-            snacOpts={props.snacOpts}
         />
     )
 }
@@ -38,7 +36,6 @@ const Children = (props: {
     root: SNACItem[],
     snac: SNACItem[],
     path: number[],
-    snacOpts: SNACOpts
 }): JSX.Element => {
 
     return (
@@ -54,7 +51,6 @@ const Children = (props: {
                                 root={props.root}
                                 node={props.snac[i] as SNACElement}
                                 path={newPath}
-                                snacOpts={props.snacOpts}
                                 getChildren={() => Children({
                                     ...props,
                                     path: newPath,
@@ -69,8 +65,6 @@ const Children = (props: {
                                 node={props.snac[i] as SNACText}
                                 path={newPath}
                                 showSelected={true}
-                                //showOpen={true}
-                                snacOpts={props.snacOpts}
                             />
                         }
                         {s.hasOwnProperty("D") &&
@@ -80,7 +74,6 @@ const Children = (props: {
                                 node={props.snac[i] as SNACCDATA}
                                 path={newPath}
                                 showSelected={true}
-                                snacOpts={props.snacOpts}
                             />
                         }
                         {s.hasOwnProperty("M") &&
@@ -90,7 +83,6 @@ const Children = (props: {
                                 node={props.snac[i] as SNACComment}
                                 path={newPath}
                                 showSelected={true}
-                                snacOpts={props.snacOpts}
                             />
                         }
                         {s.hasOwnProperty("L") &&
@@ -100,7 +92,6 @@ const Children = (props: {
                                 node={props.snac[i] as SNACPINode}
                                 path={newPath}
                                 showSelected={true}
-                                snacOpts={props.snacOpts}
                             />
                         }
                     </Fragment>

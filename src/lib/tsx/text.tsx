@@ -1,15 +1,16 @@
 import React, { useState } from 'react'
-import { SNACItem, SNACOpts, SNACText, SwitchModes, SwitchStates } from '../snac/types'
+import { SNACItem, SNACText, SwitchModes, SwitchStates } from '../snac/types'
 import { Prefix, ShowHideSwitch } from './prefix'
 import { Button, TextArea, TextInput } from './widgets'
+import {
+    snacOpts
+} from '../snac/opts'
 
 export const Text = (props: {
     root: SNACItem[],
     node: SNACText,
     path: number[],
     showSelected: boolean,
-    //showOpen: boolean,
-    snacOpts: SNACOpts,
 }): JSX.Element => {
 
     const [isSelected, setSelected] = useState(false)
@@ -35,7 +36,7 @@ export const Text = (props: {
         selectedClassName = isSelected ? 'text selected' : 'text'
     }
 
-    const prefix = <Prefix path={props.path} snacOpts={props.snacOpts} />
+    const prefix = <Prefix path={props.path} />
 
     return (
         <div className={selectedClassName}>
@@ -45,7 +46,7 @@ export const Text = (props: {
                     path={props.path}
                     selected={selectState}
                     visible={!isChildrenOpen}
-                    chars={props.snacOpts.switch_selectChars}
+                    chars={snacOpts.switch_selectChars}
                     className='selected-show-hide'
                     openClose={e => setSelected(!isSelected)}
                 />

@@ -65,5 +65,6 @@ export const snacOpts: SNACOpts = {
     xml_allowPIs: true,
     xml_ellipsis: '...',
 
-    //attribute_columnWidths: ''
+    styles_attributeGridRowWidth: ' .6fr',
+    styles_attributeGridButtonWidth: '6em',
 }

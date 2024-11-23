@@ -3,13 +3,15 @@ import { SNACCDATA, SNACItem, SNACOpts, SwitchStates } from '../snac/types'
 import { Prefix, ShowHideSwitch } from './prefix'
 import { Button, TextArea } from './widgets'
 import { escapeCDATA } from '../snac/textutils'
+import {
+    snacOpts
+} from '../snac/opts'
 
 export const CDATA = (props: {
     root: SNACItem[],
     node: SNACCDATA,
     path: number[],
     showSelected: boolean,
-    snacOpts: SNACOpts,
 }): JSX.Element => {
 
     const [isSelected, setSelected] = useState(false)
@@ -33,13 +35,12 @@ export const CDATA = (props: {
     }
 
     let cdata = valueCDATA
-    if (!isChildrenOpen && cdata.length > props.snacOpts.xml_trimTextLength) {
-        cdata = `${cdata.substring(0, props.snacOpts.xml_trimCDATALength)} ${props.snacOpts.xml_ellipsis}`
+    if (!isChildrenOpen && cdata.length > snacOpts.xml_trimTextLength) {
+        cdata = `${cdata.substring(0, snacOpts.xml_trimCDATALength)} ${snacOpts.xml_ellipsis}`
     }
 
     const prefix = <Prefix
         path={props.path}
-        snacOpts={props.snacOpts}
     />
 
     return (
@@ -49,14 +50,13 @@ export const CDATA = (props: {
                 path={props.path}
                 selected={selectState}
                 visible={!isChildrenOpen}
-                chars={props.snacOpts.switch_selectChars}
+                chars={snacOpts.switch_selectChars}
                 className='selected-show-hide'
                 openClose={e => setSelected(!isSelected)}
             />
 
             <Prefix
                 path={props.path}
-                snacOpts={props.snacOpts}
             />
 
             <CDATAOpenBracket />

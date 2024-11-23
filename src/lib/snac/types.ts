@@ -60,6 +60,9 @@ export type SNACOpts = {
     xml_allowComments: boolean,
     xml_allowPIs: boolean,
     xml_ellipsis: string,
+
+    styles_attributeGridRowWidth: string,
+    styles_attributeGridButtonWidth: string,
 }
 
 export interface SNAC2XMLFuncs {
@@ -130,7 +133,7 @@ export interface SNAC2XMLJSXFuncs {
     Prefix: PrefixJSXType,
 }
 
-export type ChildrenJSXType = TagJSXType | TextJSXType | CDATAJSXType| CommentJSXType | PIJSXType
+export type ChildrenJSXType = TagJSXType | TextJSXType | CDATAJSXType | CommentJSXType | PIJSXType
 
 export type TagJSXType = {
     (props: {
@@ -287,33 +290,27 @@ export type SNACNamesNode = {
     N: string,
 }
 
-export interface SNACNode {
-    o: boolean,
-    q: boolean
-}
-
-export interface SNACElement extends SNACNode {
+export interface SNACElement {
     X?: NamespaceType,
     S: string,
     N: string,
     A: AttributesType,
     C: SNACItem[],
-    a: boolean,
 }
 
-export interface SNACText extends SNACNode {
+export interface SNACText {
     T: string
 }
 
-export interface SNACCDATA extends SNACNode {
+export interface SNACCDATA {
     D: string
 }
 
-export interface SNACComment extends SNACNode {
+export interface SNACComment {
     M: string
 }
 
-export interface SNACPINode extends SNACNode {
+export interface SNACPINode {
     L: string,
     B: string
 }
