@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { EditBoxGridStyle } from '../snac/styles'
 
 export const Button = props =>
     <button
@@ -39,12 +40,67 @@ export const DropDownList = props => {
             className={props.className}
             value={props.value}
             onChange={props.onChange}
-            onSelect={f=>f}
         >
-            {props.opts.map((opt: string, index: number) =>
-                <option value={index}>{opt}</option>
+            {props.opts.map((opt: string[]) =>
+                <option value={opt[0]}>{opt[1]}</option>
             )}
         </select>
+    )
+}
+
+export const TextEditTextBox = (props: {
+    path: number[],
+    widthMultiplier: number,
+    editButtonBar: Function,
+    editTextArea: Function,
+}) => {
+    return (
+        <div className='text-edit-box'
+        style={
+            EditBoxGridStyle({
+                pathWidth: props.path.length * props.widthMultiplier,
+            })
+        }>
+            <span className='edit-prefix'></span>
+            <span className='edit-button-bar'>
+                {props.editButtonBar()}
+            </span>
+            <span className='edit-text-area'>
+                {props.editTextArea()}
+            </span>
+        </div>
+    )
+}
+
+export const EditTextBox = (props: {
+    path: number[],
+    widthMultiplier: number,
+    editTopBar: Function,
+    editButtonBar: Function,
+    editTextArea: Function,
+    editBottomBar: Function,
+}) => {
+    return (
+        <div className='edit-box'
+        style={
+            EditBoxGridStyle({
+                pathWidth: props.path.length * props.widthMultiplier,
+            })
+        }>
+            <span className='edit-prefix'></span>
+            <span className='edit-top-bar'>
+                {props.editTopBar()}
+            </span>
+            <span className='edit-button-bar'>
+                {props.editButtonBar()}
+            </span>
+            <span className='edit-text-area'>
+                {props.editTextArea()}
+            </span>
+            <span className='edit-bottom-bar'>
+                {props.editBottomBar()}
+            </span>
+        </div>
     )
 }
 

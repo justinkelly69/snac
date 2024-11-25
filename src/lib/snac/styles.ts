@@ -73,3 +73,15 @@ export const PIGridStyle = (
             `,
         }
 }
+
+export const EditBoxGridStyle = (
+    props: {
+        pathWidth: number,
+    }) => {
+        return {
+            gridTemplateColumns: `
+            ${props.pathWidth}em
+            min-content
+            `,
+        }
+}

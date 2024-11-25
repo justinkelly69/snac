@@ -1,21 +1,33 @@
-:root  {
-  --cdata-text: darkorange;
-  --cdata-text-disabled: rgb(163, 120, 67);
-  --cdata-cdata-label: magenta;
-  --cdata-brackets: brown;
+:root {
+  --ns-text: red;
+  --ns-focus: rgb(206, 121, 121);
+  --name-text: blue;
+  --name-focus: rgb(111, 117, 204);
+
+  --attribute-ns: darkred;
+  --attribute-name: darkorchid;
+  --attribute-value: darkgreen;
+
+  --text-color: blueviolet;
+
+  --cdata-text: rgb(112, 74, 8);
+  --cdata-text-disabled: rgb(177, 124, 58);
+  --cdata-label: magenta;
+  --cdata-brackets: rgb(222, 123, 2);
 
   --comment-text: darkgreen;
-  --comment-text-disabled: rgb(98, 123, 98);
+  --comment-text-disabled: rgb(86, 144, 86);
+  --comment-brackets: rgb(1, 51, 1);
 
-  --pi-lang-text: olive;
-  --pi-body-text: rgb(61, 131, 7);
-  --pi-brackets: darkgreen;
-  --pi-label: brown;
+  --pi-lang: rgb(66, 128, 0);
+  --pi-text: rgb(72, 90, 3);
+  --pi-text-disabled: rgb(137, 145, 82);
+  --pi-brackets: rgb(76, 135, 8);
 }
 
-.App {
+/* .App {
   text-align: center;
-}
+} */
 
 .element {
   color: brown
@@ -71,13 +83,13 @@
 
 .attribute-name-input {
   width: 12em;
-  color: darkorchid;  
+  color: darkorchid;
   outline: none !important;
   border: 1px solid rgb(180, 129, 205);
   margin-right: 0.1em;
 }
 
-.attribute-name-input:focus{
+.attribute-name-input:focus {
   outline: none !important;
   border: 2px solid rgb(180, 129, 205);
 }
@@ -105,9 +117,7 @@
   background-color: aliceblue;
 }
 
-.attributes-table-cell {
-
-}
+.attributes-table-cell {}
 
 .table-prefix {
   display: block;
@@ -196,7 +206,7 @@
 .ns-input {
   width: 3.6em;
   text-align: right;
-  color: red;
+  color:var(--ns-text);
   border-color: lightgray;
 }
 
@@ -207,7 +217,7 @@
 
 .name-input {
   width: 12em;
-  color: blue;
+  color: var(--name-text);
   border-color: lightgray;
 }
 
@@ -233,6 +243,7 @@
   width: 1.4em;
 }
 
+/*
 .text-bracket {
   color: black;
 }
@@ -261,174 +272,162 @@
   color: black;
   background-color: lightgray;
 }
+ */
+
+
+
+/* -------------------------
+ * TEXT
+ * -----------------------*/
+
+.text-edit-box {
+  display: grid;
+  min-width: 10em;
+  min-height: 4em;
+}
+
+.text-edit-prefix {
+  grid-column: 1;
+  grid-row: 1 / 2;
+}
+
+.text-edit-button-bar {
+  grid-column: 2 / 3;
+  grid-row: 1;
+}
+
+.text-edit-text-area {
+  grid-column: 2 / 3;
+  grid-row: 2;
+}
+
+
+/* -------------------------
+ * COMMENTS
+ * -----------------------*/
+
+.comment {
+  color: var(--comment-text);
+}
+
+.comment-disabled {
+  color: var(--comment-text-disabled);
+  border: dotted 1px var(--comment-text-disabled);
+}
+
+.comment-editor {
+  color: var(--comment-text);
+  border: solid 1px var(--comment-text);
+}
+
+.comment-brackets {
+  color: var(--comment-brackets);
+}
+
+/* -------------------------
+ * CDATA
+ * -----------------------*/
 
 .cdata {
-  color: var(--cdata-text)
+  color: var(--cdata-text);
+}
+
+.cdata-label {
+  color: var(--cdata-label);
+}
+
+.cdata-disabled {
+  color: var(--cdata-text-disabled);
+  border: dotted 1px var(--cdata-text-disabled);
+}
+
+.cdata-editor {
+  color: var(--cdata-text);
+  border: solid 1px var(--cdata-text);
 }
 
 .cdata-brackets {
   color: var(--cdata-brackets);
 }
 
-.cdata-label {
-  color: var(--cdata-cdata-label);
+/* -------------------------
+ * PI
+ * -----------------------*/
+
+.pi {
+  color: var(--pi-text);
 }
 
-.cdata-body {
-  color: var(--cdata-text);
-  display: inline-block;
-  padding: .25em;
-  white-space: nowrap;
+.pi-lang {
+  color: var(--pi-lang);
 }
 
-.cdata-text {
-  color: var(--cdata-text-disabled);
-  border: solid 1px var(--cdata-text-disabled);
+.pi-drop-down {
+  color: var(--pi-lang);
+  width: 6em;
 }
 
-.cdata-text-editor {
-  color: var(--cdata-text);
-  border: solid 1px var(--cdata-text);
+.pi-disabled {
+  color: var(--pi-text-disabled);
+  border: dotted 1px var(--pi-text-disabled);
 }
 
-.comment-body {
-  color: var(--comment-text);
-}
-
-.comment {
-  color: var(--comment-text);
-}
-
-.comment-text {
-  color: var(--comment-text-disabled);
-  border: solid 1px var(--comment-text-disabled);
-}
-
-.comment-text-editor {
-  color: var(--comment-text);
-  border: solid 1px var(--comment-text);
-}
-
-.pi-body {
-  color: var(--pi-body-text);
-}
-
-.pi-text {
-  color: var(--pi-body-text);
-  border: solid 1px var(--pi-body-text);
-}
-
-.pi-text-editor, .pi-lang-input {
-  color:var(--pi-lang-text);
-  border: solid 1px var(--pi-lang-text);
+.pi-editor {
+  color: var(--pi-text);
+  border: solid 1px var(--pi-text);
 }
 
 .pi-brackets {
   color: var(--pi-brackets);
 }
 
-.pi-label, .pi-lang-text {
-  color: var(--pi-lang-text)
-}
 
-.comment-body {
-  color: var(--comment-text);
-}
-
-.comment-table, 
-.cdata-table, 
-.pi-table {
+/* -------------------------
+ * EDIT BOX 
+ * -----------------------*/
+.edit-box {
   display: grid;
   min-width: 10em;
   min-height: 4em;
 }
 
-.comment-prefix, 
-.cdata-prefix,
-.pi-prefix {
+.edit-prefix {
   grid-column: 1;
   grid-row: 1 / 4;
 }
 
-.comment-open-bracket, 
-.cdata-open-bracket {
-  grid-column: 2 / 6;
-  grid-row: 1;
-}
-
-.pi-open-bracket {
+.edit-top-bar {
   grid-column: 2 / 3;
   grid-row: 1;
 }
 
-.pi-lang-text {
-  grid-column: 3 / 6;
-  grid-row: 1;
-  padding-left: .4em;
-}
-
-.comment-x-button, 
-.cdata-x-button,
-.pi-x-button {
-  grid-column: 2;
+.edit-button-bar {
+  grid-column: 2 / 3;
   grid-row: 2;
 }
 
-.comment-button-1, 
-.cdata-button-1,
-.pi-button-1 {
-  grid-column: 3;
-  grid-row: 2;
-}
-
-.comment-button-2, 
-.cdata-button-2,
-.pi-button-2 {
-  grid-column: 4;
-  grid-row: 2;
-}
-
-.comment-button-3, 
-.cdata-button-3,
-.pi-button-3 {
-  grid-column: 5;
-  grid-row: 2;
-  min-width: 20em;
-}
-
-.comment-text, 
-.cdata-text,
-.pi-text {
-  grid-column: 2 / 6;
+.edit-text-area {
+  grid-column: 2 / 3;
   grid-row: 3;
   min-height: 8em;
+  min-width: 36em;
   display: flex;
+  flex-direction: row;
   align-items: stretch;
 }
 
-.comment-text-editor, 
-.cdata-text-editor,
-.pi-text-editor {
+.edit-text-show,
+.edit-text-editor {
   flex: 1 0 100%;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   min-height: 100%;
+  min-width: 100%;
+  text-wrap-mode: wrap;
 }
 
-.comment-close-bracket, 
-.cdata-close-bracket,
-.pi-close-bracket {
-  grid-column: 2 / 6;
+.edit-bottom-bar {
+  grid-column: 2 / 3;
   grid-row: 4;
 }
-
-.comment-body, 
-.cdata-body,
-.pi-body {
-  display: inline-block;
-  padding: .25em;
-  white-space: nowrap;
-}
-
-

@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { SNACItem, SNACText, SwitchModes, SwitchStates } from '../snac/types'
 import { Prefix, ShowHideSwitch } from './prefix'
-import { Button, TextArea, TextInput } from './widgets'
+import { Button, TextArea, TextEditTextBox, TextInput } from './widgets'
 import {
     snacOpts
 } from '../snac/opts'
+import { trimBody } from '../snac/helpers'
 
 export const Text = (props: {
     root: SNACItem[],
@@ -36,28 +37,25 @@ export const Text = (props: {
         selectedClassName = isSelected ? 'text selected' : 'text'
     }
 
-    const prefix = <Prefix path={props.path} />
+    const body = trimBody (
+        isChildrenOpen,
+        newText,
+        snacOpts.xml_trimTextLength,
+        snacOpts.xml_ellipsis
+    )
+
+    const widthMultiplier = .9
 
     return (
         <div className={selectedClassName}>
-            <span className='text-head'>
-                <ShowHideSwitch
-                    root={props.root}
-                    path={props.path}
-                    selected={selectState}
-                    visible={!isChildrenOpen}
-                    chars={snacOpts.switch_selectChars}
-                    className='selected-show-hide'
-                    openClose={e => setSelected(!isSelected)}
-                />
-                {prefix}
-            </span>
             {isChildrenOpen ?
                 <>
-                    <span className='text-editor'>
-                        {mode === 'EDIT_MODE' ?
-                            <>
-                                <span className='text-editor-controls'>
+                    {mode === 'EDIT_MODE' &&
+                        <TextEditTextBox
+                            path={props.path}
+                            widthMultiplier={widthMultiplier}
+                            editButtonBar={() =>
+                                <>
                                     <Button
                                         className='button x-button'
                                         onClick={e => {
@@ -85,125 +83,155 @@ export const Text = (props: {
                                         }}
                                         label='Cancel'
                                     />
-                                </span>
+                                </>
+                            }
+                            editTextArea={() =>
                                 <TextArea
                                     readOnly={false}
-                                    className='text-editor-rw'
+                                    className='edit-text-editor'
                                     value={newText}
-                                    onChange={e => setNewText(e.target.value)}
+                                    onChange={(e: {
+                                        target: {
+                                            value: React.SetStateAction<string>
+                                        }
+                                    }) => setNewText(e.target.value)}
                                 />
-                            </> :
-                            <>
-                                {mode === 'INSERT_MODE' ?
-                                    <>
-                                        <span className='text-editor-controls'>
-                                            <Button
-                                                className='button x-button'
-                                                onClick={e => {
-                                                    setMode('VIEW_MODE')
-                                                    setChildrenOpen(false)
-                                                }}
-                                                label='X'
-                                            />
-                                            <TextInput
-                                                name="ns"
-                                                size={4}
-                                                placeholder='ns'
-                                                onChange={e => setNSText(e.target.value)}
-                                            />
-                                            <TextInput
-                                                name="name"
-                                                size={10}
-                                                placeholder='name'
-                                                onChange={e => setNameText(e.target.value)}
-                                            />
-                                            <Button
-                                                className='button text-button'
-                                                onClick={e => {
-                                                    if (nsText.length > 0 && nameText.length > 0) {
-                                                        const tag = `${nsText}:${nameText}`
-                                                        console.log(`${props.path}:${beforeText}<${tag}>${duringText}</${tag}>${afterText}`)
-                                                    }
-                                                    else if (nameText.length > 0) {
-                                                        const tag = `${nameText}`
-                                                        console.log(`${props.path}:${beforeText}<${tag}>${duringText}</${tag}>${afterText}`)
-                                                    }
-                                                    setChildrenOpen(false)
-                                                    setMode('VIEW_MODE')
-                                                    setNSText('')
-                                                    setNameText('')
-                                                    setBeforeText('')
-                                                    setDuringText('')
-                                                    setAfterText('')
-                                                }}
-                                                label='Insert Here'
-                                            />
-                                            <Button
-                                                className='button text-button'
-                                                onClick={e => {
-                                                    setMode('VIEW_MODE')
-                                                    setChildrenOpen(true)
-                                                }}
-                                                label='Cancel'
-                                            />
-                                        </span>
-                                        <TextArea
-                                            readOnly={true}
-                                            className='text-editor-ro'
-                                            value={newText}
-                                            onSelect={e => {
-                                                const value = e.target.value
-                                                const start = e.target.selectionStart
-                                                const end = e.target.selectionEnd
+                            }
+                        />
+                    }
+                    {mode === 'INSERT_MODE' &&
+                        <TextEditTextBox
+                            path={props.path}
+                            widthMultiplier={widthMultiplier}
+                            editButtonBar={() =>
+                                <>
+                                    <Button
+                                        className='button x-button'
+                                        onClick={e => {
+                                            setMode('VIEW_MODE')
+                                            setChildrenOpen(false)
+                                        }}
+                                        label='X'
+                                    />
+                                    <TextInput
+                                        name="ns"
+                                        size={4}
+                                        placeholder='ns'
+                                        onChange={e => setNSText(e.target.value)}
+                                    />
+                                    <TextInput
+                                        name="name"
+                                        size={10}
+                                        placeholder='name'
+                                        onChange={e => setNameText(e.target.value)}
+                                    />
+                                    <Button
+                                        className='button text-button'
+                                        onClick={e => {
+                                            if (nsText.length > 0 && nameText.length > 0) {
+                                                const tag = `${nsText}:${nameText}`
+                                                console.log(`${props.path}:${beforeText}<${tag}>${duringText}</${tag}>${afterText}`)
+                                            }
+                                            else if (nameText.length > 0) {
+                                                const tag = `${nameText}`
+                                                console.log(`${props.path}:${beforeText}<${tag}>${duringText}</${tag}>${afterText}`)
+                                            }
+                                            setChildrenOpen(false)
+                                            setMode('VIEW_MODE')
+                                            setNSText('')
+                                            setNameText('')
+                                            setBeforeText('')
+                                            setDuringText('')
+                                            setAfterText('')
+                                        }}
+                                        label='Insert Here'
+                                    />
+                                    <Button
+                                        className='button text-button'
+                                        onClick={e => {
+                                            setMode('VIEW_MODE')
+                                            setChildrenOpen(true)
+                                        }}
+                                        label='Cancel'
+                                    />
+                                </>
+                            }
+                            editTextArea={() =>
+                                <TextArea
+                                    readOnly={true}
+                                    className='edit-text-editor'
+                                    value={newText}
+                                    onSelect={e => {
+                                        const value = e.target.value
+                                        const start = e.target.selectionStart
+                                        const end = e.target.selectionEnd
 
-                                                setBeforeText(value.substr(0, start))
-                                                setDuringText(value.substr(start, end - start))
-                                                setAfterText(value.substr(end))
-                                            }}
-                                        />
-                                    </> :
-                                    <>
-                                        <span className='text-editor-controls'>
-                                            <Button
-                                                className='button x-button'
-                                                onClick={e => {
-                                                    setMode('VIEW_MODE')
-                                                    setChildrenOpen(false)
-                                                }}
-                                                label='X'
-                                            />
-                                            <Button
-                                                className='button text-button'
-                                                onClick={e => {
-                                                    setMode('EDIT_MODE')
-                                                }}
-                                                label='Edit'
-                                            />
-                                            <Button
-                                                className='button text-button'
-                                                onClick={e => {
-                                                    setMode('INSERT_MODE')
-                                                }}
-                                                label='Insert Mode'
-                                            />
-                                        </span>
-                                        <span className='text-editor-text' >
-                                            {newText.trim()}
-                                        </span>
-                                    </>
-                                }
-
-                            </>
-                        }
-                    </span>
+                                        setBeforeText(value.substr(0, start))
+                                        setDuringText(value.substr(start, end - start))
+                                        setAfterText(value.substr(end))
+                                    }}
+                                />
+                            }
+                        />
+                    }
+                    {mode === 'VIEW_MODE' &&
+                        <TextEditTextBox
+                            path={props.path}
+                            widthMultiplier={widthMultiplier}
+                            editButtonBar={() =>
+                                <>
+                                    <Button
+                                        className='button x-button'
+                                        onClick={e => {
+                                            setMode('VIEW_MODE')
+                                            setChildrenOpen(false)
+                                        }}
+                                        label='X'
+                                    />
+                                    <Button
+                                        className='button text-button'
+                                        onClick={e => {
+                                            setMode('EDIT_MODE')
+                                        }}
+                                        label='Edit'
+                                    />
+                                    <Button
+                                        className='button text-button'
+                                        onClick={e => {
+                                            setMode('INSERT_MODE')
+                                        }}
+                                        label='Insert Mode'
+                                    />
+                                </>
+                            }
+                            editTextArea={() =>
+                                <span className='edit-text-show' >
+                                    {newText}
+                                </span>
+                            }
+                        />
+                    }
                 </> :
-                <span className='text-body' onClick={e => {
-                    setChildrenOpen(true)
-                }}>
-                    <span className='text-bracket'>[</span>
-                    {newText}
-                    <span className='text-bracket'>]</span>
-                </span>
+                <>
+                    <ShowHideSwitch
+                        root={props.root}
+                        path={props.path}
+                        selected={selectState}
+                        visible={!isChildrenOpen}
+                        chars={snacOpts.switch_selectChars}
+                        className='selected-show-hide'
+                        openClose={e => setSelected(!isSelected)}
+                    />
+                    <Prefix path={props.path} />
+
+                    <span className='text-body' onClick={e => {
+                        setChildrenOpen(true)
+                    }}>
+                        <span className='text-bracket'>[</span>
+                        {body}
+                        <span className='text-bracket'>]</span>
+                    </span>
+                </>
             }
         </div>
     )

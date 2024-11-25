@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { SNACCDATA, SNACItem, SwitchStates } from '../snac/types'
 import { Prefix, ShowHideSwitch } from './prefix'
-import { Button, TextArea } from './widgets'
+import { Button, EditTextBox, TextArea } from './widgets'
 import { escapeCDATA } from '../snac/textutils'
 import { snacOpts } from '../snac/opts'
 import { CDATAGridStyle } from '../snac/styles'
+import { trimBody } from '../snac/helpers'
 
 export const CDATA = (props: {
     root: SNACItem[],
@@ -17,8 +18,8 @@ export const CDATA = (props: {
     const [isChildrenOpen, setChildrenOpen] = useState(false)
     const [isEditable, setIsEditable] = useState(false)
 
-    const [valueCDATA, setValueCDATA] = useState(props.node.D)
-    const [tmpValueCDATA, setTmpValueCDATA] = useState(props.node.D)
+    const [newCDATA, setNewCDATA] = useState(props.node.D)
+    const [prevCDATA, setPrevCDATA] = useState(props.node.D)
 
     let selectState = SwitchStates.HIDDEN
 
@@ -28,111 +29,108 @@ export const CDATA = (props: {
             SwitchStates.OFF
     }
 
-    let cdata = valueCDATA
-    if (!isChildrenOpen && cdata.length > snacOpts.xml_trimTextLength) {
-        cdata = `${cdata.substring(0, snacOpts.xml_trimCDATALength)} ${snacOpts.xml_ellipsis}`
-    }
+    const cdata = trimBody(
+        isChildrenOpen,
+        newCDATA,
+        snacOpts.xml_trimCDATALength,
+        snacOpts.xml_ellipsis
+    )
+
+    const widthMultiplier = 1
 
     return (
-        <div className='cdata'>
-
+        <>
             {isChildrenOpen ?
-                <span className='cdata-table'
-                    style={CDATAGridStyle({
-                        pathWidth: props.path.length * 0.76,
-                        xButtonWidth: 1,
-                        buttonWidth: 6,
-                    })}
-                >
-                    <span className='cdata-prefix'></span>
-                    <span className='cdata-open-bracket'>
-                        <CDATAOpenBracket />
-                    </span>
+                <>
                     {isEditable ?
-                        <>
-                            <span className='cdata-x-button'>
-                                <Button
-                                    className='button x-button'
-                                    onClick={e => {
-                                        setChildrenOpen(false)
-                                    }}
-                                    label='X'
-                                />
-                            </span>
-                            <span className='cdata-button-1'>
-                                <Button
-                                    className='button text-button'
-                                    onClick={e => {
-                                        setIsEditable(false)
-                                        setChildrenOpen(false)
-                                        setValueCDATA(tmpValueCDATA)
-                                        console.log(`[${props.path}]:<!-- ${tmpValueCDATA} -->`)
-                                    }}
-                                    label='Save'
-                                />
-                            </span>
-                            <span className='cdata-button-2'>
-                                <Button
-                                    className='button text-button'
-                                    onClick={e => {
-                                        setIsEditable(false)
-                                        setChildrenOpen(false)
-                                        setTmpValueCDATA('')
-                                    }}
-                                    label='Cancel'
-                                />
-                            </span>
-                            <span className='cdata-button-3'></span>
-                            <span className='cdata-text'>
+                        <EditTextBox
+                            path={props.path}
+                            widthMultiplier={widthMultiplier}
+                            editTopBar={() => <CDATAOpenBracket />}
+                            editButtonBar={() =>
+                                <>
+                                    <Button
+                                        className='button x-button'
+                                        onClick={() => {
+                                            setChildrenOpen(false)
+                                        }}
+                                        label='X'
+                                    />
+                                    <Button
+                                        className='button text-button'
+                                        onClick={() => {
+                                            setIsEditable(false)
+                                            setChildrenOpen(false)
+                                            setNewCDATA(prevCDATA)
+                                            console.log(`[${props.path}]:<!-- ${prevCDATA} -->`)
+                                        }}
+                                        label='Save'
+                                    />
+                                    <Button
+                                        className='button text-button'
+                                        onClick={() => {
+                                            setIsEditable(false)
+                                            setChildrenOpen(false)
+                                            setPrevCDATA('')
+                                        }}
+                                        label='Cancel'
+                                    />
+                                </>
+                            }
+                            editTextArea={() =>
                                 <TextArea
                                     readOnly={false}
-                                    className='cdata-text-editor'
-                                    value={tmpValueCDATA}
-                                    onChange={e => setTmpValueCDATA(e.target.value)}
+                                    className='edit-text-editor cdata-editor'
+                                    value={prevCDATA}
+                                    onChange={(e: {
+                                        target: {
+                                            value: React.SetStateAction<string>
+                                        }
+                                    }) => setPrevCDATA(e.target.value)}
                                 />
-                            </span>
-                        </> :
-                        <>
-                            <span className='cdata-x-button'>
-                                <Button
-                                    className='button x-button'
-                                    onClick={e => {
-                                        setChildrenOpen(false)
-                                    }}
-                                    label='X'
-                                />
-                            </span>
-                            <span className='cdata-button-1'>
-                                <Button
-                                    className='button text-button'
-                                    onClick={e => {
-                                        setIsEditable(true)
-                                        setTmpValueCDATA(valueCDATA)
-                                    }}
-                                    label='Edit'
-                                />
-                            </span>
-                            <span className='cdata-button-2'>
-                                <Button
-                                    className='button text-button'
-                                    onClick={e => {
-                                        setIsEditable(false)
-                                        setChildrenOpen(false)
-                                    }}
-                                    label='Remove'
-                                />
-                            </span>
-                            <span className='cdata-button-3'></span>
-                            <span className='cdata-text' >
-                                {escapeCDATA(cdata.trim())}
-                            </span>
-                        </>
+                            }
+                            editBottomBar={() => <CDATACloseBracket />}
+                        /> :
+                        <EditTextBox
+                            path={props.path}
+                            widthMultiplier={widthMultiplier}
+                            editTopBar={() => <CDATAOpenBracket />}
+                            editButtonBar={() =>
+                                <>
+                                    <Button
+                                        className='button x-button'
+                                        onClick={() => {
+                                            setChildrenOpen(false)
+                                        }}
+                                        label='X'
+                                    />
+                                    <Button
+                                        className='button text-button'
+                                        onClick={() => {
+                                            setIsEditable(true)
+                                            setPrevCDATA(newCDATA)
+                                        }}
+                                        label='Edit'
+                                    />
+                                    <Button
+                                        className='button text-button'
+                                        onClick={() => {
+                                            setIsEditable(false)
+                                            setChildrenOpen(false)
+                                        }}
+                                        label='Remove'
+                                    />
+                                </>
+                            }
+                            editTextArea={() =>
+                                <span className='edit-text-show cdata-disabled'>
+                                    {escapeCDATA(cdata.trim())}
+                                </span>
+                            }
+                            editBottomBar={() => <CDATACloseBracket />}
+                        />
                     }
-                    <span className='cdata-close-bracket'>
-                        <CDATACloseBracket />
-                    </span>
-                </span>
-                :
+                </> :
                 <span>
                     <ShowHideSwitch
                         root={props.root}
@@ -144,16 +142,19 @@ export const CDATA = (props: {
                         openClose={e => setSelected(!isSelected)}
                     />
                     <Prefix path={props.path} />
+                    {' '}
                     <CDATAOpenBracket />
-                    <span className='cdata-body' onClick={e => {
-                        setChildrenOpen(true)
-                    }}>
+                    <span
+                        className='edit-text-show cdata'
+                        onClick={() => {
+                            setChildrenOpen(true)
+                        }}>
                         {escapeCDATA(cdata)}
                     </span>
                     <CDATACloseBracket />
                 </span>
             }
-        </div>
+        </>
     )
 }
 

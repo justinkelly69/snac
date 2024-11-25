@@ -56,6 +56,8 @@ export type SNACOpts = {
     xml_trimCDATALength: number,
     xml_trimComment: boolean,
     xml_trimCommentLength: number,
+    xml_trimPIBody: boolean,
+    xml_trimPIBodyLength: number,
     xml_showCloseTags: boolean,
     xml_allowComments: boolean,
     xml_allowPIs: boolean,
@@ -64,7 +66,7 @@ export type SNACOpts = {
     styles_attributeGridRowWidth: string,
     styles_attributeGridButtonWidth: string,
 
-    pi_languages: string[],
+    pi_languages: string[][],
 }
 
 export interface SNAC2XMLFuncs {

@@ -55,11 +55,13 @@ export const snacOpts: SNACOpts = {
     xml_showChildrenOpen: true,
     xml_selfCloseTags: true,
     xml_trimText: true,
-    xml_trimTextLength: 100,
+    xml_trimTextLength: 20,
     xml_trimCDATA: true,
-    xml_trimCDATALength: 100,
+    xml_trimCDATALength: 20,
     xml_trimComment: true,
-    xml_trimCommentLength: 100,
+    xml_trimCommentLength: 20,
+    xml_trimPIBody: true,
+    xml_trimPIBodyLength: 10,
     xml_showCloseTags: true,
     xml_allowComments: true,
     xml_allowPIs: true,
@@ -68,5 +70,5 @@ export const snacOpts: SNACOpts = {
     styles_attributeGridRowWidth: ' .6fr',
     styles_attributeGridButtonWidth: '6em',
 
-    pi_languages: ['php', 'php='],
+    pi_languages: [['php', 'php'],['php=', 'php=']],
 }
