@@ -151,6 +151,7 @@ export const CDATA = (props: {
                         }}>
                         {escapeCDATA(cdata)}
                     </span>
+                    {" "}
                     <CDATACloseBracket />
                 </span>
             }

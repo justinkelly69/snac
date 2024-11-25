@@ -172,6 +172,7 @@ export const PI = (props: {
                         }}>
                         {`${escapePIBody(body)}`}
                     </span>
+                    {" "}
                     <PICloseBracket />
                 </span>
 

@@ -37,7 +37,7 @@ export const Text = (props: {
         selectedClassName = isSelected ? 'text selected' : 'text'
     }
 
-    const body = trimBody (
+    const body = trimBody(
         isChildrenOpen,
         newText,
         snacOpts.xml_trimTextLength,
@@ -88,7 +88,7 @@ export const Text = (props: {
                             editTextArea={() =>
                                 <TextArea
                                     readOnly={false}
-                                    className='edit-text-editor'
+                                    className='edit-text-editor text-editor'
                                     value={newText}
                                     onChange={(e: {
                                         target: {
@@ -115,12 +115,14 @@ export const Text = (props: {
                                     />
                                     <TextInput
                                         name="ns"
+                                        className='text-input ns-input'
                                         size={4}
                                         placeholder='ns'
                                         onChange={e => setNSText(e.target.value)}
                                     />
                                     <TextInput
                                         name="name"
+                                        className='text-input name-input'
                                         size={10}
                                         placeholder='name'
                                         onChange={e => setNameText(e.target.value)}
@@ -159,7 +161,7 @@ export const Text = (props: {
                             editTextArea={() =>
                                 <TextArea
                                     readOnly={true}
-                                    className='edit-text-editor'
+                                    className='edit-text-editor text-insert'
                                     value={newText}
                                     onSelect={e => {
                                         const value = e.target.value
@@ -223,13 +225,12 @@ export const Text = (props: {
                         openClose={e => setSelected(!isSelected)}
                     />
                     <Prefix path={props.path} />
-
-                    <span className='text-body' onClick={e => {
-                        setChildrenOpen(true)
-                    }}>
-                        <span className='text-bracket'>[</span>
+                    <span
+                        className='text-body'
+                        onClick={e => {
+                            setChildrenOpen(true)
+                        }}>
                         {body}
-                        <span className='text-bracket'>]</span>
                     </span>
                 </>
             }
