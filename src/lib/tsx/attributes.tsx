@@ -1,18 +1,8 @@
 import React, { useReducer, useState } from 'react'
-import { Button, TextInput } from './widgets'
-
-import {
-    AttributesType,
-    EditAttributesType,
-    SNACOpts
-} from '../snac/types'
-
-import {
-    snacOpts
-} from '../snac/opts'
-
+import {  Button,  TextInput } from './widgets'
+import {  AttributesType,  EditAttributesType } from '../snac/types'
+import { snacOpts } from '../snac/opts'
 import { Prefix } from './prefix'
-
 import {
     attributesEditReducer,
     snac2EditAttributes,
@@ -111,10 +101,7 @@ export const AttributesTable = (props: {
         name: '#',
     })
     const [mode, setMode] = useState('LIST_MODE')
-
-    //console.clear()
-    //console.log(JSON.stringify(state, null, 4))
-
+    
     return (
         <>
             {Object.keys(state).map((ns, i) => {

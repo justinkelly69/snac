@@ -1,17 +1,9 @@
-import {
-    OnOffHiddenChars,
-    SNACItem,
-    SwitchStates
-} from "../snac/types"
-
-import {
-    snacOpts
-} from '../snac/opts'
+import { OnOffHiddenChars, SwitchStates } from "../snac/types"
+import { snacOpts } from '../snac/opts'
 
 export const Prefix = (props: {
     path: number[],
 }): JSX.Element | null => {
-
     if (snacOpts.prefix_showPrefix) {
         return (
             <span className="prefix">
@@ -25,7 +17,7 @@ export const Prefix = (props: {
 
 const getPrefixString = (path: number[]): string => {
     const init = ""
-    return path.reduce((out, p) => out + snacOpts.prefix_charOn, init)
+    return path.reduce((out) => out + snacOpts.prefix_charOn, init)
 }
 
 export const ShowHideSwitch = (props: {
@@ -36,9 +28,7 @@ export const ShowHideSwitch = (props: {
     className: string
     openClose: Function
 }): JSX.Element => {
-
     let out = props.chars.hidden
-
     if (props.visible) {
         switch (props.selected) {
             case SwitchStates.OFF:

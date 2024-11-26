@@ -1,4 +1,3 @@
-import { repeatString } from "./helpers"
 import {
     EditAttributesType,
     AttributesType,
@@ -10,7 +9,6 @@ import {
 export const snac2EditAttributes = (
     attributes: AttributesType
 ): EditAttributesType => {
-
     const editAttributes: EditAttributesType = {}
     for (const ns of Object.keys(attributes)) {
         if (!editAttributes[ns]) {
@@ -26,7 +24,6 @@ export const snac2EditAttributes = (
             }
         }
     }
-
     return editAttributes
 }
 
@@ -55,30 +52,23 @@ export const attributesEditReducer = (
     state: EditAttributesType,
     action: EditAttributesActionType
 ): EditAttributesType => {
-
     switch (action.type) {
         case "selectAttribute":
             return selectAttribute(state, action.payload)
-
         case "saveAttribute":
             return saveAttribute(state, action.payload)
-
         case "cancelAttribute":
             return cancelAttribute(state)
-
         case "deleteAttribute":
             return deleteAttribute(state, action.payload)
-
         case "newAttribute":
             return newAttribute(state, action.payload)
-
         default:
             return state
     }
 }
 
 export const attributeGetNumRows = (state: EditAttributesType): number => {
-
     let numRows = 0
     for (const key of Object.keys(state)) {
         numRows += Object.keys(state[key]).length
@@ -91,7 +81,6 @@ export const attributeGetValue = (
     ns: string,
     name: string,
 ): string => {
-
     return state[ns][name]['V']
 }
 
@@ -104,7 +93,6 @@ export const setSelectedAttribute = (
     ns: string,
     name: string,
 ) => {
-
     if (!isDeleted) {
         if (isSelected) {
             setSelected({
@@ -142,7 +130,6 @@ export const selectAttribute = (
     state: EditAttributesType,
     payload: EditAttributesPayloadType,
 ): EditAttributesType => {
-
     const newAttrbutes: EditAttributesType = {}
     for (const ns of Object.keys(state)) {
         if (!newAttrbutes[ns]) {
@@ -167,7 +154,6 @@ export const selectAttribute = (
             }
         }
     }
-
     return newAttrbutes
 }
 
@@ -201,7 +187,6 @@ export const saveAttribute = (
     state: EditAttributesType,
     payload: EditAttributesPayloadType,
 ): EditAttributesType => {
-
     const newAttrbutes: EditAttributesType = {}
     for (const ns of Object.keys(state)) {
         if (!newAttrbutes[ns]) {
@@ -220,7 +205,6 @@ export const saveAttribute = (
             }
         }
     }
-
     return newAttrbutes
 }
 
@@ -250,7 +234,6 @@ export const setCancelAttribute = (
 export const cancelAttribute = (
     state: EditAttributesType,
 ): EditAttributesType => {
-
     const newAttrbutes: EditAttributesType = {}
     for (const ns of Object.keys(state)) {
         if (!newAttrbutes[ns]) {
@@ -263,7 +246,6 @@ export const cancelAttribute = (
             }
         }
     }
-
     return newAttrbutes
 }
 
@@ -272,7 +254,6 @@ export const attributeIsDeleted = (
     ns: string,
     name: string,
 ): boolean => {
-
     return state[ns][name]['d']
 }
 
@@ -294,7 +275,6 @@ export const deleteAttribute = (
     state: EditAttributesType,
     payload: EditAttributesPayloadType,
 ): EditAttributesType => {
-
     const newAttrbutes: EditAttributesType = {}
     for (const ns of Object.keys(state)) {
         if (!newAttrbutes[ns]) {
@@ -312,7 +292,6 @@ export const deleteAttribute = (
             }
         }
     }
-
     return newAttrbutes
 }
 
@@ -336,7 +315,6 @@ export const newAttribute = (
     state: EditAttributesType,
     payload: EditAttributesPayloadType,
 ): EditAttributesType => {
-
     const newAttrbutes: EditAttributesType = {}
     for (const ns of Object.keys(state)) {
         if (!newAttrbutes[ns]) {
@@ -351,7 +329,6 @@ export const newAttribute = (
             }
         }
     }
-
     if (payload.newNS && payload.newName && payload.newValue) {
         if (!newAttrbutes[payload.newNS]) {
             newAttrbutes[payload.newNS] = {}
@@ -362,7 +339,6 @@ export const newAttribute = (
             q: false,
         }
     }
-
     return newAttrbutes
 }
 

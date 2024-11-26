@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
-import { SNACCDATA, SNACItem, SwitchStates } from '../snac/types'
+import { SNACCDATA, SwitchStates } from '../snac/types'
 import { Prefix, ShowHideSwitch } from './prefix'
 import { Button, EditTextBox, TextArea } from './widgets'
-import { escapeCDATA } from '../snac/textutils'
+import { escapeCDATA, trimBody } from '../snac/textutils'
 import { snacOpts } from '../snac/opts'
-import { CDATAGridStyle } from '../snac/styles'
-import { trimBody } from '../snac/helpers'
 
 export const CDATA = (props: {
     node: SNACCDATA,
@@ -106,14 +104,6 @@ export const CDATA = (props: {
                                     <Button
                                         className='button text-button'
                                         onClick={() => {
-                                            setIsEditable(true)
-                                            setPrevCDATA(newCDATA)
-                                        }}
-                                        label='Edit'
-                                    />
-                                    <Button
-                                        className='button text-button'
-                                        onClick={() => {
                                             setIsEditable(false)
                                             setChildrenOpen(false)
                                         }}
@@ -122,7 +112,13 @@ export const CDATA = (props: {
                                 </>
                             }
                             editTextArea={() =>
-                                <span className='edit-text-show cdata-disabled'>
+                                <span
+                                    className='edit-text-show cdata-disabled'
+                                    onClick={() => {
+                                        setIsEditable(true)
+                                        setPrevCDATA(newCDATA)
+                                    }}
+                                >
                                     {escapeCDATA(cdata.trim())}
                                 </span>
                             }

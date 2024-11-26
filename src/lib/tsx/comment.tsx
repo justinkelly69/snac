@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
-import { SNACComment, SNACItem, SwitchStates } from '../snac/types'
+import { SNACComment, SwitchStates } from '../snac/types'
 import { Button, EditTextBox, TextArea } from './widgets'
 import { Prefix, ShowHideSwitch } from './prefix'
-import { escapeComment } from '../snac/textutils'
+import { escapeComment, trimBody } from '../snac/textutils'
 import { snacOpts } from '../snac/opts'
-import { trimBody } from '../snac/helpers'
 
 export const Comment = (props: {
     node: SNACComment,
@@ -27,7 +26,7 @@ export const Comment = (props: {
             SwitchStates.OFF
     }
 
-    const comment = trimBody (
+    const comment = trimBody(
         isChildrenOpen,
         newComment,
         snacOpts.xml_trimCommentLength,
@@ -98,14 +97,6 @@ export const Comment = (props: {
                                     <Button
                                         className='button text-button'
                                         onClick={() => {
-                                            setIsEditable(true)
-                                            setPrevComment(newComment)
-                                        }}
-                                        label='Edit'
-                                    />
-                                    <Button
-                                        className='button text-button'
-                                        onClick={() => {
                                             setIsEditable(false)
                                             setChildrenOpen(false)
                                         }}
@@ -113,8 +104,14 @@ export const Comment = (props: {
                                     />
                                 </>
                             }
-                            editTextArea={() => 
-                                <span className='edit-text-show comment-disabled'>
+                            editTextArea={() =>
+                                <span
+                                    className='edit-text-show comment-disabled'
+                                    onClick={() => {
+                                        setIsEditable(true)
+                                        setPrevComment(newComment)
+                                    }}
+                                >
                                     {escapeComment(newComment.trim())}
                                 </span>
                             }

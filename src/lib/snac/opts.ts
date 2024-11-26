@@ -55,7 +55,7 @@ export const snacOpts: SNACOpts = {
     xml_showChildrenOpen: true,
     xml_selfCloseTags: true,
     xml_trimText: true,
-    xml_trimTextLength: 20,
+    xml_trimTextLength: 50,
     xml_trimCDATA: true,
     xml_trimCDATALength: 20,
     xml_trimComment: true,

@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
-
-import { SNACItem, SNACPINode, SwitchStates } from "../snac/types"
+import { SNACPINode, SwitchStates } from "../snac/types"
 import { Prefix, ShowHideSwitch } from './prefix'
 import { Button, DropDownList, TextArea, EditTextBox } from './widgets'
-import { escapePIBody } from '../snac/textutils'
+import { escapePIBody, trimBody } from '../snac/textutils'
 import { snacOpts } from '../snac/opts'
-import { trimBody } from '../snac/helpers'
 
 export const PI = (props: {
     node: SNACPINode,
@@ -30,7 +28,7 @@ export const PI = (props: {
             SwitchStates.OFF
     }
 
-    const body = trimBody (
+    const body = trimBody(
         isChildrenOpen,
         newPIBody,
         snacOpts.xml_trimPIBodyLength,
@@ -98,7 +96,11 @@ export const PI = (props: {
                                     readOnly={false}
                                     className='edit-text-editor pi-editor'
                                     value={newPIBody}
-                                    onChange={(e: { target: { value: React.SetStateAction<string> } }) => setNewPIBody(e.target.value)}
+                                    onChange={(e: {
+                                        target: {
+                                            value: React.SetStateAction<string>
+                                        }
+                                    }) => setNewPIBody(e.target.value)}
                                 />
                             }
                             editBottomBar={() => <PICloseBracket />}
@@ -110,7 +112,7 @@ export const PI = (props: {
                                 <>
                                     <PIOpenBracket />
                                     <span className='pi-lang'>
-                                        {` ${newPILang} `}
+                                        {newPILang}
                                     </span>
                                 </>
                             }
@@ -118,22 +120,14 @@ export const PI = (props: {
                                 <>
                                     <Button
                                         className='button x-button'
-                                        onClick={e => {
+                                        onClick={() => {
                                             setChildrenOpen(false)
                                         }}
                                         label='X'
                                     />
                                     <Button
                                         className='button text-button'
-                                        onClick={e => {
-                                            setIsEditable(true)
-                                            setPrevPIBody(newPIBody)
-                                        }}
-                                        label='Edit'
-                                    />
-                                    <Button
-                                        className='button text-button'
-                                        onClick={e => {
+                                        onClick={() => {
                                             setIsEditable(false)
                                             setChildrenOpen(false)
                                         }}
@@ -142,7 +136,13 @@ export const PI = (props: {
                                 </>
                             }
                             editTextArea={() =>
-                                <span className='edit-text-show pi-disabled'>
+                                <span
+                                    className='edit-text-show pi-disabled'
+                                    onClick={() => {
+                                        setIsEditable(true)
+                                        setPrevPIBody(newPIBody)
+                                    }}
+                                >
                                     {escapePIBody(body)}
                                 </span>
                             }
@@ -160,15 +160,15 @@ export const PI = (props: {
                         openClose={() => setSelected(!isSelected)}
                     />
                     <Prefix path={props.path} />
-                    {' '}
                     <PIOpenBracket />
-                    <span className='pi-lang'>{`${newPILang} `}</span>
+                    <span className='pi-lang'>{newPILang}</span>
+                    {" "}
                     <span
                         className='edit-text-show pi'
-                        onClick={e => {
+                        onClick={() => {
                             setChildrenOpen(true)
                         }}>
-                        {`${escapePIBody(body)}`}
+                        {escapePIBody(body)}
                     </span>
                     {" "}
                     <PICloseBracket />

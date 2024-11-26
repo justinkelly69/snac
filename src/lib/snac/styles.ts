@@ -1,4 +1,4 @@
-import { repeatString } from "./helpers"
+import { repeatString } from "./textutils"
 
 export const attributesGridStyle = (
     props: {

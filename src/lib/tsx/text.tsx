@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
-import { SNACItem, SNACText, SwitchModes, SwitchStates } from '../snac/types'
+import { SNACText, SwitchModes, SwitchStates } from '../snac/types'
 import { Prefix, ShowHideSwitch } from './prefix'
 import { Button, TextArea, TextEditTextBox, TextInput } from './widgets'
-import {
-    snacOpts
-} from '../snac/opts'
-import { trimBody } from '../snac/helpers'
+import { snacOpts } from '../snac/opts'
+import { trimBody } from '../snac/textutils'
 
 export const Text = (props: {
     node: SNACText,
@@ -106,9 +104,13 @@ export const Text = (props: {
                                 <>
                                     <Button
                                         className='button x-button'
+                                        // onClick={e => {
+                                        //     setMode('VIEW_MODE')
+                                        //     setChildrenOpen(false)
+                                        // }}
                                         onClick={e => {
                                             setMode('VIEW_MODE')
-                                            setChildrenOpen(false)
+                                            setChildrenOpen(true)
                                         }}
                                         label='X'
                                     />
@@ -149,12 +151,27 @@ export const Text = (props: {
                                     />
                                     <Button
                                         className='button text-button'
+                                        onClick={f => f}
+                                        label='CDATA'
+                                    />
+                                    <Button
+                                        className='button text-button'
+                                        onClick={f => f}
+                                        label='Comment'
+                                    />
+                                    <Button
+                                        className='button text-button'
+                                        onClick={f => f}
+                                        label='PI'
+                                    />
+                                    {/* <Button
+                                        className='button text-button'
                                         onClick={e => {
                                             setMode('VIEW_MODE')
                                             setChildrenOpen(true)
                                         }}
                                         label='Cancel'
-                                    />
+                                    /> */}
                                 </>
                             }
                             editTextArea={() =>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { EditBoxGridStyle } from '../snac/styles'
 
 export const Button = props =>

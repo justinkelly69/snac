@@ -1,26 +1,8 @@
 import React, { useState } from 'react'
-
-import {
-    Button,
-    TextInput,
-} from './widgets'
-
-import {
-    SNACItem,
-    SNACElement,
-    SwitchStates,
-    SwitchModes
-} from '../snac/types'
-
-import {
-    snacOpts
-} from '../snac/opts'
-
-import {
-    Prefix,
-    ShowHideSwitch
-} from './prefix'
-
+import { Button, TextInput } from './widgets'
+import { SNACElement, SwitchStates, SwitchModes } from '../snac/types'
+import { snacOpts } from '../snac/opts'
+import { Prefix, ShowHideSwitch } from './prefix'
 import { Attributes, AttributesTable } from './attributes'
 import { attributeKeys } from '../snac/textutils'
 import { attributesGridStyle } from '../snac/styles'
@@ -295,8 +277,8 @@ const NSNodeEdit = (props: {
             <span
                 className='attributes-table'
                 style={attributesGridStyle({
-                    keys: keys, 
-                    pathWidth: props.path.length * 1.2, 
+                    keys: keys,
+                    pathWidth: props.path.length * 1.2,
                     buttonWidth: 6,
                     cellWidth: 6,
                     height: numRows * 1.4,
