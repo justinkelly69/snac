@@ -11,12 +11,7 @@ function App() {
     console.log(JSON.stringify(snac, null, 4))
 
     return (
-        <pre>
-            <XMLOut
-                root={[snac]}
-                snac={[snac]}
-            />
-        </pre>
+        <XMLOut snac={[snac]} />
     )
 }
 

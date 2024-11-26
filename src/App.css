@@ -43,6 +43,46 @@
   --pi-brackets: hsl(87.87, 88.81%, 28.04%);
 }
 
+@font-face {
+  font-family: 'RobotoMono';
+  src: url('./fonts/RobotoMono-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* -------------------------
+ * XML OUT
+ * -----------------------*/
+.xml-out {
+  white-space: pre;
+  font-family: 'RobotoMono', monospace;
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+/* -------------------------
+ * BUTTONS
+ * -----------------------*/
+.button {
+  height: 1.4em;
+  border: none;
+  margin-right: .25em;
+  border-radius: .25em;
+  padding: .1em;
+  font-size: .8rem;
+}
+
+.text-button {
+  width: 6em;
+}
+
+.x-button {
+  width: 1.4em;
+}
+
+/* -------------------------
+ * SELECTED TEXT
+ * -----------------------*/
 .selected {
   background-color: var(--selected-background);
 }
@@ -54,7 +94,6 @@
 /* -------------------------
  * ELEMENTS
  * -----------------------*/
-
 .element {
   color: var(--element)
 }
@@ -93,9 +132,6 @@
 /* -------------------------
  * ATTRIBUTES
  * -----------------------*/
-
-.attribute {}
-
 .attribute-ns {
   color: var(--attribute-ns);
   text-align: right;
@@ -155,32 +191,9 @@
   display: grid;
 }
 
-.table-prefix {
-  display: block;
-  float: left;
-}
-
-.button {
-  height: 1.4em;
-  border: none;
-  margin-right: .25em;
-  border-radius: .25em;
-  padding: .1em;
-  font-size: .8rem;
-}
-
-.text-button {
-  width: 6em;
-}
-
-.x-button {
-  width: 1.4em;
-}
-
 /* -------------------------
  * TEXT
  * -----------------------*/
-
 .text {
   color: var(--text-body)
 }
@@ -252,7 +265,6 @@
 /* -------------------------
  * COMMENTS
  * -----------------------*/
-
 .comment {
   color: var(--comment-text);
 }
@@ -274,7 +286,6 @@
 /* -------------------------
  * CDATA
  * -----------------------*/
-
 .cdata {
   color: var(--cdata-text);
 }
@@ -300,7 +311,6 @@
 /* -------------------------
  * PI
  * -----------------------*/
-
 .pi {
   color: var(--pi-text);
 }

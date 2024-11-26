@@ -7,7 +7,6 @@ import { snacOpts } from '../snac/opts'
 import { trimBody } from '../snac/helpers'
 
 export const Comment = (props: {
-    root: SNACItem[],
     node: SNACComment,
     path: number[],
     showSelected: boolean,
@@ -125,7 +124,6 @@ export const Comment = (props: {
                 </> :
                 <span>
                     <ShowHideSwitch
-                        root={props.root}
                         path={props.path}
                         selected={selectState}
                         visible={!isChildrenOpen}

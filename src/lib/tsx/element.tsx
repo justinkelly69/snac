@@ -26,7 +26,6 @@ import { attributeKeys } from '../snac/textutils'
 import { attributesGridStyle } from '../snac/styles'
 
 export const Tag = (props: {
-    root: SNACItem[],
     node: SNACElement,
     path: number[],
     getChildren: Function,
@@ -50,7 +49,6 @@ export const Tag = (props: {
     return (
         <div className={selectedClassName}>
             <OpenTag
-                root={props.root}
                 node={props.node}
                 path={props.path}
                 isEmpty={isEmpty}
@@ -64,7 +62,6 @@ export const Tag = (props: {
 
             {isChildrenOpen ?
                 props.getChildren(
-                    props.root,
                     props.node.C,
                     props.path,
                 ) :
@@ -73,7 +70,6 @@ export const Tag = (props: {
 
             {!isEmpty && snacOpts.xml_showCloseTags ? (
                 <CloseTag
-                    root={props.root}
                     node={props.node}
                     path={props.path}
                     isEmpty={isEmpty}
@@ -90,7 +86,6 @@ export const Tag = (props: {
 }
 
 export const OpenTag = (props: {
-    root: SNACItem[],
     node: SNACElement,
     path: number[],
     isEmpty: boolean,
@@ -145,7 +140,6 @@ export const OpenTag = (props: {
                 </> :
                 <>
                     <ShowHideSwitch
-                        root={props.root}
                         path={props.path}
                         selected={selectState}
                         visible={mode === 'VIEW_MODE'}
@@ -159,7 +153,6 @@ export const OpenTag = (props: {
                     />
 
                     <ShowHideSwitch
-                        root={props.root}
                         path={props.path}
                         selected={childrenOpenState}
                         visible={mode === 'VIEW_MODE'}
@@ -183,7 +176,6 @@ export const OpenTag = (props: {
                     </>
                     {closeSlash}&gt;
                     <ShowHideSwitch
-                        root={props.root}
                         path={props.path}
                         selected={attributesOpenState}
                         visible={mode === 'VIEW_MODE'}
@@ -199,7 +191,6 @@ export const OpenTag = (props: {
 }
 
 export const CloseTag = (props: {
-    root: SNACItem[],
     node: SNACElement,
     path: number[],
     isEmpty: boolean,
@@ -230,7 +221,6 @@ export const CloseTag = (props: {
             {props.isChildrenOpen ? (
                 <>
                     <ShowHideSwitch
-                        root={props.root}
                         path={props.path}
                         selected={selectState}
                         visible={mode === 'VIEW_MODE'}
@@ -240,7 +230,6 @@ export const CloseTag = (props: {
                     />
                     <Prefix path={props.path} />
                     <ShowHideSwitch
-                        root={props.root}
                         path={props.path}
                         selected={childrenOpenState}
                         visible={mode === 'VIEW_MODE'}
@@ -313,10 +302,9 @@ const NSNodeEdit = (props: {
                     height: numRows * 1.4,
                 })}
             >
-                <span className='table-prefix'
+                <span
                     style={{
                         gridArea: `1 / 1 / ${numRows} / 1`,
-                        backgroundColor: 'pink',
                     }}
                 ></span>
                 <span>

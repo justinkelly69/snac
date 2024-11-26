@@ -29,7 +29,6 @@ const getPrefixString = (path: number[]): string => {
 }
 
 export const ShowHideSwitch = (props: {
-    root: SNACItem[],
     path: number[],
     chars: OnOffHiddenChars,
     selected: SwitchStates,

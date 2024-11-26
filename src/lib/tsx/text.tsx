@@ -8,7 +8,6 @@ import {
 import { trimBody } from '../snac/helpers'
 
 export const Text = (props: {
-    root: SNACItem[],
     node: SNACText,
     path: number[],
     showSelected: boolean,
@@ -190,13 +189,13 @@ export const Text = (props: {
                                         }}
                                         label='X'
                                     />
-                                    <Button
+                                    {/* <Button
                                         className='button text-button'
                                         onClick={e => {
                                             setMode('EDIT_MODE')
                                         }}
                                         label='Edit'
-                                    />
+                                    /> */}
                                     <Button
                                         className='button text-button'
                                         onClick={e => {
@@ -207,7 +206,12 @@ export const Text = (props: {
                                 </>
                             }
                             editTextArea={() =>
-                                <span className='edit-text-show' >
+                                <span
+                                    className='edit-text-show'
+                                    onClick={e => {
+                                        setMode('EDIT_MODE')
+                                    }}
+                                >
                                     {newText}
                                 </span>
                             }
@@ -216,7 +220,6 @@ export const Text = (props: {
                 </> :
                 <>
                     <ShowHideSwitch
-                        root={props.root}
                         path={props.path}
                         selected={selectState}
                         visible={!isChildrenOpen}

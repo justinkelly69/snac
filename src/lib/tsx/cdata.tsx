@@ -8,7 +8,6 @@ import { CDATAGridStyle } from '../snac/styles'
 import { trimBody } from '../snac/helpers'
 
 export const CDATA = (props: {
-    root: SNACItem[],
     node: SNACCDATA,
     path: number[],
     showSelected: boolean,
@@ -133,7 +132,6 @@ export const CDATA = (props: {
                 </> :
                 <span>
                     <ShowHideSwitch
-                        root={props.root}
                         path={props.path}
                         selected={selectState}
                         visible={!isChildrenOpen}
