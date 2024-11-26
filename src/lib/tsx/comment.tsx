@@ -7,6 +7,7 @@ import { snacOpts } from '../snac/opts'
 import { ShowHideSwitch } from './showhide'
 import { XMLContext } from './xmlout'
 import { EditBoxGridStyle } from '../snac/styles'
+import { XmlShow } from './xmlshow'
 
 export const Comment = (props: {
     node: SNACComment,
@@ -158,23 +159,13 @@ export const Comment = (props: {
     }
     else {
         return (
-            <>
-                {props.node.M.trim().length > 0 ?
-                    <div className='show-body-code comment'
-                        style={EditBoxGridStyle({
-                            pathWidth: props.path.length
-                        })}
-                    >
-                        <span className='show-body-code-prefix'></span>
-                        <span className='show-body-code-text'>
-                            <CommentOpenBracket /><br />
-                            {props.node.M.trim()}<br />
-                            <CommentCloseBracket />
-                        </span>
-                    </div> :
-                    null
-                }
-            </>
+            <XmlShow
+                path={props.path}
+                className='comment'>
+                <CommentOpenBracket /><br />
+                {props.node.M.trim()}<br />
+                <CommentCloseBracket />
+            </XmlShow>
         )
     }
 }

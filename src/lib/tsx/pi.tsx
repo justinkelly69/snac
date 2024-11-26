@@ -7,6 +7,7 @@ import { snacOpts } from '../snac/opts'
 import { ShowHideSwitch } from './showhide'
 import { XMLContext } from './xmlout'
 import { EditBoxGridStyle } from '../snac/styles'
+import { XmlShow } from './xmlshow'
 
 export const PI = (props: {
     node: SNACPINode,
@@ -189,27 +190,17 @@ export const PI = (props: {
     }
     else {
         return (
-            <>
-                {props.node.B.trim().length > 0 ?
-                    <div className='show-body-code pi'
-                        style={EditBoxGridStyle({
-                            pathWidth: props.path.length
-                        })}
-                    >
-                        <span className='show-body-code-prefix'></span>
-                        <span className='show-body-code-text'>
-                            <PIOpenBracket />
-                            <span className='pi-lang'>
-                                {props.node.L}
-                            </span>
-                            <br />
-                            {props.node.B.trim()}<br />
-                            <PICloseBracket />
-                        </span>
-                    </div> :
-                    null
-                }
-            </>
+            <XmlShow
+                path={props.path}
+                className='comment'>
+                <PIOpenBracket />
+                <span className='pi-lang'>
+                    {props.node.L}
+                </span>
+                {" "}
+                {props.node.B.trim()}<br />
+                <PICloseBracket />
+            </XmlShow>
         )
     }
 }

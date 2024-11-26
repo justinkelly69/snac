@@ -7,6 +7,7 @@ import { trimBody } from '../snac/textutils'
 import { ShowHideSwitch } from './showhide'
 import { XMLContext } from './xmlout'
 import { EditBoxGridStyle } from '../snac/styles'
+import { XmlShow } from './xmlshow'
 
 export const Text = (props: {
     node: SNACText,
@@ -269,22 +270,16 @@ export const Text = (props: {
     }
     else {
         return (
-            <>
+            <XmlShow
+                path={props.path}
+                className='text'>
                 {props.node.T.trim().length > 0 ?
-                    <div className='show-body-code'
-                        style={EditBoxGridStyle({
-                            pathWidth: props.path.length
-                        })}
-                    >
-                        <span className='show-body-code-prefix'></span>
-                        <span className='show-body-code-text'>
-                            {props.node.T.trim()}
-                        </span>
-                    </div> :
+                    <>
+                        {props.node.T.trim()}
+                    </> :
                     null
                 }
-            </>
+            </XmlShow>
         )
-
     }
 }

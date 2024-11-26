@@ -57,6 +57,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr 20fr;
+  height: 50em;
 }
 
 .xml-display-top-bar {
@@ -72,11 +73,17 @@
 .xml-display-tree {
   grid-column: 1;
   grid-row: 3;
+  overflow: scroll;
+  border: 2px solid lightgray;
+  margin: .4em;
 }
 
 .xml-display-xml {
   grid-column: 2;
   grid-row: 3;
+  overflow: scroll;
+  border: 2px solid lightgray;
+  margin: .4em;
 }
 
 

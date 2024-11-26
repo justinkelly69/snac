@@ -7,6 +7,7 @@ import { snacOpts } from '../snac/opts'
 import { ShowHideSwitch } from './showhide'
 import { XMLContext } from './xmlout'
 import { EditBoxGridStyle } from '../snac/styles'
+import { XmlShow } from './xmlshow'
 
 export const CDATA = (props: {
     node: SNACCDATA,
@@ -170,23 +171,13 @@ export const CDATA = (props: {
     }
     else {
         return (
-            <>
-                {props.node.D.trim().length > 0 ?
-                    <div className='show-body-code cdata'
-                        style={EditBoxGridStyle({
-                            pathWidth: props.path.length
-                        })}
-                    >
-                        <span className='show-body-code-prefix'></span>
-                        <span className='show-body-code-text'>
-                            <CDATAOpenBracket /><br/>
-                            {props.node.D.trim()}<br/>
-                            <CDATACloseBracket />
-                        </span>
-                    </div> :
-                    null
-                }
-            </>
+            <XmlShow
+                path={props.path}
+                className='cdata'>
+                <CDATAOpenBracket /><br />
+                {props.node.D.trim()}<br />
+                <CDATACloseBracket />
+            </XmlShow>
         )
     }
 }
