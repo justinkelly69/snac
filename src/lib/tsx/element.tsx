@@ -1,17 +1,21 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button, TextInput } from './widgets'
 import { SNACElement, SwitchStates, SwitchModes } from '../snac/types'
 import { snacOpts } from '../snac/opts'
-import { Prefix, ShowHideSwitch } from './prefix'
+import { Prefix } from './prefix'
 import { Attributes, AttributesTable } from './attributes'
 import { attributeKeys } from '../snac/textutils'
-import { attributesGridStyle } from '../snac/styles'
+import { attributesGridStyle, EditBoxGridStyle } from '../snac/styles'
+import { ShowHideSwitch } from './showhide'
+import { XMLContext } from './xmlout'
 
 export const Tag = (props: {
     node: SNACElement,
     path: number[],
     getChildren: Function,
 }): JSX.Element => {
+
+    const xmlContext = useContext(XMLContext);
 
     const [isSelected, setSelected] = useState(false)
     const [isAttributesOpen, setAttributesOpen] = useState(false)
@@ -79,6 +83,8 @@ export const OpenTag = (props: {
     setChildrenOpen: Function
 }): JSX.Element => {
 
+    const xmlContext = useContext(XMLContext);
+
     const [isEditable, setIsEditable] = useState(false)
     const [mode, setMode] = useState<SwitchModes>('VIEW_MODE') // VIEW_MODE, EDIT_MODE, INSERT_MODE
 
@@ -94,7 +100,7 @@ export const OpenTag = (props: {
             SwitchStates.OFF
     }
 
-    if (snacOpts.xml_showAttributesOpen && attributeKeys(props.node.A).length) {
+    if (snacOpts.xml_showAttributesOpen && Object.keys(props.node.A).length > 0) {
         attributesOpenState = props.isAttributesOpen ?
             SwitchStates.ON :
             SwitchStates.OFF
@@ -108,68 +114,88 @@ export const OpenTag = (props: {
         }
         closeSlash = ""
     }
-
-    return (
-        <>
-            {isEditable ?
-                <>
-                    <NSNodeEdit
-                        node={props.node}
-                        type='element'
-                        path={props.path}
-                        openClose={e => { setIsEditable(false) }}
-                    />
-                </> :
-                <>
-                    <ShowHideSwitch
-                        path={props.path}
-                        selected={selectState}
-                        visible={mode === 'VIEW_MODE'}
-                        chars={snacOpts.switch_selectChars}
-                        className='selected-show-hide'
-                        openClose={e => props.setSelected(!props.isSelected)}
-                    />
-
-                    <Prefix
-                        path={props.path}
-                    />
-
-                    <ShowHideSwitch
-                        path={props.path}
-                        selected={childrenOpenState}
-                        visible={mode === 'VIEW_MODE'}
-                        chars={snacOpts.switch_elementChars}
-                        className='element-show-hide'
-                        openClose={e => props.setChildrenOpen(!props.isChildrenOpen)}
-                    />
-                    &lt;
-                    <NSName
-                        node={props.node}
-                        openClose={e => setIsEditable(true)}
-                    />
+    if (xmlContext.treeMode) {
+        return (
+            <>
+                {isEditable ?
                     <>
-                        {props.isAttributesOpen ?
-                            <Attributes
-                                attributes={props.node.A}
-                                path={props.path}
-                            /> :
-                            null
-                        }
-                    </>
-                    {closeSlash}&gt;
-                    <ShowHideSwitch
-                        path={props.path}
-                        selected={attributesOpenState}
-                        visible={mode === 'VIEW_MODE'}
-                        chars={snacOpts.switch_attributeChars}
-                        className='attributes-show-hide'
-                        openClose={e => props.setAttributesOpen(!props.isAttributesOpen)}
-                    />
-                </>
-            }
+                        <NSNodeEdit
+                            node={props.node}
+                            type='element'
+                            path={props.path}
+                            openClose={e => { setIsEditable(false) }}
+                        />
+                    </> :
+                    <>
+                        <ShowHideSwitch
+                            path={props.path}
+                            selected={selectState}
+                            visible={mode === 'VIEW_MODE'}
+                            chars={snacOpts.switch_selectChars}
+                            openClose={e => props.setSelected(!props.isSelected)}
+                        />
 
-        </>
-    )
+                        <Prefix
+                            path={props.path}
+                        />
+
+                        <ShowHideSwitch
+                            path={props.path}
+                            selected={childrenOpenState}
+                            visible={mode === 'VIEW_MODE'}
+                            chars={snacOpts.switch_elementChars}
+                            openClose={e => props.setChildrenOpen(!props.isChildrenOpen)}
+                        />
+                        &lt;
+                        <NSName
+                            node={props.node}
+                            openClose={e => setIsEditable(true)}
+                        />
+                        <>
+                            {props.isAttributesOpen ?
+                                <Attributes
+                                    attributes={props.node.A}
+                                    path={props.path}
+                                /> :
+                                null
+                            }
+                        </>
+                        {closeSlash}&gt;
+                        <ShowHideSwitch
+                            path={props.path}
+                            selected={attributesOpenState}
+                            visible={mode === 'VIEW_MODE'}
+                            chars={snacOpts.switch_attributeChars}
+                            openClose={e => props.setAttributesOpen(!props.isAttributesOpen)}
+                        />
+                    </>
+                }
+            </>
+        )
+    }
+    else {
+        return (
+            <div className='show-body-code'
+                style={EditBoxGridStyle({
+                    pathWidth: props.path.length
+                })}
+            >
+                <span className='show-body-code-prefix'></span>
+                <span className='show-body-code-text'>
+                    &lt;
+                    <NSName node={props.node} />
+                    <Attributes
+                        attributes={props.node.A}
+                        path={props.path}
+                    />
+                    {props.node.C.length === 0 &&
+                        '/'
+                    }
+                    &gt;
+                </span>
+            </div>
+        )
+    }
 }
 
 export const CloseTag = (props: {
@@ -181,6 +207,8 @@ export const CloseTag = (props: {
     isChildrenOpen: boolean,
     setChildrenOpen: Function
 }): JSX.Element | null => {
+
+    const xmlContext = useContext(XMLContext);
 
     const [mode, setMode] = useState<SwitchModes>('VIEW_MODE') // VIEW_MODE, EDIT_MODE, INSERT_MODE
 
@@ -198,36 +226,52 @@ export const CloseTag = (props: {
         }
     }
 
-    return (
-        <>
-            {props.isChildrenOpen ? (
-                <>
-                    <ShowHideSwitch
-                        path={props.path}
-                        selected={selectState}
-                        visible={mode === 'VIEW_MODE'}
-                        chars={snacOpts.switch_selectChars}
-                        className='selected-show-hide'
-                        openClose={e => props.setSelected(!props.isSelected)}
-                    />
-                    <Prefix path={props.path} />
-                    <ShowHideSwitch
-                        path={props.path}
-                        selected={childrenOpenState}
-                        visible={mode === 'VIEW_MODE'}
-                        chars={snacOpts.switch_elementChars}
-                        className='element-show-hide'
-                        openClose={e => props.setChildrenOpen(!props.isChildrenOpen)}
-                    />
-                </>
-            ) :
-                null
-            }
-            &lt;/
-            <NSName node={props.node} />
-            &gt;
-        </>
-    )
+    if (xmlContext.treeMode) {
+        return (
+            <>
+                {props.isChildrenOpen ? (
+                    <>
+                        <ShowHideSwitch
+                            path={props.path}
+                            selected={selectState}
+                            visible={true}
+                            chars={snacOpts.switch_selectChars}
+                            openClose={e => props.setSelected(!props.isSelected)}
+                        />
+                        <Prefix path={props.path} />
+                        <ShowHideSwitch
+                            path={props.path}
+                            selected={childrenOpenState}
+                            visible={true}
+                            chars={snacOpts.switch_elementChars}
+                            openClose={e => props.setChildrenOpen(!props.isChildrenOpen)}
+                        />
+                    </>
+                ) :
+                    null
+                }
+                &lt;/
+                <NSName node={props.node} />
+                &gt;
+            </>
+        )
+    }
+    else {
+        return (
+            <div className='show-body-code'
+                style={EditBoxGridStyle({
+                    pathWidth: props.path.length
+                })}
+            >
+                <span className='show-body-code-prefix'></span>
+                <span className='show-body-code-text'>
+                    &lt;/
+                    <NSName node={props.node} />
+                    &gt;
+                </span>
+            </div>
+        )
+    }
 }
 
 const NSName = (props: {

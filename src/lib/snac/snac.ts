@@ -17,7 +17,8 @@ const find = (
         N: "",
         X: {},
         A: {}, 
-        C: snac, 
+        C: snac,
+        q: false, 
     }
 
     return _find(element, path)

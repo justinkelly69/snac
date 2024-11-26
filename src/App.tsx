@@ -3,7 +3,7 @@ import "./App.css";
 
 import xmlInput from './lib/data/xml/waffle'
 import xml2snac from './lib/snac/xml2snac'
-import XMLOut from './lib/tsx/xmlout';
+import { XMLDisplay } from './lib/tsx/xmldisplay';
 
 function App() {
     const snac = xml2snac(xmlInput)[0]
@@ -11,7 +11,7 @@ function App() {
     console.log(JSON.stringify(snac, null, 4))
 
     return (
-        <XMLOut snac={[snac]} />
+        <XMLDisplay snac={[snac]} />
     )
 }
 

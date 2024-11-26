@@ -1,6 +1,6 @@
-import React, { useReducer, useState } from 'react'
-import {  Button,  TextInput } from './widgets'
-import {  AttributesType,  EditAttributesType } from '../snac/types'
+import React, { useContext, useReducer, useState } from 'react'
+import { Button, TextInput } from './widgets'
+import { AttributesType, EditAttributesType } from '../snac/types'
 import { snacOpts } from '../snac/opts'
 import { Prefix } from './prefix'
 import {
@@ -15,11 +15,16 @@ import {
     attributeGetValue,
     setNewAttribute,
 } from '../snac/attsutils'
+import { XMLContext } from './xmlout'
+import { EditBoxGridStyle } from '../snac/styles'
 
 export const Attributes = (props: {
     path: number[],
     attributes: AttributesType,
 }): JSX.Element | null => {
+
+    const xmlContext = useContext(XMLContext);
+
     return Object.keys(props.attributes).length > 0 ?
         <>
             <div>
@@ -32,19 +37,30 @@ export const Attributes = (props: {
                         }
                         return (
                             <span key={`${i}:${j}`}>
-                                {i > 0 || j > 0 ? <br /> : null}
-                                <Attribute
-                                    path={props.path}
-                                    name={tagName}
-                                    value={props.attributes[ns][name]}
-                                />
+                                {xmlContext.treeMode ?
+                                    <>
+                                        {i > 0 || j > 0 ? <br /> : null}
+                                        <Attribute
+                                            path={props.path}
+                                            name={tagName}
+                                            value={props.attributes[ns][name]}
+                                        />
+                                    </> :
+                                    <>
+                                        <Attribute
+                                            path={[]}
+                                            name={tagName}
+                                            value={props.attributes[ns][name]}
+                                        />
+                                    </>
+                                }
                             </span>
                         )
                     })
 
                 })}
             </div>
-            {Object.keys(props.attributes).length > 0 ?
+            {xmlContext.treeMode && Object.keys(props.attributes).length > 0 ?
                 <>
                     {snacOpts.prefix_spaceBefore}
                     <Prefix
@@ -64,23 +80,50 @@ const Attribute = (props: {
     value: string,
 }): JSX.Element => {
 
-    return (
-        <span className='attribute'>
-            <Prefix
-                path={props.path}
-            />
-            {snacOpts.prefix_attributePrefix}
-            <ANSName
-                name={props.name}
-                openClose={f => f}
-            />
-            =&quot;
-            <span className='attribute-value'>
-                {props.value}
+    const xmlContext = useContext(XMLContext);
+
+    if (xmlContext.treeMode) {
+        return (
+            <span className='attribute'>
+                <Prefix
+                    path={props.path}
+                />
+                {snacOpts.prefix_attributePrefix}
+                <ANSName
+                    name={props.name}
+                    openClose={f => f}
+                />
+                =&quot;
+                <span className='attribute-value'>
+                    {props.value}
+                </span>
+                &quot;
             </span>
-            &quot;
-        </span>
-    )
+        )
+    }
+    else {
+        return (
+            <div className='show-body-code'
+                style={EditBoxGridStyle({
+                    pathWidth: props.path.length
+                })}
+            >
+                <span className='show-body-code-prefix'></span>
+                <span className='show-body-code-text'>
+                    {snacOpts.prefix_attributePrefix}
+                    <ANSName
+                        name={props.name}
+                        openClose={f => f}
+                    />
+                    =&quot;
+                    <span className='attribute-value'>
+                        {props.value}
+                    </span>
+                    &quot;
+                </span>
+            </div>
+        )
+    }
 }
 
 export const AttributesTable = (props: {
@@ -101,7 +144,7 @@ export const AttributesTable = (props: {
         name: '#',
     })
     const [mode, setMode] = useState('LIST_MODE')
-    
+
     return (
         <>
             {Object.keys(state).map((ns, i) => {

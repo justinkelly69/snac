@@ -1,15 +1,20 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { SNACComment, SwitchStates } from '../snac/types'
 import { Button, EditTextBox, TextArea } from './widgets'
-import { Prefix, ShowHideSwitch } from './prefix'
+import { Prefix } from './prefix'
 import { escapeComment, trimBody } from '../snac/textutils'
 import { snacOpts } from '../snac/opts'
+import { ShowHideSwitch } from './showhide'
+import { XMLContext } from './xmlout'
+import { EditBoxGridStyle } from '../snac/styles'
 
 export const Comment = (props: {
     node: SNACComment,
     path: number[],
     showSelected: boolean,
 }): JSX.Element | null => {
+
+    const xmlContext = useContext(XMLContext)
 
     const [isSelected, setSelected] = useState(false)
     const [isChildrenOpen, setChildrenOpen] = useState(false)
@@ -19,11 +24,16 @@ export const Comment = (props: {
     const [prevComment, setPrevComment] = useState(props.node.M)
 
     let selectState = SwitchStates.HIDDEN
+    let selectedClassName = 'comment'
 
     if (props.showSelected) {
         selectState = isSelected ?
             SwitchStates.ON :
             SwitchStates.OFF
+
+        selectedClassName = isSelected ?
+            'comment selected' :
+            'comment'
     }
 
     const comment = trimBody(
@@ -34,118 +44,139 @@ export const Comment = (props: {
     )
 
     const widthMultiplier = .9
-
-    return (
-        <>
-            {isChildrenOpen ?
-                <>
-                    {isEditable ?
-                        <EditTextBox
+    if (xmlContext.treeMode) {
+        return (
+            <div className={selectedClassName}>
+                {isChildrenOpen ?
+                    <>
+                        {isEditable ?
+                            <EditTextBox
+                                path={props.path}
+                                widthMultiplier={widthMultiplier}
+                                editTopBar={() => <CommentOpenBracket />}
+                                editButtonBar={() =>
+                                    <>
+                                        <Button
+                                            className='button text-button'
+                                            onClick={() => {
+                                                setIsEditable(false)
+                                                setChildrenOpen(false)
+                                                setNewComment(prevComment)
+                                                console.log(`[${props.path}]:<!-- ${prevComment} -->`)
+                                            }}
+                                            label='Save'
+                                        />
+                                        <Button
+                                            className='button text-button'
+                                            onClick={() => {
+                                                setIsEditable(false)
+                                                setChildrenOpen(false)
+                                                setPrevComment('')
+                                            }}
+                                            label='Cancel'
+                                        />
+                                    </>
+                                }
+                                editTextArea={() =>
+                                    <TextArea
+                                        readOnly={false}
+                                        className='edit-text-editor comment-editor'
+                                        value={prevComment}
+                                        onChange={(e: {
+                                            target: {
+                                                value: React.SetStateAction<string>
+                                            }
+                                        }) => setPrevComment(e.target.value)}
+                                    />
+                                }
+                                editBottomBar={() => <CommentCloseBracket />}
+                            /> :
+                            <EditTextBox
+                                path={props.path}
+                                widthMultiplier={widthMultiplier}
+                                editTopBar={() => <CommentOpenBracket />}
+                                editButtonBar={() =>
+                                    <>
+                                        <Button
+                                            className='button x-button'
+                                            onClick={() => {
+                                                setChildrenOpen(false)
+                                            }}
+                                            label='X'
+                                        />
+                                        <Button
+                                            className='button text-button'
+                                            onClick={() => {
+                                                setIsEditable(false)
+                                                setChildrenOpen(false)
+                                            }}
+                                            label='Remove'
+                                        />
+                                    </>
+                                }
+                                editTextArea={() =>
+                                    <span
+                                        className='edit-text-show comment-disabled'
+                                        onClick={() => {
+                                            setIsEditable(true)
+                                            setPrevComment(newComment)
+                                        }}
+                                    >
+                                        {escapeComment(newComment.trim())}
+                                    </span>
+                                }
+                                editBottomBar={() => <CommentCloseBracket />}
+                            />
+                        }
+                    </> :
+                    <span>
+                        <ShowHideSwitch
                             path={props.path}
-                            widthMultiplier={widthMultiplier}
-                            editTopBar={() => <CommentOpenBracket />}
-                            editButtonBar={() =>
-                                <>
-                                    <Button
-                                        className='button text-button'
-                                        onClick={() => {
-                                            setIsEditable(false)
-                                            setChildrenOpen(false)
-                                            setNewComment(prevComment)
-                                            console.log(`[${props.path}]:<!-- ${prevComment} -->`)
-                                        }}
-                                        label='Save'
-                                    />
-                                    <Button
-                                        className='button text-button'
-                                        onClick={() => {
-                                            setIsEditable(false)
-                                            setChildrenOpen(false)
-                                            setPrevComment('')
-                                        }}
-                                        label='Cancel'
-                                    />
-                                </>
-                            }
-                            editTextArea={() =>
-                                <TextArea
-                                    readOnly={false}
-                                    className='edit-text-editor comment-editor'
-                                    value={prevComment}
-                                    onChange={(e: {
-                                        target: {
-                                            value: React.SetStateAction<string>
-                                        }
-                                    }) => setPrevComment(e.target.value)}
-                                />
-                            }
-                            editBottomBar={() => <CommentCloseBracket />}
-                        /> :
-                        <EditTextBox
-                            path={props.path}
-                            widthMultiplier={widthMultiplier}
-                            editTopBar={() => <CommentOpenBracket />}
-                            editButtonBar={() =>
-                                <>
-                                    <Button
-                                        className='button x-button'
-                                        onClick={() => {
-                                            setChildrenOpen(false)
-                                        }}
-                                        label='X'
-                                    />
-                                    <Button
-                                        className='button text-button'
-                                        onClick={() => {
-                                            setIsEditable(false)
-                                            setChildrenOpen(false)
-                                        }}
-                                        label='Remove'
-                                    />
-                                </>
-                            }
-                            editTextArea={() =>
-                                <span
-                                    className='edit-text-show comment-disabled'
-                                    onClick={() => {
-                                        setIsEditable(true)
-                                        setPrevComment(newComment)
-                                    }}
-                                >
-                                    {escapeComment(newComment.trim())}
-                                </span>
-                            }
-                            editBottomBar={() => <CommentCloseBracket />}
+                            selected={selectState}
+                            visible={!isChildrenOpen}
+                            chars={snacOpts.switch_selectChars}
+                            openClose={() => setSelected(!isSelected)}
                         />
-                    }
-                </> :
-                <span>
-                    <ShowHideSwitch
-                        path={props.path}
-                        selected={selectState}
-                        visible={!isChildrenOpen}
-                        chars={snacOpts.switch_selectChars}
-                        className='selected-show-hide'
-                        openClose={() => setSelected(!isSelected)}
-                    />
-                    <Prefix path={props.path} />
-                    {' '}
-                    <CommentOpenBracket />
-                    {' '}
-                    <span
-                        className='edit-text-show comment'
-                        onClick={() => {
-                            setChildrenOpen(true)
-                        }}>
-                        {escapeComment(comment)}
+                        <Prefix path={props.path} />
+                        {' '}
+                        <CommentOpenBracket />
+                        {' '}
+                        <span
+                            className='edit-text-show comment'
+                            onClick={() => {
+                                setChildrenOpen(true)
+                            }}>
+                            {escapeComment(comment)}
+                        </span>
+                        {' '}
+                        <CommentCloseBracket />
                     </span>
-                    {' '}
-                    <CommentCloseBracket />
-                </span>
 
-            }
-        </>
-    )
+                }
+            </div>
+        )
+    }
+    else {
+        return (
+            <>
+                {props.node.M.trim().length > 0 ?
+                    <div className='show-body-code comment'
+                        style={EditBoxGridStyle({
+                            pathWidth: props.path.length
+                        })}
+                    >
+                        <span className='show-body-code-prefix'></span>
+                        <span className='show-body-code-text'>
+                            <CommentOpenBracket /><br />
+                            {props.node.M.trim()}<br />
+                            <CommentCloseBracket />
+                        </span>
+                    </div> :
+                    null
+                }
+            </>
+        )
+    }
 }
 
 export const CommentOpenBracket = () =>

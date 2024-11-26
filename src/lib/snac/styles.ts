@@ -63,25 +63,25 @@ export const PIGridStyle = (
         xButtonWidth: number,
         buttonWidth: number,
     }) => {
-        return {
-            gridTemplateColumns: `
+    return {
+        gridTemplateColumns: `
             ${props.pathWidth}em
             ${props.xButtonWidth}em 
             ${props.buttonWidth}em 
             ${props.buttonWidth}em
             min-content
             `,
-        }
+    }
 }
 
 export const EditBoxGridStyle = (
     props: {
         pathWidth: number,
     }) => {
-        return {
-            gridTemplateColumns: `
-            ${props.pathWidth}em
-            min-content
+    return {
+        gridTemplateColumns: `
+                ${props.pathWidth}em
+                min-content
             `,
-        }
+    }
 }

@@ -1,3 +1,5 @@
+import React, { createContext, useContext } from "react";
+
 import {
     SNACItem,
     SNACElement,
@@ -6,8 +8,8 @@ import {
     SNACComment,
     SNACPINode,
     SwitchModes,
+    XMLOutOpts,
 } from '../snac/types'
-
 import { Tag } from './element';
 import { Text } from './text';
 import { CDATA } from './cdata';
@@ -15,24 +17,39 @@ import { Comment } from './comment';
 import { PI } from './pi';
 import { Fragment, useState } from 'react';
 
-const XMLOut = (props: {
+export const XMLContext = React.createContext<XMLOutOpts>({
+    treeMode: false,
+})
+
+export const XMLOut = (props: {
     snac: SNACItem[],
+    treeMode: boolean,
 }): JSX.Element => {
 
     const [mode, setMode] = useState<SwitchModes>('VIEW_MODE') // 'VIEW_MODE' | 'EDIT_MODE' | 'INSERT_MODE'
     const [editPath, setEditPath] = useState<number[] | null>(null)
 
+    const providerValue  = {
+        treeMode: props.treeMode
+    }
+
     return (
-        <Children
-            snac={props.snac}
-            path={[]}
-        />
+        <XMLContext.Provider value={providerValue}>
+            <Children
+                snac={props.snac}
+                path={[]}
+                treeMode={props.treeMode}
+            />
+        </XMLContext.Provider>
     )
 }
 const Children = (props: {
     snac: SNACItem[],
     path: number[],
+    treeMode: boolean,
 }): JSX.Element => {
+
+    const xmlContext = useContext(XMLContext);
 
     return (
         <span className='xml-out'>
