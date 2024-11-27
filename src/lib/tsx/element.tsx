@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { Button, TextInput } from './widgets'
-import { SNACElement, SwitchStates, SwitchModes } from '../snac/types'
+import { SNACElement, SwitchStates } from '../snac/types'
 import { snacOpts } from '../snac/opts'
 import { Prefix } from './prefix'
 import { Attributes, AttributesTable } from './attributes'
@@ -14,8 +14,6 @@ export const Tag = (props: {
     path: number[],
     getChildren: Function,
 }): JSX.Element => {
-
-    const xmlContext = useContext(XMLContext);
 
     const [isSelected, setSelected] = useState(false)
     const [isAttributesOpen, setAttributesOpen] = useState(false)
@@ -86,8 +84,6 @@ export const OpenTag = (props: {
     const xmlContext = useContext(XMLContext);
 
     const [isEditable, setIsEditable] = useState(false)
-    const [mode, setMode] = useState<SwitchModes>('VIEW_MODE') // VIEW_MODE, EDIT_MODE, INSERT_MODE
-
 
     let selectState = SwitchStates.HIDDEN
     let attributesOpenState = SwitchStates.HIDDEN
@@ -130,9 +126,8 @@ export const OpenTag = (props: {
                         <ShowHideSwitch
                             path={props.path}
                             selected={selectState}
-                            visible={mode === 'VIEW_MODE'}
                             chars={snacOpts.switch_selectChars}
-                            openClose={e => props.setSelected(!props.isSelected)}
+                            openClose={() => props.setSelected(!props.isSelected)}
                         />
 
                         <Prefix
@@ -142,9 +137,8 @@ export const OpenTag = (props: {
                         <ShowHideSwitch
                             path={props.path}
                             selected={childrenOpenState}
-                            visible={mode === 'VIEW_MODE'}
                             chars={snacOpts.switch_elementChars}
-                            openClose={e => props.setChildrenOpen(!props.isChildrenOpen)}
+                            openClose={() => props.setChildrenOpen(!props.isChildrenOpen)}
                         />
                         &lt;
                         <NSName
@@ -164,9 +158,8 @@ export const OpenTag = (props: {
                         <ShowHideSwitch
                             path={props.path}
                             selected={attributesOpenState}
-                            visible={mode === 'VIEW_MODE'}
                             chars={snacOpts.switch_attributeChars}
-                            openClose={e => props.setAttributesOpen(!props.isAttributesOpen)}
+                            openClose={() => props.setAttributesOpen(!props.isAttributesOpen)}
                         />
                     </>
                 }
@@ -210,9 +203,6 @@ export const CloseTag = (props: {
 
     const xmlContext = useContext(XMLContext);
 
-    const [mode, setMode] = useState<SwitchModes>('VIEW_MODE') // VIEW_MODE, EDIT_MODE, INSERT_MODE
-
-
     let selectState = SwitchStates.HIDDEN
     let childrenOpenState = SwitchStates.HIDDEN
 
@@ -234,17 +224,15 @@ export const CloseTag = (props: {
                         <ShowHideSwitch
                             path={props.path}
                             selected={selectState}
-                            visible={true}
                             chars={snacOpts.switch_selectChars}
-                            openClose={e => props.setSelected(!props.isSelected)}
+                            openClose={() => props.setSelected(!props.isSelected)}
                         />
                         <Prefix path={props.path} />
                         <ShowHideSwitch
                             path={props.path}
                             selected={childrenOpenState}
-                            visible={true}
                             chars={snacOpts.switch_elementChars}
-                            openClose={e => props.setChildrenOpen(!props.isChildrenOpen)}
+                            openClose={() => props.setChildrenOpen(!props.isChildrenOpen)}
                         />
                     </>
                 ) :

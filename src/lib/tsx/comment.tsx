@@ -6,13 +6,11 @@ import { escapeComment, trimBody } from '../snac/textutils'
 import { snacOpts } from '../snac/opts'
 import { ShowHideSwitch } from './showhide'
 import { XMLContext } from './xmlout'
-import { EditBoxGridStyle } from '../snac/styles'
 import { XmlShow } from './xmlshow'
 
 export const Comment = (props: {
     node: SNACComment,
     path: number[],
-    showSelected: boolean,
 }): JSX.Element | null => {
 
     const xmlContext = useContext(XMLContext)
@@ -27,7 +25,7 @@ export const Comment = (props: {
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'comment'
 
-    if (props.showSelected) {
+    if (xmlContext.treeMode) {
         selectState = isSelected ?
             SwitchStates.ON :
             SwitchStates.OFF
@@ -134,7 +132,6 @@ export const Comment = (props: {
                         <ShowHideSwitch
                             path={props.path}
                             selected={selectState}
-                            visible={!isChildrenOpen}
                             chars={snacOpts.switch_selectChars}
                             openClose={() => setSelected(!isSelected)}
                         />

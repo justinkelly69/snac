@@ -76,6 +76,8 @@
   overflow: scroll;
   border: 2px solid lightgray;
   margin: .4em;
+  background-color: antiquewhite;
+  text-align: left;
 }
 
 .xml-display-xml {
@@ -84,6 +86,9 @@
   overflow: scroll;
   border: 2px solid lightgray;
   margin: .4em;
+  background-color: antiquewhite;
+  text-align: left;
+
 }
 
 

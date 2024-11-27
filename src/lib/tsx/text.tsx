@@ -3,16 +3,14 @@ import { SNACText, SwitchModes, SwitchStates } from '../snac/types'
 import { Prefix } from './prefix'
 import { Button, TextArea, TextEditTextBox, TextInput } from './widgets'
 import { snacOpts } from '../snac/opts'
-import { trimBody } from '../snac/textutils'
+import { escapeHtml, trimBody } from '../snac/textutils'
 import { ShowHideSwitch } from './showhide'
 import { XMLContext } from './xmlout'
-import { EditBoxGridStyle } from '../snac/styles'
 import { XmlShow } from './xmlshow'
 
 export const Text = (props: {
     node: SNACText,
     path: number[],
-    showSelected: boolean,
 }): JSX.Element => {
 
     const xmlContext = useContext(XMLContext);
@@ -35,7 +33,7 @@ export const Text = (props: {
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'text'
 
-    if (props.showSelected) {
+    if (xmlContext.treeMode) {
         selectState = isSelected ?
             SwitchStates.ON :
             SwitchStates.OFF
@@ -116,10 +114,6 @@ export const Text = (props: {
                                     <>
                                         <Button
                                             className='button x-button'
-                                            // onClick={e => {
-                                            //     setMode('VIEW_MODE')
-                                            //     setChildrenOpen(false)
-                                            // }}
                                             onClick={e => {
                                                 setMode('VIEW_MODE')
                                                 setChildrenOpen(true)
@@ -176,14 +170,6 @@ export const Text = (props: {
                                             onClick={f => f}
                                             label='PI'
                                         />
-                                        {/* <Button
-                                        className='button text-button'
-                                        onClick={e => {
-                                            setMode('VIEW_MODE')
-                                            setChildrenOpen(true)
-                                        }}
-                                        label='Cancel'
-                                    /> */}
                                     </>
                                 }
                                 editTextArea={() =>
@@ -218,13 +204,6 @@ export const Text = (props: {
                                             }}
                                             label='X'
                                         />
-                                        {/* <Button
-                                        className='button text-button'
-                                        onClick={e => {
-                                            setMode('EDIT_MODE')
-                                        }}
-                                        label='Edit'
-                                    /> */}
                                         <Button
                                             className='button text-button'
                                             onClick={e => {
@@ -241,7 +220,7 @@ export const Text = (props: {
                                             setMode('EDIT_MODE')
                                         }}
                                     >
-                                        {newText}
+                                        {escapeHtml(newText)}
                                     </span>
                                 }
                             />
@@ -251,9 +230,8 @@ export const Text = (props: {
                         <ShowHideSwitch
                             path={props.path}
                             selected={selectState}
-                            visible={!isChildrenOpen}
                             chars={snacOpts.switch_selectChars}
-                            openClose={e => setSelected(!isSelected)}
+                            openClose={() => setSelected(!isSelected)}
                         />
                         <Prefix path={props.path} />
                         <span
@@ -261,7 +239,7 @@ export const Text = (props: {
                             onClick={e => {
                                 setChildrenOpen(true)
                             }}>
-                            {body}
+                            {escapeHtml(body)}
                         </span>
                     </>
                 }
@@ -275,7 +253,7 @@ export const Text = (props: {
                 className='text'>
                 {props.node.T.trim().length > 0 ?
                     <>
-                        {props.node.T.trim()}
+                        {escapeHtml(props.node.T.trim())}
                     </> :
                     null
                 }

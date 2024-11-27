@@ -6,13 +6,11 @@ import { escapePIBody, trimBody } from '../snac/textutils'
 import { snacOpts } from '../snac/opts'
 import { ShowHideSwitch } from './showhide'
 import { XMLContext } from './xmlout'
-import { EditBoxGridStyle } from '../snac/styles'
 import { XmlShow } from './xmlshow'
 
 export const PI = (props: {
     node: SNACPINode,
     path: number[],
-    showSelected: boolean,
 }): JSX.Element | null => {
 
     const xmlContext = useContext(XMLContext)
@@ -29,7 +27,7 @@ export const PI = (props: {
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'pi'
 
-    if (props.showSelected) {
+    if (xmlContext.treeMode) {
         selectState = isSelected ?
             SwitchStates.ON :
             SwitchStates.OFF
@@ -165,7 +163,6 @@ export const PI = (props: {
                         <ShowHideSwitch
                             path={props.path}
                             selected={selectState}
-                            visible={!isChildrenOpen}
                             chars={snacOpts.switch_selectChars}
                             openClose={() => setSelected(!isSelected)}
                         />

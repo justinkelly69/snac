@@ -89,16 +89,13 @@ export const attributeKeys = (attributes: AttributesType): string[][] => {
     Object.keys(attributes).map((ns, i) => {
         
         return Object.keys(attributes[ns]).map((name, j) => {
-            out.push([ns, name])
+            return out.push([ns, name])
         })
     })
     return out
 }
 
-export const range = (start: number, end: number): number[] => {
-    const length = end - start
-    return Array.from({ length }, (_, i) => start + i)
-}
+
 
 export const repeatString = (
     start: number,

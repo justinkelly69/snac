@@ -7,11 +7,14 @@ import {
     SNACPINode 
 } from "./types"
 
+
+// Find an element in the tree
 const find = (
     snac: SNACItem[], 
     path: number[]
 ): SNACItem | null => {
 
+    // Create a blank SNAC element with snac as the children
     const element: SNACItem = {
         S: "", 
         N: "",
@@ -21,29 +24,31 @@ const find = (
         q: false, 
     }
 
+    // Call the search function recursively
     return _find(element, path)
 }
 
+// Recursive search function
 const _find = (
-    snac: SNACItem, 
-    path: number[]
+    element: SNACItem,  // Element to be searched
+    path: number[]      // path from that element
 ): SNACItem | null => {
 
-    if (path.length === 0) {
-        return snac
+    if (path.length === 0) { // Element found.
+        return element       // Return it.
     }
 
     else {
-        if (snac.hasOwnProperty('C')) {
-            const S = snac as SNACElement
-            const [i, ...p] = path
+        if (element.hasOwnProperty('C')) {   // Depth first search
+            const S = element as SNACElement
+            const [i, ...p] = path           // Drop down a level
             if (S.C.length > i) {
-                return _find(S.C[i], p)
+                return _find(S.C[i], p)      // And search
             }
         }
     }
 
-    return null
+    return null // Return null if nothing found
 }
 
 export const findElement = (
@@ -89,38 +94,52 @@ export const findElement = (
     }
 }
 
-const getRemovePaths = (
-    removeFrom: number[], 
-    removeTo: number[] 
-) => {
+// Compare 2 arrays.
+// 
+const isAdjacent = (
+    array1: number[], 
+    array2: number[] 
+):number | null => {
 
-    if(removeFrom.length !== removeTo.length) {
-        return removeTo
+    // Nodes are different lengths. Return null.
+    if(array1.length !== array2.length) {
+        return null
     }
 
     else {
-        for(let i in removeFrom.slice(0, removeFrom.length - 1)) {
-            if(removeFrom[i] !== removeTo[i]) {
-                return removeTo
+
+        // Nodes are the same length but not adjacent. Return null.
+        for(let i in array1.slice(0, array1.length - 1)) {
+            if(array1[i] !== array2[i]) {
+                return null
             }
         }
 
-        const from = removeFrom[removeFrom.length - 1]
-        const to = removeTo[removeTo.length - 1]
+        // Nodes are the same length and match.
+        // Compare the last number in each.
+        const last1 = array1[array1.length - 1]
+        const last2 = array2[array2.length - 1]
 
-        let out:number[] = []
-        if(from > to){
-            for(let i = to; i<=from; i++){
-                out = [...out, i]
-            }
+        if(last1 === last2 + 1){
+            return 1
         }
-        else if(from < to) {
-
+        else if(last1 === last2 - 1) {
+            return -1
         }
         else {
-
+            return 0
         }
     }
+}
+
+const createNumberArea = (base:number[], from: number, to: number):number[][] => {
+    const out:number[][] = []
+    if(from <= to){
+        for(const i in range(from, to)){
+            out.push([...base, parseInt(i)])
+        }
+    }
+    return out
 }
 
 const clone = (
@@ -130,14 +149,19 @@ const clone = (
     replace: SNACItem[] | null
 ): SNACItem[] => {
 
-    const snac1: SNACItem[] = []
+    const snacOut: SNACItem[] = []
     for (const s in snac) {
         if (removeFrom[0] === parseInt(s)) {
 
         }
         else {
-            snac1.push(snac[s])
+            snacOut.push(snac[s])
         }
     }
-    return snac1
+    return snacOut
+}
+
+export const range = (start: number, end: number): number[] => {
+    const length = end - start
+    return Array.from({ length }, (_, i) => start + i)
 }

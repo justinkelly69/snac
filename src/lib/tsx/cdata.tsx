@@ -6,13 +6,11 @@ import { escapeCDATA, trimBody } from '../snac/textutils'
 import { snacOpts } from '../snac/opts'
 import { ShowHideSwitch } from './showhide'
 import { XMLContext } from './xmlout'
-import { EditBoxGridStyle } from '../snac/styles'
 import { XmlShow } from './xmlshow'
 
 export const CDATA = (props: {
     node: SNACCDATA,
     path: number[],
-    showSelected: boolean,
 }): JSX.Element => {
 
     const xmlContext = useContext(XMLContext)
@@ -27,13 +25,7 @@ export const CDATA = (props: {
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'cdata'
 
-    if (props.showSelected) {
-        selectState = isSelected ?
-            SwitchStates.ON :
-            SwitchStates.OFF
-    }
-
-    if (props.showSelected) {
+    if (xmlContext.treeMode) {
         selectState = isSelected ?
             SwitchStates.ON :
             SwitchStates.OFF
@@ -148,9 +140,8 @@ export const CDATA = (props: {
                         <ShowHideSwitch
                             path={props.path}
                             selected={selectState}
-                            visible={!isChildrenOpen}
                             chars={snacOpts.switch_selectChars}
-                            openClose={e => setSelected(!isSelected)}
+                            openClose={() => setSelected(!isSelected)}
                         />
                         <Prefix path={props.path} />
                         {' '}

@@ -7,14 +7,13 @@ export const ShowHideSwitch = (props: {
     path: number[],
     chars: OnOffHiddenChars,
     selected: SwitchStates,
-    visible: boolean,
     openClose: Function
 }): JSX.Element => {
 
     const xmlContext = useContext(XMLContext);
     
     let out = props.chars.hidden
-    if (props.visible) {
+    if (xmlContext.treeMode) {
         switch (props.selected) {
             case SwitchStates.OFF:
                 out = props.chars.on
@@ -28,7 +27,7 @@ export const ShowHideSwitch = (props: {
             {xmlContext.treeMode && props.selected !== SwitchStates.HIDDEN ?
                 <Button
                     className='show-hide-button'
-                    onClick={e => {
+                    onClick={() => {
                         props.openClose()
                     }}
                     label={out}
