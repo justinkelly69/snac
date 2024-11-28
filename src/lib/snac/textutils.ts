@@ -64,7 +64,6 @@ export const nsNameArray = (text: string): string[] => {
     const nsName = text.split(/:/)
     if (nsName.length === 1) {
         return ['', nsName[0]]
-
     }
     else {
         return nsName
@@ -85,17 +84,13 @@ export const nsNameJoin = (nsNode?: SNACNamesNode): string | null => {
 
 export const attributeKeys = (attributes: AttributesType): string[][] => {
     const out:string[][] = []
-
     Object.keys(attributes).map((ns, i) => {
-        
         return Object.keys(attributes[ns]).map((name, j) => {
             return out.push([ns, name])
         })
     })
     return out
 }
-
-
 
 export const repeatString = (
     start: number,

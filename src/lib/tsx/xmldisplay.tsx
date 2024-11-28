@@ -1,10 +1,13 @@
-import { XMLOut } from "./xmlout";
-import { SNACItem } from "../snac/types";
-
+import { XMLOut } from "./xmlout"
+import { SNACItem } from "../snac/types"
+import { useState } from "react"
 
 export const XMLDisplay = (props: {
     snac: SNACItem[],
 }) => {
+
+    const [paths, setPaths] = useState<number[][]>([])
+
     return (
         <div className="xml-display">
             <div className="xml-display-top-bar"></div>

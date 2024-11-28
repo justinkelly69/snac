@@ -1,5 +1,4 @@
-import React from "react";
-
+import React from "react"
 import {
     SNACItem,
     SNACElement,
@@ -9,12 +8,12 @@ import {
     SNACPINode,
     XMLOutOpts,
 } from '../snac/types'
-import { Tag } from './element';
-import { Text } from './text';
-import { CDATA } from './cdata';
-import { Comment } from './comment';
-import { PI } from './pi';
-import { Fragment } from 'react';
+import { Tag } from './element'
+import { Text } from './text'
+import { CDATA } from './cdata'
+import { Comment } from './comment'
+import { PI } from './pi'
+import { Fragment } from 'react'
 
 export const XMLContext = React.createContext<XMLOutOpts>({
     treeMode: false,
