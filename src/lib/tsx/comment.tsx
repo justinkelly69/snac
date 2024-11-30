@@ -5,9 +5,8 @@ import { Prefix } from './prefix'
 import { escapeComment, trimBody } from '../snac/textutils'
 import { snacOpts } from '../snac/opts'
 import { ShowHideSwitch } from './showhide'
-import { XMLRWContext } from './xmlout'
+import { XMLRWContext } from '../snac/contexts'
 import { XmlShow } from './xmlshow'
-import { XMLTagOpenCloseContext } from './element'
 
 export const Comment = (props: {
     node: SNACComment,
@@ -15,7 +14,6 @@ export const Comment = (props: {
 }): JSX.Element | null => {
 
     const xmlRWContext = useContext(XMLRWContext) as XMLRWType
-    const openCloseContext = useContext(XMLTagOpenCloseContext) as XMLTagOpenCloseType
     
     const [isSelected, setSelected] = useState(false)
     const [isChildrenOpen, setChildrenOpen] = useState(false)

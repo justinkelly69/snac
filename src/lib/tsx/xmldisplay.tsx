@@ -2,15 +2,7 @@ import { XMLOut } from "./xmlout"
 import { XMLModesType, SNACItem, SwitchModes } from "../snac/types"
 import { useState } from "react"
 import React from "react"
-
-export const XMLModesContext = React.createContext<XMLModesType>({
-    path: [],
-    setPath: (f: any)=>f,
-    paths: [],
-    setPaths: (f: any)=>f,
-    mode: 'VIEW_MODE',
-    setMode: (f: any)=>f,
-})
+import { XMLModesContext } from "../snac/contexts"
 
 export const XMLDisplay = (props: {
     snac: SNACItem[],
@@ -50,6 +42,5 @@ export const XMLDisplay = (props: {
                 </div>
             </div>
         </XMLModesContext.Provider>
-
     )
 }

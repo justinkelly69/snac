@@ -1,7 +1,6 @@
 import { ReactNode } from "react"
 import { EditBoxGridStyle } from "../snac/styles"
 
-
 export const XmlShow = (props: {
     path: number[],
     className: string,

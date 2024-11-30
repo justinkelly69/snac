@@ -1,6 +1,12 @@
 import React, { useContext, useReducer, useState } from 'react'
 import { Button, TextInput } from './widgets'
-import { AttributesType, EditAttributesType, XMLAttributesOpenCloseType, XMLAttributesTableType, XMLModesType } from '../snac/types'
+import {
+    AttributesType,
+    EditAttributesType,
+    XMLAttributesOpenCloseType,
+    XMLAttributesTableType,
+    XMLModesType
+} from '../snac/types'
 import { snacOpts } from '../snac/opts'
 import { Prefix } from './prefix'
 import {
@@ -15,20 +21,10 @@ import {
     attributeGetValue,
     setNewAttribute,
 } from '../snac/attsutils'
-import { XMLRWContext } from './xmlout'
+import { XMLRWContext, XMLModesContext } from '../snac/contexts'
 import { EditBoxGridStyle } from '../snac/styles'
 import { XMLAttributesOpenCloseContext } from './element'
-import { XMLModesContext } from './xmldisplay'
-
-const XMLAttributesTableContext = React.createContext<XMLAttributesTableType>({
-    ns: '',
-    name: '',
-    value: '',
-    dispatch: (f: any) => f,
-    isDeleted: false,
-    isSelected: false,
-    setSelected: (f: any) => f,
-})
+import { XMLAttributesTableContext } from '../snac/contexts'
 
 export const Attributes = (props: {
     path: number[],

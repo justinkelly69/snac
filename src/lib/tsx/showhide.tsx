@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { OnOffHiddenChars, SwitchStates } from "../snac/types"
 import { Button } from "./widgets"
-import { XMLRWContext } from "./xmlout";
+import { XMLRWContext } from '../snac/contexts'
 
 export const ShowHideSwitch = (props: {
     path: number[],

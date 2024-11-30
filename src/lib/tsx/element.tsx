@@ -1,13 +1,5 @@
-import React, {
-    useContext,
-    useState
-} from 'react'
-
-import {
-    Button,
-    TextInput
-} from './widgets'
-
+import React, { useContext, useState } from 'react'
+import { Button, TextInput } from './widgets'
 import {
     SNACElement,
     SwitchStates,
@@ -15,37 +7,13 @@ import {
     XMLRWType,
     XMLTagOpenCloseType
 } from '../snac/types'
-
 import { snacOpts } from '../snac/opts'
-
 import { Prefix } from './prefix'
-
-import {
-    Attributes,
-    AttributesTable
-} from './attributes'
-
+import { Attributes, AttributesTable } from './attributes'
 import { attributeKeys } from '../snac/textutils'
-
-import {
-    attributesGridStyle,
-    EditBoxGridStyle
-} from '../snac/styles'
-
+import { attributesGridStyle, EditBoxGridStyle } from '../snac/styles'
 import { ShowHideSwitch } from './showhide'
-
-import { XMLRWContext } from './xmlout'
-
-export const XMLTagOpenCloseContext =
-    React.createContext<XMLTagOpenCloseType>({
-        isEmpty: false,
-        isSelected: false,
-        setSelected: (f: any) => f,
-        isAttributesOpen: false,
-        setAttributesOpen: (f: any) => f,
-        isChildrenOpen: false,
-        setChildrenOpen: (f: any) => f,
-    })
+import { XMLTagOpenCloseContext, XMLRWContext } from '../snac/contexts'
 
 export const Tag = (props: {
     node: SNACElement,
@@ -512,4 +480,6 @@ const NSNodeEdit = (props: {
 }
 
 
+
+export { XMLTagOpenCloseContext }
 

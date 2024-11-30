@@ -104,7 +104,6 @@ export const setSelectedAttribute = (
     name: string,
 ) => {
     if (!isDeleted) {
-
         if (isSelected) {
             setSelected({
                 ns: '#',
@@ -112,7 +111,6 @@ export const setSelectedAttribute = (
             })
             setMode('LIST_MODE')
         }
-
         else {
             setSelected({
                 ns: ns,
@@ -120,7 +118,6 @@ export const setSelectedAttribute = (
             })
             setMode('EDIT_MODE')
         }
-
         dispatch({
             type: "selectAttribute",
             payload: {
@@ -153,7 +150,6 @@ export const selectAttribute = (
         }
 
         for (const name of Object.keys(state[ns])) {
-
             if (
                 payload.newNS === ns &&
                 payload.newName === name &&
@@ -192,12 +188,10 @@ export const setSaveAttribute = (
             newValue: value,
         }
     })
-
     setSelected({
         ns: '#',
         name: '#',
     })
-
     setMode('LIST_MODE')
 }
 
@@ -209,13 +203,10 @@ export const saveAttribute = (
     const newAttrbutes: EditAttributesType = {}
 
     for (const ns of Object.keys(state)) {
-
         if (!newAttrbutes[ns]) {
             newAttrbutes[ns] = {}
         }
-
         for (const name of Object.keys(state[ns])) {
-
             if (payload.newNS === ns && payload.newName === name && payload.newValue) {
                 newAttrbutes[ns][name] = {
                     V: payload.newValue,
@@ -223,7 +214,6 @@ export const saveAttribute = (
                     q: false,
                 }
             }
-
             else {
                 newAttrbutes[ns][name] = state[ns][name]
             }
@@ -268,7 +258,6 @@ export const cancelAttribute = (
         if (!newAttrbutes[ns]) {
             newAttrbutes[ns] = {}
         }
-
         for (const name of Object.keys(state[ns])) {
             newAttrbutes[ns][name] = {
                 ...state[ns][name],
@@ -276,7 +265,6 @@ export const cancelAttribute = (
             }
         }
     }
-
     return newAttrbutes
 }
 
@@ -316,9 +304,7 @@ export const deleteAttribute = (
         if (!newAttrbutes[ns]) {
             newAttrbutes[ns] = {}
         }
-
         for (const name of Object.keys(state[ns])) {
-            
             if (payload.newNS === ns && payload.newName === name) {
                 newAttrbutes[ns][name] = {
                     ...state[ns][name],
@@ -330,7 +316,6 @@ export const deleteAttribute = (
             }
         }
     }
-
     return newAttrbutes
 }
 
@@ -340,7 +325,6 @@ export const setNewAttribute = (
     name: string,
     value: string,
 ) => {
-
     dispatch({
         type: "newAttribute",
         payload: {
@@ -359,11 +343,9 @@ export const newAttribute = (
     const newAttrbutes: EditAttributesType = {}
 
     for (const ns of Object.keys(state)) {
-
         if (!newAttrbutes[ns]) {
             newAttrbutes[ns] = {}
         }
-
         for (const name of Object.keys(state[ns])) {
             if (payload.newNS === ns && payload.newName === name) {
                 continue
@@ -373,13 +355,11 @@ export const newAttribute = (
             }
         }
     }
-
+    
     if (payload.newNS && payload.newName && payload.newValue) {
-
         if (!newAttrbutes[payload.newNS]) {
             newAttrbutes[payload.newNS] = {}
         }
-
         newAttrbutes[payload.newNS][payload.newName] = {
             V: payload.newValue,
             d: false,

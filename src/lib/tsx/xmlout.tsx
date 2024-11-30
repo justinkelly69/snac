@@ -6,7 +6,6 @@ import {
     SNACCDATA,
     SNACComment,
     SNACPINode,
-    XMLRWType,
 } from '../snac/types'
 import { Tag } from './element'
 import { Text } from './text'
@@ -14,10 +13,7 @@ import { CDATA } from './cdata'
 import { Comment } from './comment'
 import { PI } from './pi'
 import { Fragment } from 'react'
-
-export const XMLRWContext = React.createContext<XMLRWType>({
-    treeMode: false,
-})
+import { XMLRWContext } from "../snac/contexts"
 
 export const XMLOut = (props: {
     snac: SNACItem[],

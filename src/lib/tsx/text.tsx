@@ -5,9 +5,8 @@ import { Button, TextArea, TextEditTextBox, TextInput } from './widgets'
 import { snacOpts } from '../snac/opts'
 import { escapeHtml, trimBody } from '../snac/textutils'
 import { ShowHideSwitch } from './showhide'
-import { XMLRWContext } from './xmlout'
+import { XMLRWContext } from '../snac/contexts'
 import { XmlShow } from './xmlshow'
-import { XMLTagOpenCloseContext } from './element'
 
 export const Text = (props: {
     node: SNACText,
@@ -15,7 +14,6 @@ export const Text = (props: {
 }): JSX.Element => {
 
     const xmlRWContext = useContext(XMLRWContext) as XMLRWType
-    const openCloseContext = useContext(XMLTagOpenCloseContext) as XMLTagOpenCloseType
     
     const [isSelected, setSelected] = useState(false)
     const [isChildrenOpen, setChildrenOpen] = useState(false)
