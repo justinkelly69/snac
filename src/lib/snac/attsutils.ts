@@ -103,7 +103,6 @@ export const setSelectedAttribute = (
     ns: string,
     name: string,
 ) => {
-
     if (!isDeleted) {
 
         if (isSelected) {

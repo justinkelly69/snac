@@ -170,8 +170,8 @@ export const AttributesTable = (props: {
                     }
 
                     return (
-                        <XMLAttributesTableContext.Provider value={value}>
-                            <AttributeTableRow key={`${i}:${j}`} />
+                        <XMLAttributesTableContext.Provider value={value} key={`${i}:${j}`}>
+                            <AttributeTableRow />
                         </XMLAttributesTableContext.Provider>
                     )
                 })

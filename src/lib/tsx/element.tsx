@@ -369,7 +369,7 @@ const NSNodeEdit = (props: {
 
     const attributesOpenCloseContext = {
         setAttributes: setAttributes,
-        editAttributes: false,
+        editAttributes: editAttributes,
         numRows: numRows,
         setNumRows: setNumRows,
     }
