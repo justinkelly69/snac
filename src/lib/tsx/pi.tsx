@@ -1,20 +1,22 @@
 import React, { useContext, useState } from 'react'
-import { SNACPINode, SwitchStates } from "../snac/types"
+import { SNACPINode, SwitchStates, XMLRWType, XMLTagOpenCloseType } from "../snac/types"
 import { Prefix } from './prefix'
 import { Button, DropDownList, TextArea, EditTextBox } from './widgets'
 import { escapePIBody, trimBody } from '../snac/textutils'
 import { snacOpts } from '../snac/opts'
 import { ShowHideSwitch } from './showhide'
-import { XMLContext } from './xmlout'
+import { XMLRWContext } from './xmlout'
 import { XmlShow } from './xmlshow'
+import { XMLTagOpenCloseContext } from './element'
 
 export const PI = (props: {
     node: SNACPINode,
     path: number[],
 }): JSX.Element | null => {
 
-    const xmlContext = useContext(XMLContext)
-
+    const xmlRWContext = useContext(XMLRWContext) as XMLRWType
+    const openCloseContext = useContext(XMLTagOpenCloseContext) as XMLTagOpenCloseType
+    
     const [isSelected, setSelected] = useState(false)
     const [isChildrenOpen, setChildrenOpen] = useState(false)
     const [isEditable, setIsEditable] = useState(false)
@@ -27,7 +29,7 @@ export const PI = (props: {
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'pi'
 
-    if (xmlContext.treeMode) {
+    if (xmlRWContext.treeMode) {
         selectState = isSelected ?
             SwitchStates.ON :
             SwitchStates.OFF
@@ -45,7 +47,7 @@ export const PI = (props: {
     )
 
     const widthMultiplier = 1
-    if (xmlContext.treeMode) {
+    if (xmlRWContext.treeMode) {
         return (
             <div className={selectedClassName}>
                 {isChildrenOpen ?

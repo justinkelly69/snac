@@ -94,54 +94,6 @@ export const findElement = (
     }
 }
 
-// Compare 2 arrays.
-// 
-const isAdjacent = (
-    array1: number[], 
-    array2: number[] 
-):number | null => {
-
-    // Nodes are different lengths. Return null.
-    if(array1.length !== array2.length) {
-        return null
-    }
-
-    else {
-
-        // Nodes are the same length but not adjacent. Return null.
-        for(let i in array1.slice(0, array1.length - 1)) {
-            if(array1[i] !== array2[i]) {
-                return null
-            }
-        }
-
-        // Nodes are the same length and match.
-        // Compare the last number in each.
-        const last1 = array1[array1.length - 1]
-        const last2 = array2[array2.length - 1]
-
-        if(last1 === last2 + 1){
-            return 1
-        }
-        else if(last1 === last2 - 1) {
-            return -1
-        }
-        else {
-            return 0
-        }
-    }
-}
-
-const createNumberArea = (base:number[], from: number, to: number):number[][] => {
-    const out:number[][] = []
-    if(from <= to){
-        for(const i in range(from, to)){
-            out.push([...base, parseInt(i)])
-        }
-    }
-    return out
-}
-
 const clone = (
     snac: SNACItem[], 
     removeFrom: number[], 
@@ -161,7 +113,4 @@ const clone = (
     return snacOut
 }
 
-export const range = (start: number, end: number): number[] => {
-    const length = end - start
-    return Array.from({ length }, (_, i) => start + i)
-}
+

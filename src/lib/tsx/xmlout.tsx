@@ -6,7 +6,7 @@ import {
     SNACCDATA,
     SNACComment,
     SNACPINode,
-    XMLOutOpts,
+    XMLRWType,
 } from '../snac/types'
 import { Tag } from './element'
 import { Text } from './text'
@@ -15,7 +15,7 @@ import { Comment } from './comment'
 import { PI } from './pi'
 import { Fragment } from 'react'
 
-export const XMLContext = React.createContext<XMLOutOpts>({
+export const XMLRWContext = React.createContext<XMLRWType>({
     treeMode: false,
 })
 
@@ -24,20 +24,21 @@ export const XMLOut = (props: {
     treeMode: boolean,
 }): JSX.Element => {
 
-    const providerValue  = {
+    const xmlRWValue = {
         treeMode: props.treeMode
     }
 
     return (
-        <XMLContext.Provider value={providerValue}>
+        <XMLRWContext.Provider value={xmlRWValue}>
             <Children
                 snac={props.snac}
                 path={[]}
                 treeMode={props.treeMode}
             />
-        </XMLContext.Provider>
+        </XMLRWContext.Provider>
     )
 }
+
 const Children = (props: {
     snac: SNACItem[],
     path: number[],

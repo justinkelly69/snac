@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { OnOffHiddenChars, SwitchStates } from "../snac/types"
 import { Button } from "./widgets"
-import { XMLContext } from "./xmlout";
+import { XMLRWContext } from "./xmlout";
 
 export const ShowHideSwitch = (props: {
     path: number[],
@@ -10,7 +10,7 @@ export const ShowHideSwitch = (props: {
     openClose: Function
 }): JSX.Element => {
 
-    const xmlContext = useContext(XMLContext);
+    const xmlContext = useContext(XMLRWContext);
     
     let out = props.chars.hidden
     if (xmlContext.treeMode) {

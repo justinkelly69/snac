@@ -8,7 +8,7 @@ import { XMLDisplay } from './lib/tsx/xmldisplay';
 function App() {
     const snac = xml2snac(xmlInput)[0]
 
-    console.log(JSON.stringify(snac, null, 4))
+    //console.log(JSON.stringify(snac, null, 4))
 
     return (
         <XMLDisplay snac={[snac]} />

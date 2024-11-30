@@ -1,20 +1,22 @@
 import React, { useContext, useState } from 'react'
-import { SNACText, SwitchModes, SwitchStates } from '../snac/types'
+import { SNACText, SwitchModes, SwitchStates, XMLRWType, XMLTagOpenCloseType } from '../snac/types'
 import { Prefix } from './prefix'
 import { Button, TextArea, TextEditTextBox, TextInput } from './widgets'
 import { snacOpts } from '../snac/opts'
 import { escapeHtml, trimBody } from '../snac/textutils'
 import { ShowHideSwitch } from './showhide'
-import { XMLContext } from './xmlout'
+import { XMLRWContext } from './xmlout'
 import { XmlShow } from './xmlshow'
+import { XMLTagOpenCloseContext } from './element'
 
 export const Text = (props: {
     node: SNACText,
     path: number[],
 }): JSX.Element => {
 
-    const xmlContext = useContext(XMLContext);
-
+    const xmlRWContext = useContext(XMLRWContext) as XMLRWType
+    const openCloseContext = useContext(XMLTagOpenCloseContext) as XMLTagOpenCloseType
+    
     const [isSelected, setSelected] = useState(false)
     const [isChildrenOpen, setChildrenOpen] = useState(false)
 
@@ -33,7 +35,7 @@ export const Text = (props: {
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'text'
 
-    if (xmlContext.treeMode) {
+    if (xmlRWContext.treeMode) {
         selectState = isSelected ?
             SwitchStates.ON :
             SwitchStates.OFF
@@ -52,7 +54,7 @@ export const Text = (props: {
 
     const widthMultiplier = .9
 
-    if (xmlContext.treeMode) {
+    if (xmlRWContext.treeMode) {
         return (
             <div className={selectedClassName}>
                 {isChildrenOpen ?

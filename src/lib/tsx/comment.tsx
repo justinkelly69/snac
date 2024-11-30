@@ -1,20 +1,22 @@
 import React, { useContext, useState } from 'react'
-import { SNACComment, SwitchStates } from '../snac/types'
+import { SNACComment, SwitchStates, XMLRWType, XMLTagOpenCloseType } from '../snac/types'
 import { Button, EditTextBox, TextArea } from './widgets'
 import { Prefix } from './prefix'
 import { escapeComment, trimBody } from '../snac/textutils'
 import { snacOpts } from '../snac/opts'
 import { ShowHideSwitch } from './showhide'
-import { XMLContext } from './xmlout'
+import { XMLRWContext } from './xmlout'
 import { XmlShow } from './xmlshow'
+import { XMLTagOpenCloseContext } from './element'
 
 export const Comment = (props: {
     node: SNACComment,
     path: number[],
 }): JSX.Element | null => {
 
-    const xmlContext = useContext(XMLContext)
-
+    const xmlRWContext = useContext(XMLRWContext) as XMLRWType
+    const openCloseContext = useContext(XMLTagOpenCloseContext) as XMLTagOpenCloseType
+    
     const [isSelected, setSelected] = useState(false)
     const [isChildrenOpen, setChildrenOpen] = useState(false)
     const [isEditable, setIsEditable] = useState(false)
@@ -25,7 +27,7 @@ export const Comment = (props: {
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'comment'
 
-    if (xmlContext.treeMode) {
+    if (xmlRWContext.treeMode) {
         selectState = isSelected ?
             SwitchStates.ON :
             SwitchStates.OFF
@@ -43,7 +45,7 @@ export const Comment = (props: {
     )
 
     const widthMultiplier = .9
-    if (xmlContext.treeMode) {
+    if (xmlRWContext.treeMode) {
         return (
             <div className={selectedClassName}>
                 {isChildrenOpen ?

@@ -1,11 +1,48 @@
 //import React from 'react'
 
 export enum SwitchStates { 'ON', 'OFF', 'HIDDEN' }
-export type SwitchModes = 'VIEW_MODE' | 'EDIT_MODE' | 'INSERT_MODE'
+export type SwitchModes = 'VIEW_MODE' | 'EDIT_MODE' | 'SELECT_MODE' | 'INSERT_MODE' | 'LIST_MODE'
 
-export type XMLOutOpts = {
+export type XMLRWType = {
     treeMode: boolean
 }
+
+export type XMLModesType = {
+    path: number[],
+    setPath: Function,
+    paths: number[][],
+    setPaths: Function,
+    mode: SwitchModes,
+    setMode: Function,
+}
+
+export type XMLTagOpenCloseType = {
+    isEmpty: boolean,
+    isSelected: boolean,
+    setSelected: Function,
+    isAttributesOpen: boolean,
+    setAttributesOpen: Function,
+    isChildrenOpen: boolean,
+    setChildrenOpen: Function,
+}
+
+export type XMLAttributesOpenCloseType = {
+    setAttributes: Function,
+    editAttributes: boolean,
+    numRows: number,
+    setNumRows: Function,
+}
+
+export type XMLAttributesTableType = {
+    ns: string
+    name: string
+    value: string
+    dispatch: Function
+    isDeleted: boolean
+    isSelected: boolean
+    setSelected: Function
+}
+
 
 export type XMLOpts = {
     prefix_showPrefix: boolean,

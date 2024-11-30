@@ -1,13 +1,51 @@
-import React, { useContext, useState } from 'react'
-import { Button, TextInput } from './widgets'
-import { SNACElement, SwitchStates } from '../snac/types'
+import React, {
+    useContext,
+    useState
+} from 'react'
+
+import {
+    Button,
+    TextInput
+} from './widgets'
+
+import {
+    SNACElement,
+    SwitchStates,
+    XMLAttributesOpenCloseType,
+    XMLRWType,
+    XMLTagOpenCloseType
+} from '../snac/types'
+
 import { snacOpts } from '../snac/opts'
+
 import { Prefix } from './prefix'
-import { Attributes, AttributesTable } from './attributes'
+
+import {
+    Attributes,
+    AttributesTable
+} from './attributes'
+
 import { attributeKeys } from '../snac/textutils'
-import { attributesGridStyle, EditBoxGridStyle } from '../snac/styles'
+
+import {
+    attributesGridStyle,
+    EditBoxGridStyle
+} from '../snac/styles'
+
 import { ShowHideSwitch } from './showhide'
-import { XMLContext } from './xmlout'
+
+import { XMLRWContext } from './xmlout'
+
+export const XMLTagOpenCloseContext =
+    React.createContext<XMLTagOpenCloseType>({
+        isEmpty: false,
+        isSelected: false,
+        setSelected: (f: any) => f,
+        isAttributesOpen: false,
+        setAttributesOpen: (f: any) => f,
+        isChildrenOpen: false,
+        setChildrenOpen: (f: any) => f,
+    })
 
 export const Tag = (props: {
     node: SNACElement,
@@ -22,66 +60,60 @@ export const Tag = (props: {
     let selectedClassName = 'element'
 
     if (snacOpts.xml_showSelected) {
-        selectedClassName = isSelected ? 'element selected' : 'element'
+        selectedClassName = isSelected ?
+            'element selected' :
+            'element'
     }
 
-    let isEmpty = false
-    if (props.node.C.length === 0) {
-        isEmpty = true
+    const isEmpty = props.node.C.length === 0
+
+    const xmlTagOpenCloseContext = {
+        isEmpty: props.node.C.length === 0,
+        isSelected: isSelected,
+        setSelected: setSelected,
+        isAttributesOpen: isAttributesOpen,
+        setAttributesOpen: setAttributesOpen,
+        isChildrenOpen: isChildrenOpen,
+        setChildrenOpen: setChildrenOpen,
     }
 
     return (
-        <div className={selectedClassName}>
-            <OpenTag
-                node={props.node}
-                path={props.path}
-                isEmpty={isEmpty}
-                isSelected={isSelected}
-                setSelected={setSelected}
-                isAttributesOpen={isAttributesOpen}
-                setAttributesOpen={setAttributesOpen}
-                isChildrenOpen={isChildrenOpen}
-                setChildrenOpen={setChildrenOpen}
-            />
-
-            {isChildrenOpen ?
-                props.getChildren(
-                    props.node.C,
-                    props.path,
-                ) :
-                snacOpts.xml_ellipsis
-            }
-
-            {!isEmpty && snacOpts.xml_showCloseTags ? (
-                <CloseTag
+        <XMLTagOpenCloseContext.Provider
+            value={xmlTagOpenCloseContext}>
+            <div className={selectedClassName}>
+                <OpenTag
                     node={props.node}
                     path={props.path}
-                    isEmpty={isEmpty}
-                    isSelected={isSelected}
-                    setSelected={setSelected}
-                    isChildrenOpen={isChildrenOpen}
-                    setChildrenOpen={setChildrenOpen}
                 />
-            ) :
-                null
-            }
-        </div>
+
+                {isChildrenOpen ?
+                    props.getChildren(
+                        props.node.C,
+                        props.path,
+                    ) :
+                    snacOpts.xml_ellipsis
+                }
+
+                {!isEmpty && snacOpts.xml_showCloseTags ? (
+                    <CloseTag
+                        node={props.node}
+                        path={props.path}
+                    />
+                ) :
+                    null
+                }
+            </div>
+        </XMLTagOpenCloseContext.Provider>
     )
 }
 
 export const OpenTag = (props: {
     node: SNACElement,
     path: number[],
-    isEmpty: boolean,
-    isSelected: boolean,
-    setSelected: Function
-    isAttributesOpen: boolean,
-    setAttributesOpen: Function
-    isChildrenOpen: boolean,
-    setChildrenOpen: Function
 }): JSX.Element => {
 
-    const xmlContext = useContext(XMLContext);
+    const xmlRWContext = useContext(XMLRWContext) as XMLRWType
+    const openCloseContext = useContext(XMLTagOpenCloseContext) as XMLTagOpenCloseType
 
     const [isEditable, setIsEditable] = useState(false)
 
@@ -91,26 +123,27 @@ export const OpenTag = (props: {
     let closeSlash = "/"
 
     if (snacOpts.xml_showSelected) {
-        selectState = props.isSelected ?
+        selectState = openCloseContext.isSelected ?
             SwitchStates.ON :
             SwitchStates.OFF
     }
 
-    if (snacOpts.xml_showAttributesOpen && Object.keys(props.node.A).length > 0) {
-        attributesOpenState = props.isAttributesOpen ?
+    if (snacOpts.xml_showAttributesOpen &&
+        Object.keys(props.node.A).length > 0) {
+        attributesOpenState = openCloseContext.isAttributesOpen ?
             SwitchStates.ON :
             SwitchStates.OFF
     }
 
-    if (!props.isEmpty) {
+    if (!openCloseContext.isEmpty) {
         if (snacOpts.xml_showChildrenOpen) {
-            childrenOpenState = props.isChildrenOpen ?
+            childrenOpenState = openCloseContext.isChildrenOpen ?
                 SwitchStates.ON :
                 SwitchStates.OFF
         }
         closeSlash = ""
     }
-    if (xmlContext.treeMode) {
+    if (xmlRWContext.treeMode) {
         return (
             <>
                 {isEditable ?
@@ -119,7 +152,9 @@ export const OpenTag = (props: {
                             node={props.node}
                             type='element'
                             path={props.path}
-                            openClose={e => { setIsEditable(false) }}
+                            openClose={() => {
+                                setIsEditable(false)
+                            }}
                         />
                     </> :
                     <>
@@ -127,7 +162,11 @@ export const OpenTag = (props: {
                             path={props.path}
                             selected={selectState}
                             chars={snacOpts.switch_selectChars}
-                            openClose={() => props.setSelected(!props.isSelected)}
+                            openClose={() =>
+                                openCloseContext.setSelected(
+                                    !openCloseContext.isSelected
+                                )
+                            }
                         />
 
                         <Prefix
@@ -138,15 +177,21 @@ export const OpenTag = (props: {
                             path={props.path}
                             selected={childrenOpenState}
                             chars={snacOpts.switch_elementChars}
-                            openClose={() => props.setChildrenOpen(!props.isChildrenOpen)}
+                            openClose={() =>
+                                openCloseContext.setChildrenOpen(
+                                    !openCloseContext.isChildrenOpen
+                                )
+                            }
                         />
                         &lt;
                         <NSName
                             node={props.node}
-                            openClose={e => setIsEditable(true)}
+                            openClose={() =>
+                                setIsEditable(true)
+                            }
                         />
                         <>
-                            {props.isAttributesOpen ?
+                            {openCloseContext.isAttributesOpen ?
                                 <Attributes
                                     attributes={props.node.A}
                                     path={props.path}
@@ -159,7 +204,11 @@ export const OpenTag = (props: {
                             path={props.path}
                             selected={attributesOpenState}
                             chars={snacOpts.switch_attributeChars}
-                            openClose={() => props.setAttributesOpen(!props.isAttributesOpen)}
+                            openClose={() =>
+                                openCloseContext.setAttributesOpen(
+                                    !openCloseContext.isAttributesOpen
+                                )
+                            }
                         />
                     </>
                 }
@@ -194,45 +243,53 @@ export const OpenTag = (props: {
 export const CloseTag = (props: {
     node: SNACElement,
     path: number[],
-    isEmpty: boolean,
-    isSelected: boolean,
-    setSelected: Function
-    isChildrenOpen: boolean,
-    setChildrenOpen: Function
 }): JSX.Element | null => {
 
-    const xmlContext = useContext(XMLContext);
+    const xmlRWContext = useContext(XMLRWContext) as XMLRWType
+    const openCloseContext = useContext(XMLTagOpenCloseContext) as XMLTagOpenCloseType
 
     let selectState = SwitchStates.HIDDEN
     let childrenOpenState = SwitchStates.HIDDEN
 
     if (snacOpts.xml_showSelected) {
-        selectState = props.isSelected ? SwitchStates.ON : SwitchStates.OFF
+        selectState = openCloseContext.isSelected ?
+            SwitchStates.ON :
+            SwitchStates.OFF
     }
 
-    if (props.isEmpty) {
+    if (openCloseContext.isEmpty) {
         if (snacOpts.xml_showChildrenOpen) {
-            childrenOpenState = props.isChildrenOpen ? SwitchStates.ON : SwitchStates.OFF
+            childrenOpenState = openCloseContext.isChildrenOpen ?
+                SwitchStates.ON :
+                SwitchStates.OFF
         }
     }
 
-    if (xmlContext.treeMode) {
+    if (xmlRWContext.treeMode) {
         return (
             <>
-                {props.isChildrenOpen ? (
+                {openCloseContext.isChildrenOpen ? (
                     <>
                         <ShowHideSwitch
                             path={props.path}
                             selected={selectState}
                             chars={snacOpts.switch_selectChars}
-                            openClose={() => props.setSelected(!props.isSelected)}
+                            openClose={() =>
+                                openCloseContext.setSelected(
+                                    !openCloseContext.isSelected
+                                )
+                            }
                         />
                         <Prefix path={props.path} />
                         <ShowHideSwitch
                             path={props.path}
                             selected={childrenOpenState}
                             chars={snacOpts.switch_elementChars}
-                            openClose={() => props.setChildrenOpen(!props.isChildrenOpen)}
+                            openClose={() =>
+                                openCloseContext.setChildrenOpen(
+                                    !openCloseContext.isChildrenOpen
+                                )
+                            }
                         />
                     </>
                 ) :
@@ -268,7 +325,7 @@ const NSName = (props: {
 }): JSX.Element => {
 
     return props.node.S.length > 0 ?
-        <span onClick={e => props.openClose && props.openClose()}>
+        <span onClick={() => props.openClose && props.openClose()}>
             <span className='element-ns'>
                 {props.node.S}
             </span>
@@ -278,13 +335,19 @@ const NSName = (props: {
             </span>
         </span>
         :
-        <span onClick={e => props.openClose && props.openClose()}
+        <span onClick={() => props.openClose && props.openClose()}
             className='element-name'>
             {props.node.N}
         </span>
 }
 
-
+export const XMLAttributesOpenCloseContext =
+    React.createContext<XMLAttributesOpenCloseType>({
+        setAttributes: (f: any) => f,
+        editAttributes: false,
+        numRows: 0,
+        setNumRows: (f: any) => f,
+    })
 
 const NSNodeEdit = (props: {
     node: SNACElement,
@@ -303,6 +366,14 @@ const NSNodeEdit = (props: {
 
     const keys = attributeKeys(attributes)
     const [numRows, setNumRows] = useState(keys.length + 2)
+
+    const attributesOpenCloseContext = {
+        setAttributes: setAttributes,
+        editAttributes: false,
+        numRows: numRows,
+        setNumRows: setNumRows,
+    }
+
 
     return (
         <>
@@ -324,7 +395,7 @@ const NSNodeEdit = (props: {
                 <span>
                     <Button
                         className='button x-button'
-                        onClick={e => {
+                        onClick={() => {
                             props.openClose && props.openClose()
                         }}
                         label='X'
@@ -341,12 +412,15 @@ const NSNodeEdit = (props: {
                         <span>
                             <Button
                                 className='button text-button'
-                                onClick={e => {
+                                onClick={() => {
                                     setEditAttributes(false)
                                 }}
                                 label='Edit'
                             />
-                            <span style={{ display: 'block', width: '6em' }}>
+                            <span style={{
+                                display: 'block',
+                                width: '6em'
+                            }}>
                             </span>
                         </span>
                     </> :
@@ -358,7 +432,11 @@ const NSNodeEdit = (props: {
                                 value={ns}
                                 size={4}
                                 placeholder='ns'
-                                onChange={e => setNs(e.target.value)}
+                                onChange={(e: {
+                                    target: {
+                                        value: React.SetStateAction<string>
+                                    }
+                                }) => setNs(e.target.value)}
                             />
                             :
                         </span>
@@ -369,13 +447,17 @@ const NSNodeEdit = (props: {
                                 value={name}
                                 size={10}
                                 placeholder='name'
-                                onChange={e => setName(e.target.value)}
+                                onChange={(e: {
+                                    target: {
+                                        value: React.SetStateAction<string>
+                                    }
+                                }) => setName(e.target.value)}
                             />
                         </span>
                         <span>
                             <Button
                                 className='button text-button'
-                                onClick={e => {
+                                onClick={() => {
                                     setOldNs(ns)
                                     setOldName(name)
                                     setEditAttributes(true)
@@ -385,7 +467,7 @@ const NSNodeEdit = (props: {
                             />
                             <Button
                                 className='button text-button'
-                                onClick={e => {
+                                onClick={() => {
                                     setNs(oldNs)
                                     setName(oldName)
                                     setEditAttributes(true)
@@ -417,14 +499,13 @@ const NSNodeEdit = (props: {
                         label='Cancel'
                     />
                 </span>
-                <AttributesTable
-                    path={props.path}
-                    attributes={attributes}
-                    setAttributes={setAttributes}
-                    editAttributes={editAttributes}
-                    numRows={numRows}
-                    setNumRows={setNumRows}
-                />
+                <XMLAttributesOpenCloseContext.Provider
+                    value={attributesOpenCloseContext}>
+                    <AttributesTable
+                        path={props.path}
+                        attributes={attributes}
+                    />
+                </XMLAttributesOpenCloseContext.Provider>
             </span>
         </>
     )
