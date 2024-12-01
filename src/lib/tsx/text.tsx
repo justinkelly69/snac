@@ -29,15 +29,13 @@ import { addPath, hasPath } from '../snac/paths'
 export const Text = (props: {
     node: SNACText,
     path: number[],
+    isSelected: boolean,
 }): JSX.Element => {
 
     const xmlModesContext = useContext(XMLModesContext) as XMLModesType
-
     const xmlRWContext = useContext(XMLRWContext) as XMLRWType
 
-    //const [isSelected, setSelected] = useState()
     const [isChildrenOpen, setChildrenOpen] = useState(false)
-
     const [mode, setMode] = useState<SwitchModes>('VIEW_MODE') // VIEW_MODE, EDIT_MODE, INSERT_MODE
 
     const [nsText, setNSText] = useState('')
@@ -53,9 +51,9 @@ export const Text = (props: {
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'text'
 
-    const isSelected = hasPath(xmlModesContext.paths, props.path)
+    const isSelected = hasPath(xmlModesContext.paths, props.path) || props.isSelected
 
-    //if (xmlRWContext.treeMode) {
+    if (xmlRWContext.treeMode) {
         selectState = isSelected ?
             SwitchStates.ON :
             SwitchStates.OFF
@@ -63,7 +61,7 @@ export const Text = (props: {
         selectedClassName = isSelected ?
             'text selected' :
             'text'
-    //}
+    }
 
     const body = trimBody(
         isChildrenOpen,
@@ -291,16 +289,22 @@ export const Text = (props: {
     }
     else {
         return (
-            <XmlShow
-                path={props.path}
-                className={selectedClassName}>
-                {props.node.T.trim().length > 0 ?
-                    <>
-                        {escapeHtml(props.node.T.trim())}
-                    </> :
+            <>
+                {isSelected ?
+                    <XmlShow
+                        path={props.path}
+                        className={selectedClassName}
+                    >
+                        {props.node.T.trim().length > 0 ?
+                            <>
+                                {escapeHtml(props.node.T.trim())}
+                            </> :
+                            null
+                        }
+                    </XmlShow> :
                     null
                 }
-            </XmlShow>
+            </>
         )
     }
 }

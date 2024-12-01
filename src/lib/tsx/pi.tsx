@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { SNACPINode, SwitchStates, XMLModesType, XMLRWType, XMLTagOpenCloseType } from "../snac/types"
+import { SNACPINode, SwitchStates, XMLModesType, XMLRWType } from "../snac/types"
 import { Prefix } from './prefix'
 import { Button, DropDownList, TextArea, EditTextBox } from './widgets'
 import { escapePIBody, trimBody } from '../snac/textutils'
@@ -12,6 +12,7 @@ import { addPath, hasPath } from '../snac/paths'
 export const PI = (props: {
     node: SNACPINode,
     path: number[],
+    isSelected: boolean,
 }): JSX.Element | null => {
 
     const xmlRWContext = useContext(XMLRWContext) as XMLRWType
@@ -25,19 +26,20 @@ export const PI = (props: {
     const [prevPILang, setPrevPILang] = useState(props.node.L)
     const [prevPIBody, setPrevPIBody] = useState(props.node.B)
 
-    const isSelected = hasPath(xmlModesContext.paths, props.path)
+    const isSelected = hasPath(xmlModesContext.paths, props.path) || props.isSelected
+
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'pi'
 
-    //if (xmlRWContext.treeMode) {
-    selectState = isSelected ?
-        SwitchStates.ON :
-        SwitchStates.OFF
+    if (xmlRWContext.treeMode) {
+        selectState = isSelected ?
+            SwitchStates.ON :
+            SwitchStates.OFF
 
-    selectedClassName = isSelected ?
-        'pi selected' :
-        'pi'
-    //}
+        selectedClassName = isSelected ?
+            'pi selected' :
+            'pi'
+    }
 
     const body = trimBody(
         isChildrenOpen,
@@ -196,19 +198,25 @@ export const PI = (props: {
     }
     else {
         return (
-            <XmlShow
-                path={props.path}
-                className={selectedClassName}
-            >
-                <PIOpenBracket />
-                <span className='pi-lang'>
-                    {props.node.L}
-                </span>
-                {" "}
-                {props.node.B.trim()}
-                <br />
-                <PICloseBracket />
-            </XmlShow>
+
+            <>
+                {isSelected ?
+                    <XmlShow
+                        path={props.path}
+                        className={selectedClassName}
+                    >
+                        <PIOpenBracket />
+                        <span className='pi-lang'>
+                            {props.node.L}
+                        </span>
+                        {" "}
+                        {props.node.B.trim()}
+                        <br />
+                        <PICloseBracket />
+                    </XmlShow> :
+                    null
+                }
+            </>
         )
     }
 }

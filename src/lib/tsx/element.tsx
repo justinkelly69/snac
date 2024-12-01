@@ -36,24 +36,23 @@ import {
 } from '../snac/contexts'
 import { addPath, hasPath } from '../snac/paths'
 
-export const Tag = (props: {
+export const Element = (props: {
     node: SNACElement,
     path: number[],
+    isSelected: boolean,
 }): JSX.Element => {
-    const xmlModesContext = useContext(XMLModesContext) as XMLModesType
-    const xmlRWContext = useContext(XMLRWContext) as XMLRWType
 
-    
-    //const [isSelected, setSelected] = useState(false)
+    const xmlRWContext = useContext(XMLRWContext) as XMLRWType
+    const xmlModesContext = useContext(XMLModesContext) as XMLModesType
+
     const [isAttributesOpen, setAttributesOpen] = useState(false)
     const [isChildrenOpen, setChildrenOpen] = useState(true)
 
-    const isSelected = hasPath(xmlModesContext.paths, props.path)
-
+    const isSelected = hasPath(xmlModesContext.paths, props.path) || props.isSelected
 
     let selectedClassName = 'element'
 
-    if (snacOpts.xml_showSelected) {
+    if (xmlRWContext.treeMode && snacOpts.xml_showSelected) {
         selectedClassName = isSelected ?
             'element selected' :
             'element'
@@ -64,7 +63,6 @@ export const Tag = (props: {
     const xmlTagOpenCloseContext = {
         isEmpty: props.node.C.length === 0,
         isSelected: isSelected,
-        //setSelected: setSelected,
         isAttributesOpen: isAttributesOpen,
         setAttributesOpen: setAttributesOpen,
         isChildrenOpen: isChildrenOpen,
@@ -75,20 +73,26 @@ export const Tag = (props: {
         <XMLTagOpenCloseContext.Provider
             value={xmlTagOpenCloseContext}>
             <div className={selectedClassName}>
-                <OpenTag
-                    node={props.node}
-                    path={props.path}
-                />
+
+                {xmlRWContext.treeMode || isSelected ?
+                    <OpenTag
+                        node={props.node}
+                        path={props.path}
+                    />
+                    :
+                    null
+                }
 
                 {isChildrenOpen ?
                     <Children
                         snac={props.node.C}
                         path={props.path}
+                        isSelected={isSelected}
                     /> :
                     snacOpts.xml_ellipsis
                 }
 
-                {!isEmpty && (!xmlRWContext.treeMode || snacOpts.xml_showCloseTags) ? (
+                {isSelected && !isEmpty && (!xmlRWContext.treeMode || snacOpts.xml_showCloseTags) ? (
                     <CloseTag
                         node={props.node}
                         path={props.path}
@@ -165,10 +169,6 @@ export const OpenTag = (props: {
                                 console.log(JSON.stringify(newPaths, null, 4))
                                 xmlModesContext.setPaths(newPaths)
                             }}
-                                // openCloseContext.setSelected(
-                                //     !openCloseContext.isSelected
-                                // )
-                            
                         />
 
                         <Prefix
@@ -276,12 +276,7 @@ export const CloseTag = (props: {
                             path={props.path}
                             selected={selectState}
                             chars={snacOpts.switch_selectChars}
-                            // openClose={() =>
-                            //     openCloseContext.setSelected(
-                            //         !openCloseContext.isSelected
-                            //     )
-                            // }
-                            openClose={f=>f}
+                            openClose={(f: any) => f}
                         />
                         <Prefix path={props.path} />
                         <ShowHideSwitch
@@ -369,7 +364,6 @@ const NSNodeEdit = (props: {
         numRows: numRows,
         setNumRows: setNumRows,
     }
-
 
     return (
         <>

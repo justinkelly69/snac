@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { SNACComment, SwitchStates, XMLModesType, XMLRWType, XMLTagOpenCloseType } from '../snac/types'
+import { SNACComment, SwitchStates, XMLModesType, XMLRWType } from '../snac/types'
 import { Button, EditTextBox, TextArea } from './widgets'
 import { Prefix } from './prefix'
 import { escapeComment, trimBody } from '../snac/textutils'
@@ -12,6 +12,7 @@ import { addPath, hasPath } from '../snac/paths'
 export const Comment = (props: {
     node: SNACComment,
     path: number[],
+    isSelected: boolean,
 }): JSX.Element | null => {
 
     const xmlRWContext = useContext(XMLRWContext) as XMLRWType
@@ -23,19 +24,19 @@ export const Comment = (props: {
     const [newComment, setNewComment] = useState(props.node.M)
     const [prevComment, setPrevComment] = useState(props.node.M)
 
-    const isSelected = hasPath(xmlModesContext.paths, props.path)
+    const isSelected = hasPath(xmlModesContext.paths, props.path) || props.isSelected
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'comment'
 
-    //if (xmlRWContext.treeMode) {
-    selectState = isSelected ?
-        SwitchStates.ON :
-        SwitchStates.OFF
+    if (xmlRWContext.treeMode) {
+        selectState = isSelected ?
+            SwitchStates.ON :
+            SwitchStates.OFF
 
-    selectedClassName = isSelected ?
-        'comment selected' :
-        'comment'
-    //}
+        selectedClassName = isSelected ?
+            'comment selected' :
+            'comment'
+    }
 
     const comment = trimBody(
         isChildrenOpen,
@@ -165,14 +166,19 @@ export const Comment = (props: {
     }
     else {
         return (
-            <XmlShow
-                path={props.path}
-                className={selectedClassName}
-            >
-                <CommentOpenBracket /><br />
-                {props.node.M.trim()}<br />
-                <CommentCloseBracket />
-            </XmlShow>
+            <>
+                {isSelected ?
+                    <XmlShow
+                        path={props.path}
+                        className={selectedClassName}
+                    >
+                        <CommentOpenBracket /><br />
+                        {props.node.M.trim()}<br />
+                        <CommentCloseBracket />
+                    </XmlShow> :
+                    null
+                }
+            </>
         )
     }
 }

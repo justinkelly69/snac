@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { SNACCDATA, SwitchStates, XMLModesType, XMLRWType, XMLTagOpenCloseType } from '../snac/types'
+import { SNACCDATA, SwitchStates, XMLModesType, XMLRWType } from '../snac/types'
 import { Prefix } from './prefix'
 import { Button, EditTextBox, TextArea } from './widgets'
 import { escapeCDATA, trimBody } from '../snac/textutils'
@@ -12,6 +12,7 @@ import { addPath, hasPath } from '../snac/paths'
 export const CDATA = (props: {
     node: SNACCDATA,
     path: number[],
+    isSelected: boolean,
 }): JSX.Element => {
 
     const xmlRWContext = useContext(XMLRWContext) as XMLRWType
@@ -23,19 +24,19 @@ export const CDATA = (props: {
     const [newCDATA, setNewCDATA] = useState(props.node.D)
     const [prevCDATA, setPrevCDATA] = useState(props.node.D)
 
-    const isSelected = hasPath(xmlModesContext.paths, props.path)
+    const isSelected = hasPath(xmlModesContext.paths, props.path) || props.isSelected
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'cdata'
 
-    //if (xmlRWContext.treeMode) {
-    selectState = isSelected ?
-        SwitchStates.ON :
-        SwitchStates.OFF
+    if (xmlRWContext.treeMode) {
+        selectState = isSelected ?
+            SwitchStates.ON :
+            SwitchStates.OFF
 
-    selectedClassName = isSelected ?
-        'cdata selected' :
-        'cdata'
-    //}
+        selectedClassName = isSelected ?
+            'cdata selected' :
+            'cdata'
+    }
 
     const cdata = trimBody(
         isChildrenOpen,
@@ -171,14 +172,20 @@ export const CDATA = (props: {
     }
     else {
         return (
-            <XmlShow
-                path={props.path}
-                className={selectedClassName}
-            >
-                <CDATAOpenBracket /><br />
-                {props.node.D.trim()}<br />
-                <CDATACloseBracket />
-            </XmlShow>
+            <>
+                {isSelected ?
+                    <XmlShow
+                        path={props.path}
+                        className={selectedClassName}
+                    >
+                        <CDATAOpenBracket /><br />
+                        {props.node.D.trim()}<br />
+                        <CDATACloseBracket />
+                    </XmlShow> :
+                    null
+                }
+            </>
+
         )
     }
 }
