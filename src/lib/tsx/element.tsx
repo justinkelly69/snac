@@ -13,7 +13,7 @@ import { Attributes, AttributesTable } from './attributes'
 import { attributeKeys } from '../snac/textutils'
 import { attributesGridStyle, EditBoxGridStyle } from '../snac/styles'
 import { ShowHideSwitch } from './showhide'
-import { XMLTagOpenCloseContext, XMLRWContext } from '../snac/contexts'
+import { XMLTagOpenCloseContext, XMLRWContext, XMLAttributesOpenCloseContext } from '../snac/contexts'
 
 export const Tag = (props: {
     node: SNACElement,
@@ -309,13 +309,6 @@ const NSName = (props: {
         </span>
 }
 
-export const XMLAttributesOpenCloseContext =
-    React.createContext<XMLAttributesOpenCloseType>({
-        setAttributes: (f: any) => f,
-        editAttributes: false,
-        numRows: 0,
-        setNumRows: (f: any) => f,
-    })
 
 const NSNodeEdit = (props: {
     node: SNACElement,
@@ -448,7 +441,7 @@ const NSNodeEdit = (props: {
                 <span>
                     <Button
                         className='button text-button'
-                        onClick={e => {
+                        onClick={() => {
                             if (ns.length > 0 && name.length > 0) {
                                 console.log(`[${props.path}]:<${ns}:${name} />`)
                             }
@@ -478,8 +471,3 @@ const NSNodeEdit = (props: {
         </>
     )
 }
-
-
-
-export { XMLTagOpenCloseContext }
-

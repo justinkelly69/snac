@@ -21,7 +21,6 @@ const find = (
         X: {},
         A: {}, 
         C: snac,
-        q: false, 
     }
 
     // Call the search function recursively

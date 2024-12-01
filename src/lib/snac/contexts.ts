@@ -1,5 +1,6 @@
 import React from "react";
 import {
+    XMLAttributesOpenCloseType,
     XMLAttributesTableType,
     XMLModesType,
     XMLRWType,
@@ -42,4 +43,12 @@ export const XMLAttributesTableContext =
         isDeleted: false,
         isSelected: false,
         setSelected: (f: any) => f,
-    })   
+    })
+
+export const XMLAttributesOpenCloseContext =
+    React.createContext<XMLAttributesOpenCloseType>({
+        setAttributes: (f: any) => f,
+        editAttributes: false,
+        numRows: 0,
+        setNumRows: (f: any) => f,
+    })

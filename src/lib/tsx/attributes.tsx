@@ -1,5 +1,12 @@
-import React, { useContext, useReducer, useState } from 'react'
-import { Button, TextInput } from './widgets'
+import React, {
+    useContext,
+    useReducer,
+    useState
+} from 'react'
+import {
+    Button,
+    TextInput
+} from './widgets'
 import {
     AttributesType,
     EditAttributesType,
@@ -21,10 +28,13 @@ import {
     attributeGetValue,
     setNewAttribute,
 } from '../snac/attsutils'
-import { XMLRWContext, XMLModesContext } from '../snac/contexts'
 import { EditBoxGridStyle } from '../snac/styles'
-import { XMLAttributesOpenCloseContext } from './element'
-import { XMLAttributesTableContext } from '../snac/contexts'
+import {
+    XMLAttributesTableContext,
+    XMLAttributesOpenCloseContext,
+    XMLRWContext,
+    XMLModesContext
+} from '../snac/contexts'
 
 export const Attributes = (props: {
     path: number[],
@@ -68,7 +78,8 @@ export const Attributes = (props: {
 
                 })}
             </div>
-            {xmlContext.treeMode && Object.keys(props.attributes).length > 0 ?
+            {xmlContext.treeMode &&
+                Object.keys(props.attributes).length > 0 ?
                 <>
                     {snacOpts.prefix_spaceBefore}
                     <Prefix
@@ -139,7 +150,7 @@ export const AttributesTable = (props: {
     attributes: AttributesType,
 }): JSX.Element => {
 
-    const attributesOpenCloseContext = useContext(XMLAttributesOpenCloseContext) as XMLAttributesOpenCloseType
+    const openCloseContext = useContext(XMLAttributesOpenCloseContext) as XMLAttributesOpenCloseType
 
     const [state, dispatch] = useReducer(
         attributesEditReducer,
@@ -154,26 +165,25 @@ export const AttributesTable = (props: {
         <>
             {Object.keys(state).map((ns, i) => {
                 return Object.keys(state[ns]).map((name, j) => {
-
-                    const value = {
-                        ns: ns,
-                        name: name,
-                        value: attributeGetValue(state, ns, name),
-                        dispatch: dispatch,
-                        isDeleted: attributeIsDeleted(state, ns, name),
-                        isSelected: attributeIsSelected(selected, ns, name),
-                        setSelected: setSelected,
-                    }
-
                     return (
-                        <XMLAttributesTableContext.Provider value={value} key={`${i}:${j}`}>
+                        <XMLAttributesTableContext.Provider
+                            key={`${i}:${j}`}
+                            value={{
+                                ns: ns,
+                                name: name,
+                                value: attributeGetValue(state, ns, name),
+                                dispatch: dispatch,
+                                isDeleted: attributeIsDeleted(state, ns, name),
+                                isSelected: attributeIsSelected(selected, ns, name),
+                                setSelected: setSelected,
+                            }}>
                             <AttributeTableRow />
-                        </XMLAttributesTableContext.Provider>
+                        </XMLAttributesTableContext.Provider >
                     )
                 })
             })}
 
-            {attributesOpenCloseContext.editAttributes ?
+            {openCloseContext.editAttributes ?
                 <AttributeNewRow
                     state={state}
                     dispatch={dispatch}
@@ -201,15 +211,14 @@ const AttributeTableRow = () => {
     return (
         <>
             <span>
-                {attributesOpenCloseContext.editAttributes && xmlModesContext.mode === 'VIEW_MODE' &&
+                {attributesOpenCloseContext.editAttributes &&
+                    xmlModesContext.mode === 'VIEW_MODE' &&
                     <Button
                         className='button x-button'
                         onClick={() => {
-                            setDeletedAttribute(
-                                attributesTableContext.dispatch,
-                                attributesTableContext.ns,
-                                attributesTableContext.name,
-                            )
+                            setDeletedAttribute({
+                                ...attributesTableContext,
+                            })
                         }}
                         label={deletedLabel}
                     />
@@ -217,36 +226,29 @@ const AttributeTableRow = () => {
             </span>
             <span className={`attribute-ns ${classDeleted}`}
                 onClick={() => {
-                    attributesOpenCloseContext.editAttributes && setSelectedAttribute(
-                        xmlModesContext.setMode,
-                        attributesTableContext.setSelected,
-                        attributesTableContext.isSelected,
-                        attributesTableContext.isDeleted,
-                        attributesTableContext.dispatch,
-                        attributesTableContext.ns,
-                        attributesTableContext.name,
-                    )
+                    attributesOpenCloseContext.editAttributes &&
+                        setSelectedAttribute({
+                            ...xmlModesContext,
+                            ...attributesTableContext,
+                        })
                 }}
             >
                 {attributesTableContext.ns !== '@' ? `${attributesTableContext.ns}:` : ''}
             </span>
             <span className={`attribute-name ${classDeleted}`}
                 onClick={() => {
-                    attributesOpenCloseContext.editAttributes && setSelectedAttribute(
-                        xmlModesContext.setMode,
-                        attributesTableContext.setSelected,
-                        attributesTableContext.isSelected,
-                        attributesTableContext.isDeleted,
-                        attributesTableContext.dispatch,
-                        attributesTableContext.ns,
-                        attributesTableContext.name,
-                    )
+                    attributesOpenCloseContext.editAttributes &&
+                        setSelectedAttribute({
+                            ...xmlModesContext,
+                            ...attributesTableContext,
+                        })
                 }}
             >
                 {attributesTableContext.name}
             </span>
 
-            {xmlModesContext.mode === 'EDIT_MODE' && attributesTableContext.isSelected ?
+            {xmlModesContext.mode === 'EDIT_MODE' &&
+                attributesTableContext.isSelected ?
                 <>
                     <span>
                         <TextInput
@@ -267,14 +269,11 @@ const AttributeTableRow = () => {
                             className='button text-button'
                             onClick={() => {
                                 setOldValue(value)
-                                setSaveAttribute(
-                                    xmlModesContext.setMode,
-                                    attributesTableContext.setSelected,
-                                    attributesTableContext.dispatch,
-                                    attributesTableContext.ns,
-                                    attributesTableContext.name,
+                                setSaveAttribute({
+                                    ...xmlModesContext,
+                                    ...attributesTableContext,
                                     value
-                                )
+                                })
                             }}
                             label='Save'
                         />
@@ -284,14 +283,11 @@ const AttributeTableRow = () => {
                             className='button text-button'
                             onClick={() => {
                                 setValue(oldValue)
-                                setCancelAttribute(
-                                    xmlModesContext.setMode,
-                                    attributesTableContext.setSelected,
-                                    attributesTableContext.dispatch,
-                                    attributesTableContext.ns,
-                                    attributesTableContext.name,
+                                setCancelAttribute({
+                                    ...xmlModesContext,
+                                    ...attributesTableContext,
                                     oldValue,
-                                )
+                                })
                             }}
                             label='Cancel'
                         />
@@ -301,15 +297,11 @@ const AttributeTableRow = () => {
                     <span>
                         <span className={`attribute-value  ${classDeleted}`}
                             onClick={() => {
-                                attributesOpenCloseContext.editAttributes && setSelectedAttribute(
-                                    xmlModesContext.setMode,
-                                    attributesTableContext.setSelected,
-                                    attributesTableContext.isSelected,
-                                    attributesTableContext.isDeleted,
-                                    attributesTableContext.dispatch,
-                                    attributesTableContext.ns,
-                                    attributesTableContext.name,
-                                )
+                                attributesOpenCloseContext.editAttributes &&
+                                    setSelectedAttribute({
+                                        ...xmlModesContext,
+                                        ...attributesTableContext,
+                                    })
                             }}>
                             {value}
                         </span>
@@ -384,7 +376,7 @@ const AttributeNewRow = (props: {
             <span className='attributes-table-cell'>
                 <Button
                     className='button text-button'
-                    onClick={e => {
+                    onClick={() => {
                         const newNs = ns.length === 0 ? '@' : ns
 
                         if (name.length > 0 &&

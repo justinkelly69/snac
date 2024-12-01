@@ -1,7 +1,10 @@
-import { XMLOut } from "./xmlout"
-import { XMLModesType, SNACItem, SwitchModes } from "../snac/types"
-import { useState } from "react"
 import React from "react"
+import { XMLOut } from "./xmlout"
+import {
+    SNACItem,
+    SwitchModes
+} from "../snac/types"
+import { useState } from "react"
 import { XMLModesContext } from "../snac/contexts"
 
 export const XMLDisplay = (props: {

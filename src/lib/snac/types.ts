@@ -222,28 +222,23 @@ export interface SNACElement {
     N: string,
     A: AttributesType,
     C: SNACItem[],
-    q: boolean,
 }
 
 export interface SNACText {
     T: string,
-    q: boolean,
 }
 
 export interface SNACCDATA {
     D: string,
-    q: boolean,
 }
 
 export interface SNACComment {
     M: string,
-    q: boolean,
 }
 
 export interface SNACPINode {
     L: string,
     B: string,
-    q: boolean,
 }
 
 export type SNACItem =

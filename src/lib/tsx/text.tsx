@@ -1,9 +1,25 @@
-import React, { useContext, useState } from 'react'
-import { SNACText, SwitchModes, SwitchStates, XMLRWType, XMLTagOpenCloseType } from '../snac/types'
+import React, {
+    useContext,
+    useState
+} from 'react'
+import {
+    SNACText,
+    SwitchModes,
+    SwitchStates,
+    XMLRWType
+} from '../snac/types'
 import { Prefix } from './prefix'
-import { Button, TextArea, TextEditTextBox, TextInput } from './widgets'
+import {
+    Button,
+    TextArea,
+    TextEditTextBox,
+    TextInput
+} from './widgets'
 import { snacOpts } from '../snac/opts'
-import { escapeHtml, trimBody } from '../snac/textutils'
+import {
+    escapeHtml,
+    trimBody
+} from '../snac/textutils'
 import { ShowHideSwitch } from './showhide'
 import { XMLRWContext } from '../snac/contexts'
 import { XmlShow } from './xmlshow'
@@ -14,7 +30,7 @@ export const Text = (props: {
 }): JSX.Element => {
 
     const xmlRWContext = useContext(XMLRWContext) as XMLRWType
-    
+
     const [isSelected, setSelected] = useState(false)
     const [isChildrenOpen, setChildrenOpen] = useState(false)
 
@@ -65,7 +81,7 @@ export const Text = (props: {
                                     <>
                                         <Button
                                             className='button x-button'
-                                            onClick={e => {
+                                            onClick={() => {
                                                 setMode('VIEW_MODE')
                                                 setChildrenOpen(false)
                                             }}
@@ -73,7 +89,7 @@ export const Text = (props: {
                                         />
                                         <Button
                                             className='button text-button'
-                                            onClick={e => {
+                                            onClick={() => {
                                                 setMode('VIEW_MODE')
                                                 setChildrenOpen(true)
                                                 setOldText(newText)
@@ -83,7 +99,7 @@ export const Text = (props: {
                                         />
                                         <Button
                                             className='button text-button'
-                                            onClick={e => {
+                                            onClick={() => {
                                                 setMode('VIEW_MODE')
                                                 setChildrenOpen(true)
                                                 setNewText(oldText)
@@ -114,7 +130,7 @@ export const Text = (props: {
                                     <>
                                         <Button
                                             className='button x-button'
-                                            onClick={e => {
+                                            onClick={() => {
                                                 setMode('VIEW_MODE')
                                                 setChildrenOpen(true)
                                             }}
@@ -125,18 +141,26 @@ export const Text = (props: {
                                             className='text-input ns-input'
                                             size={4}
                                             placeholder='ns'
-                                            onChange={e => setNSText(e.target.value)}
+                                            onChange={(e: {
+                                                target: {
+                                                    value: React.SetStateAction<string>
+                                                }
+                                            }) => setNSText(e.target.value)}
                                         />
                                         <TextInput
                                             name="name"
                                             className='text-input name-input'
                                             size={10}
                                             placeholder='name'
-                                            onChange={e => setNameText(e.target.value)}
+                                            onChange={(e: {
+                                                target: {
+                                                    value: React.SetStateAction<string>
+                                                }
+                                            }) => setNameText(e.target.value)}
                                         />
                                         <Button
                                             className='button text-button'
-                                            onClick={e => {
+                                            onClick={() => {
                                                 if (nsText.length > 0 && nameText.length > 0) {
                                                     const tag = `${nsText}:${nameText}`
                                                     console.log(`${props.path}:${beforeText}<${tag}>${duringText}</${tag}>${afterText}`)
@@ -177,7 +201,13 @@ export const Text = (props: {
                                         readOnly={true}
                                         className='edit-text-editor text-insert'
                                         value={newText}
-                                        onSelect={e => {
+                                        onSelect={(e: {
+                                            target: {
+                                                value: any;
+                                                selectionStart: any;
+                                                selectionEnd: any
+                                            }
+                                        }) => {
                                             const value = e.target.value
                                             const start = e.target.selectionStart
                                             const end = e.target.selectionEnd
@@ -198,7 +228,7 @@ export const Text = (props: {
                                     <>
                                         <Button
                                             className='button x-button'
-                                            onClick={e => {
+                                            onClick={() => {
                                                 setMode('VIEW_MODE')
                                                 setChildrenOpen(false)
                                             }}
@@ -206,7 +236,7 @@ export const Text = (props: {
                                         />
                                         <Button
                                             className='button text-button'
-                                            onClick={e => {
+                                            onClick={() => {
                                                 setMode('INSERT_MODE')
                                             }}
                                             label='Insert Mode'
@@ -216,7 +246,7 @@ export const Text = (props: {
                                 editTextArea={() =>
                                     <span
                                         className='edit-text-show'
-                                        onClick={e => {
+                                        onClick={() => {
                                             setMode('EDIT_MODE')
                                         }}
                                     >
@@ -236,7 +266,7 @@ export const Text = (props: {
                         <Prefix path={props.path} />
                         <span
                             className='text-body'
-                            onClick={e => {
+                            onClick={() => {
                                 setChildrenOpen(true)
                             }}>
                             {escapeHtml(body)}
