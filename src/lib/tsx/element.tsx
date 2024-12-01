@@ -166,7 +166,6 @@ export const OpenTag = (props: {
                                     xmlModesContext.paths,
                                     props.path,
                                 )
-                                console.log(JSON.stringify(newPaths, null, 4))
                                 xmlModesContext.setPaths(newPaths)
                             }}
                         />
