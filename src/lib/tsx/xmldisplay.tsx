@@ -24,7 +24,7 @@ export const XMLDisplay = (props: {
         setMode: setMode,
     }
 
-    console.log(paths)
+    //console.log(paths)
 
     return (
         <XMLModesContext.Provider value={xmlModes}>

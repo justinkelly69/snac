@@ -1,29 +1,55 @@
-import React, { useContext, useState } from 'react'
-import { Button, TextInput } from './widgets'
+import React, {
+    useContext,
+    useState
+} from 'react'
+import {
+    Button,
+    TextInput,
+} from './widgets'
 import {
     SNACElement,
     SwitchStates,
-    XMLAttributesOpenCloseType,
+    XMLModesType,
     XMLRWType,
-    XMLTagOpenCloseType
+    XMLTagOpenCloseType,
 } from '../snac/types'
 import { snacOpts } from '../snac/opts'
 import { Prefix } from './prefix'
-import { Attributes, AttributesTable } from './attributes'
+import {
+    Attributes,
+    AttributesTable,
+} from './attributes'
+import {
+    Children
+} from './xmlout'
 import { attributeKeys } from '../snac/textutils'
-import { attributesGridStyle, EditBoxGridStyle } from '../snac/styles'
+import {
+    attributesGridStyle,
+    EditBoxGridStyle,
+} from '../snac/styles'
 import { ShowHideSwitch } from './showhide'
-import { XMLTagOpenCloseContext, XMLRWContext, XMLAttributesOpenCloseContext } from '../snac/contexts'
+import {
+    XMLRWContext,
+    XMLTagOpenCloseContext,
+    XMLAttributesOpenCloseContext,
+    XMLModesContext,
+} from '../snac/contexts'
+import { addPath, hasPath } from '../snac/paths'
 
 export const Tag = (props: {
     node: SNACElement,
     path: number[],
-    getChildren: Function,
 }): JSX.Element => {
+    const xmlModesContext = useContext(XMLModesContext) as XMLModesType
+    const xmlRWContext = useContext(XMLRWContext) as XMLRWType
 
-    const [isSelected, setSelected] = useState(false)
+    
+    //const [isSelected, setSelected] = useState(false)
     const [isAttributesOpen, setAttributesOpen] = useState(false)
     const [isChildrenOpen, setChildrenOpen] = useState(true)
+
+    const isSelected = hasPath(xmlModesContext.paths, props.path)
+
 
     let selectedClassName = 'element'
 
@@ -38,7 +64,7 @@ export const Tag = (props: {
     const xmlTagOpenCloseContext = {
         isEmpty: props.node.C.length === 0,
         isSelected: isSelected,
-        setSelected: setSelected,
+        //setSelected: setSelected,
         isAttributesOpen: isAttributesOpen,
         setAttributesOpen: setAttributesOpen,
         isChildrenOpen: isChildrenOpen,
@@ -55,14 +81,14 @@ export const Tag = (props: {
                 />
 
                 {isChildrenOpen ?
-                    props.getChildren(
-                        props.node.C,
-                        props.path,
-                    ) :
+                    <Children
+                        snac={props.node.C}
+                        path={props.path}
+                    /> :
                     snacOpts.xml_ellipsis
                 }
 
-                {!isEmpty && snacOpts.xml_showCloseTags ? (
+                {!isEmpty && (!xmlRWContext.treeMode || snacOpts.xml_showCloseTags) ? (
                     <CloseTag
                         node={props.node}
                         path={props.path}
@@ -80,6 +106,7 @@ export const OpenTag = (props: {
     path: number[],
 }): JSX.Element => {
 
+    const xmlModesContext = useContext(XMLModesContext) as XMLModesType
     const xmlRWContext = useContext(XMLRWContext) as XMLRWType
     const openCloseContext = useContext(XMLTagOpenCloseContext) as XMLTagOpenCloseType
 
@@ -130,11 +157,18 @@ export const OpenTag = (props: {
                             path={props.path}
                             selected={selectState}
                             chars={snacOpts.switch_selectChars}
-                            openClose={() =>
-                                openCloseContext.setSelected(
-                                    !openCloseContext.isSelected
+                            openClose={() => {
+                                const newPaths = addPath(
+                                    xmlModesContext.paths,
+                                    props.path,
                                 )
-                            }
+                                console.log(JSON.stringify(newPaths, null, 4))
+                                xmlModesContext.setPaths(newPaths)
+                            }}
+                                // openCloseContext.setSelected(
+                                //     !openCloseContext.isSelected
+                                // )
+                            
                         />
 
                         <Prefix
@@ -242,11 +276,12 @@ export const CloseTag = (props: {
                             path={props.path}
                             selected={selectState}
                             chars={snacOpts.switch_selectChars}
-                            openClose={() =>
-                                openCloseContext.setSelected(
-                                    !openCloseContext.isSelected
-                                )
-                            }
+                            // openClose={() =>
+                            //     openCloseContext.setSelected(
+                            //         !openCloseContext.isSelected
+                            //     )
+                            // }
+                            openClose={f=>f}
                         />
                         <Prefix path={props.path} />
                         <ShowHideSwitch

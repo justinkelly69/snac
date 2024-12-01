@@ -6,6 +6,7 @@ import {
     SNACText,
     SwitchModes,
     SwitchStates,
+    XMLModesType,
     XMLRWType
 } from '../snac/types'
 import { Prefix } from './prefix'
@@ -21,17 +22,20 @@ import {
     trimBody
 } from '../snac/textutils'
 import { ShowHideSwitch } from './showhide'
-import { XMLRWContext } from '../snac/contexts'
+import { XMLModesContext, XMLRWContext } from '../snac/contexts'
 import { XmlShow } from './xmlshow'
+import { addPath, hasPath } from '../snac/paths'
 
 export const Text = (props: {
     node: SNACText,
     path: number[],
 }): JSX.Element => {
 
+    const xmlModesContext = useContext(XMLModesContext) as XMLModesType
+
     const xmlRWContext = useContext(XMLRWContext) as XMLRWType
 
-    const [isSelected, setSelected] = useState(false)
+    //const [isSelected, setSelected] = useState()
     const [isChildrenOpen, setChildrenOpen] = useState(false)
 
     const [mode, setMode] = useState<SwitchModes>('VIEW_MODE') // VIEW_MODE, EDIT_MODE, INSERT_MODE
@@ -49,7 +53,9 @@ export const Text = (props: {
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'text'
 
-    if (xmlRWContext.treeMode) {
+    const isSelected = hasPath(xmlModesContext.paths, props.path)
+
+    //if (xmlRWContext.treeMode) {
         selectState = isSelected ?
             SwitchStates.ON :
             SwitchStates.OFF
@@ -57,7 +63,7 @@ export const Text = (props: {
         selectedClassName = isSelected ?
             'text selected' :
             'text'
-    }
+    //}
 
     const body = trimBody(
         isChildrenOpen,
@@ -261,7 +267,14 @@ export const Text = (props: {
                             path={props.path}
                             selected={selectState}
                             chars={snacOpts.switch_selectChars}
-                            openClose={() => setSelected(!isSelected)}
+                            openClose={() => {
+                                const newPaths = addPath(
+                                    xmlModesContext.paths,
+                                    props.path,
+                                )
+                                console.log(JSON.stringify(newPaths, null, 4))
+                                xmlModesContext.setPaths(newPaths)
+                            }}
                         />
                         <Prefix path={props.path} />
                         <span
@@ -280,7 +293,7 @@ export const Text = (props: {
         return (
             <XmlShow
                 path={props.path}
-                className='text'>
+                className={selectedClassName}>
                 {props.node.T.trim().length > 0 ?
                     <>
                         {escapeHtml(props.node.T.trim())}

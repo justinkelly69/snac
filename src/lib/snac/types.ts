@@ -19,7 +19,7 @@ export type XMLModesType = {
 export type XMLTagOpenCloseType = {
     isEmpty: boolean,
     isSelected: boolean,
-    setSelected: Function,
+    //setSelected: Function,
     isAttributesOpen: boolean,
     setAttributesOpen: Function,
     isChildrenOpen: boolean,

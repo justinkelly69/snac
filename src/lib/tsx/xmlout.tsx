@@ -29,16 +29,14 @@ export const XMLOut = (props: {
             <Children
                 snac={props.snac}
                 path={[]}
-                treeMode={props.treeMode}
             />
         </XMLRWContext.Provider>
     )
 }
 
-const Children = (props: {
+export const Children = (props: {
     snac: SNACItem[],
     path: number[],
-    treeMode: boolean,
 }): JSX.Element => {
 
     return (
@@ -52,11 +50,6 @@ const Children = (props: {
                             <Tag
                                 node={props.snac[i] as SNACElement}
                                 path={newPath}
-                                getChildren={() => Children({
-                                    ...props,
-                                    path: newPath,
-                                    snac: (props.snac[i] as SNACElement).C,
-                                })}
                             />
                         }
                         {s.hasOwnProperty("T") &&

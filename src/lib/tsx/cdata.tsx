@@ -1,12 +1,13 @@
 import React, { useContext, useState } from 'react'
-import { SNACCDATA, SwitchStates, XMLRWType, XMLTagOpenCloseType } from '../snac/types'
+import { SNACCDATA, SwitchStates, XMLModesType, XMLRWType, XMLTagOpenCloseType } from '../snac/types'
 import { Prefix } from './prefix'
 import { Button, EditTextBox, TextArea } from './widgets'
 import { escapeCDATA, trimBody } from '../snac/textutils'
 import { snacOpts } from '../snac/opts'
 import { ShowHideSwitch } from './showhide'
-import { XMLRWContext } from '../snac/contexts'
+import { XMLModesContext, XMLRWContext } from '../snac/contexts'
 import { XmlShow } from './xmlshow'
+import { addPath, hasPath } from '../snac/paths'
 
 export const CDATA = (props: {
     node: SNACCDATA,
@@ -14,26 +15,27 @@ export const CDATA = (props: {
 }): JSX.Element => {
 
     const xmlRWContext = useContext(XMLRWContext) as XMLRWType
-    
-    const [isSelected, setSelected] = useState(false)
+    const xmlModesContext = useContext(XMLModesContext) as XMLModesType
+
     const [isChildrenOpen, setChildrenOpen] = useState(false)
     const [isEditable, setIsEditable] = useState(false)
 
     const [newCDATA, setNewCDATA] = useState(props.node.D)
     const [prevCDATA, setPrevCDATA] = useState(props.node.D)
 
+    const isSelected = hasPath(xmlModesContext.paths, props.path)
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'cdata'
 
-    if (xmlRWContext.treeMode) {
-        selectState = isSelected ?
-            SwitchStates.ON :
-            SwitchStates.OFF
+    //if (xmlRWContext.treeMode) {
+    selectState = isSelected ?
+        SwitchStates.ON :
+        SwitchStates.OFF
 
-        selectedClassName = isSelected ?
-            'cdata selected' :
-            'cdata'
-    }
+    selectedClassName = isSelected ?
+        'cdata selected' :
+        'cdata'
+    //}
 
     const cdata = trimBody(
         isChildrenOpen,
@@ -141,7 +143,14 @@ export const CDATA = (props: {
                             path={props.path}
                             selected={selectState}
                             chars={snacOpts.switch_selectChars}
-                            openClose={() => setSelected(!isSelected)}
+                            openClose={() => {
+                                const newPaths = addPath(
+                                    xmlModesContext.paths,
+                                    props.path,
+                                )
+                                console.log(JSON.stringify(newPaths, null, 4))
+                                xmlModesContext.setPaths(newPaths)
+                            }}
                         />
                         <Prefix path={props.path} />
                         {' '}
@@ -164,7 +173,8 @@ export const CDATA = (props: {
         return (
             <XmlShow
                 path={props.path}
-                className='cdata'>
+                className={selectedClassName}
+            >
                 <CDATAOpenBracket /><br />
                 {props.node.D.trim()}<br />
                 <CDATACloseBracket />

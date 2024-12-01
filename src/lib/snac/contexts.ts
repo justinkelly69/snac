@@ -27,7 +27,7 @@ export const XMLTagOpenCloseContext =
     React.createContext<XMLTagOpenCloseType>({
         isEmpty: false,
         isSelected: false,
-        setSelected: (f: any) => f,
+        //setSelected: (f: any) => f,
         isAttributesOpen: false,
         setAttributesOpen: (f: any) => f,
         isChildrenOpen: false,

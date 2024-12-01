@@ -1,12 +1,13 @@
 import React, { useContext, useState } from 'react'
-import { SNACComment, SwitchStates, XMLRWType, XMLTagOpenCloseType } from '../snac/types'
+import { SNACComment, SwitchStates, XMLModesType, XMLRWType, XMLTagOpenCloseType } from '../snac/types'
 import { Button, EditTextBox, TextArea } from './widgets'
 import { Prefix } from './prefix'
 import { escapeComment, trimBody } from '../snac/textutils'
 import { snacOpts } from '../snac/opts'
 import { ShowHideSwitch } from './showhide'
-import { XMLRWContext } from '../snac/contexts'
+import { XMLModesContext, XMLRWContext } from '../snac/contexts'
 import { XmlShow } from './xmlshow'
+import { addPath, hasPath } from '../snac/paths'
 
 export const Comment = (props: {
     node: SNACComment,
@@ -14,26 +15,27 @@ export const Comment = (props: {
 }): JSX.Element | null => {
 
     const xmlRWContext = useContext(XMLRWContext) as XMLRWType
-    
-    const [isSelected, setSelected] = useState(false)
+    const xmlModesContext = useContext(XMLModesContext) as XMLModesType
+
     const [isChildrenOpen, setChildrenOpen] = useState(false)
     const [isEditable, setIsEditable] = useState(false)
 
     const [newComment, setNewComment] = useState(props.node.M)
     const [prevComment, setPrevComment] = useState(props.node.M)
 
+    const isSelected = hasPath(xmlModesContext.paths, props.path)
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'comment'
 
-    if (xmlRWContext.treeMode) {
-        selectState = isSelected ?
-            SwitchStates.ON :
-            SwitchStates.OFF
+    //if (xmlRWContext.treeMode) {
+    selectState = isSelected ?
+        SwitchStates.ON :
+        SwitchStates.OFF
 
-        selectedClassName = isSelected ?
-            'comment selected' :
-            'comment'
-    }
+    selectedClassName = isSelected ?
+        'comment selected' :
+        'comment'
+    //}
 
     const comment = trimBody(
         isChildrenOpen,
@@ -133,7 +135,14 @@ export const Comment = (props: {
                             path={props.path}
                             selected={selectState}
                             chars={snacOpts.switch_selectChars}
-                            openClose={() => setSelected(!isSelected)}
+                            openClose={() => {
+                                const newPaths = addPath(
+                                    xmlModesContext.paths,
+                                    props.path,
+                                )
+                                console.log(JSON.stringify(newPaths, null, 4))
+                                xmlModesContext.setPaths(newPaths)
+                            }}
                         />
                         <Prefix path={props.path} />
                         {' '}
@@ -158,7 +167,8 @@ export const Comment = (props: {
         return (
             <XmlShow
                 path={props.path}
-                className='comment'>
+                className={selectedClassName}
+            >
                 <CommentOpenBracket /><br />
                 {props.node.M.trim()}<br />
                 <CommentCloseBracket />

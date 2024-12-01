@@ -1,12 +1,13 @@
 import React, { useContext, useState } from 'react'
-import { SNACPINode, SwitchStates, XMLRWType, XMLTagOpenCloseType } from "../snac/types"
+import { SNACPINode, SwitchStates, XMLModesType, XMLRWType, XMLTagOpenCloseType } from "../snac/types"
 import { Prefix } from './prefix'
 import { Button, DropDownList, TextArea, EditTextBox } from './widgets'
 import { escapePIBody, trimBody } from '../snac/textutils'
 import { snacOpts } from '../snac/opts'
 import { ShowHideSwitch } from './showhide'
-import { XMLRWContext } from '../snac/contexts'
+import { XMLModesContext, XMLRWContext } from '../snac/contexts'
 import { XmlShow } from './xmlshow'
+import { addPath, hasPath } from '../snac/paths'
 
 export const PI = (props: {
     node: SNACPINode,
@@ -14,8 +15,8 @@ export const PI = (props: {
 }): JSX.Element | null => {
 
     const xmlRWContext = useContext(XMLRWContext) as XMLRWType
-    
-    const [isSelected, setSelected] = useState(false)
+    const xmlModesContext = useContext(XMLModesContext) as XMLModesType
+
     const [isChildrenOpen, setChildrenOpen] = useState(false)
     const [isEditable, setIsEditable] = useState(false)
 
@@ -24,18 +25,19 @@ export const PI = (props: {
     const [prevPILang, setPrevPILang] = useState(props.node.L)
     const [prevPIBody, setPrevPIBody] = useState(props.node.B)
 
+    const isSelected = hasPath(xmlModesContext.paths, props.path)
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'pi'
 
-    if (xmlRWContext.treeMode) {
-        selectState = isSelected ?
-            SwitchStates.ON :
-            SwitchStates.OFF
+    //if (xmlRWContext.treeMode) {
+    selectState = isSelected ?
+        SwitchStates.ON :
+        SwitchStates.OFF
 
-        selectedClassName = isSelected ?
-            'pi selected' :
-            'pi'
-    }
+    selectedClassName = isSelected ?
+        'pi selected' :
+        'pi'
+    //}
 
     const body = trimBody(
         isChildrenOpen,
@@ -164,7 +166,14 @@ export const PI = (props: {
                             path={props.path}
                             selected={selectState}
                             chars={snacOpts.switch_selectChars}
-                            openClose={() => setSelected(!isSelected)}
+                            openClose={() => {
+                                const newPaths = addPath(
+                                    xmlModesContext.paths,
+                                    props.path,
+                                )
+                                console.log(JSON.stringify(newPaths, null, 4))
+                                xmlModesContext.setPaths(newPaths)
+                            }}
                         />
                         <Prefix path={props.path} />
                         <PIOpenBracket />
@@ -189,13 +198,15 @@ export const PI = (props: {
         return (
             <XmlShow
                 path={props.path}
-                className='comment'>
+                className={selectedClassName}
+            >
                 <PIOpenBracket />
                 <span className='pi-lang'>
                     {props.node.L}
                 </span>
                 {" "}
-                {props.node.B.trim()}<br />
+                {props.node.B.trim()}
+                <br />
                 <PICloseBracket />
             </XmlShow>
         )
