@@ -65,30 +65,37 @@
   grid-row: 1;
 }
 
-.xml-display-controls {
-  grid-column: 1 / 3;
+.xml-display-controls-left {
+  grid-column: 1;
   grid-row: 2;
 }
 
-.xml-display-tree {
+.xml-display-controls-right {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.xml-display-body-left {
   grid-column: 1;
   grid-row: 3;
-  overflow: scroll;
-  border: 2px solid lightgray;
-  margin: .4em;
-  background-color: antiquewhite;
+}
+
+.xml-display-body-right {
+  grid-column: 2;
+  grid-row: 3;
+}
+
+.xml-controls-area {
+  border: 1px solid grey;
+  background-color: skyblue;
   text-align: left;
 }
 
-.xml-display-xml {
-  grid-column: 2;
-  grid-row: 3;
+.xml-body-area {
   overflow: scroll;
-  border: 2px solid lightgray;
-  margin: .4em;
+  border: 1px solid grey;
   background-color: antiquewhite;
   text-align: left;
-
 }
 
 

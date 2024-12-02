@@ -6,6 +6,7 @@ import {
     XMLRWType,
     XMLTagOpenCloseType
 } from "./types";
+import { addPath } from "./paths";
 
 export const XMLRWContext =
     React.createContext<XMLRWType>({
@@ -52,3 +53,15 @@ export const XMLAttributesOpenCloseContext =
         numRows: 0,
         setNumRows: (f: any) => f,
     })
+
+export const insertPath = (
+    xmlModesContext: XMLModesType,
+    path: number[],
+) => {
+    const newPaths = addPath(
+        xmlModesContext.paths,
+        path,
+    )
+    xmlModesContext.setPaths(newPaths)
+    xmlModesContext.setMode('SELECT_MODE')
+}

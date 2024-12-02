@@ -25,24 +25,34 @@ export const XMLDisplay = (props: {
     }
 
     //console.log(paths)
+    console.log(xmlModes.mode)
 
     return (
         <XMLModesContext.Provider value={xmlModes}>
             <div className="xml-display">
                 <div className="xml-display-top-bar"></div>
-                <div className="xml-display-controls"></div>
-                <div className="xml-display-tree">
-                    <XMLOut
-                        snac={props.snac}
-                        treeMode={true}
-                    />
-                </div>
-                <div className="xml-display-xml">
+                <XMLOut
+                    snac={props.snac}
+                    treeMode={true}
+                    isSelected={false}
+                    side='left'
+                />
+                {xmlModes.mode === 'VIEW_MODE' &&
                     <XMLOut
                         snac={props.snac}
                         treeMode={false}
+                        isSelected={true}
+                        side='right'
                     />
-                </div>
+                }
+                {xmlModes.mode === 'SELECT_MODE' &&
+                    <XMLOut
+                        snac={props.snac}
+                        treeMode={false}
+                        isSelected={false}
+                        side='right'
+                    />
+                }
             </div>
         </XMLModesContext.Provider>
     )

@@ -22,9 +22,13 @@ import {
     trimBody
 } from '../snac/textutils'
 import { ShowHideSwitch } from './showhide'
-import { XMLModesContext, XMLRWContext } from '../snac/contexts'
+import {
+    insertPath,
+    XMLModesContext,
+    XMLRWContext
+} from '../snac/contexts'
 import { XmlShow } from './xmlshow'
-import { addPath, hasPath } from '../snac/paths'
+import { hasPath } from '../snac/paths'
 
 export const Text = (props: {
     node: SNACText,
@@ -265,13 +269,10 @@ export const Text = (props: {
                             path={props.path}
                             selected={selectState}
                             chars={snacOpts.switch_selectChars}
-                            openClose={() => {
-                                const newPaths = addPath(
-                                    xmlModesContext.paths,
-                                    props.path,
-                                )
-                                xmlModesContext.setPaths(newPaths)
-                            }}
+                            openClose={() => insertPath(
+                                xmlModesContext,
+                                props.path,
+                            )}
                         />
                         <Prefix path={props.path} />
                         <span

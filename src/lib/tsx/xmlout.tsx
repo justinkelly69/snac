@@ -18,6 +18,8 @@ import { XMLRWContext } from "../snac/contexts"
 export const XMLOut = (props: {
     snac: SNACItem[],
     treeMode: boolean,
+    isSelected: boolean,
+    side: string,
 }): JSX.Element => {
 
     const xmlRWValue = {
@@ -26,11 +28,16 @@ export const XMLOut = (props: {
 
     return (
         <XMLRWContext.Provider value={xmlRWValue}>
+            <div className={`xml-display-controls-${props.side} xml-controls-area`}>
+                
+            </div>
+            <div className={`xml-display-body-${props.side} xml-body-area`}>
             <Children
                 snac={props.snac}
                 path={[]}
-                isSelected={false}
+                isSelected={props.isSelected}
             />
+            </div>
         </XMLRWContext.Provider>
     )
 }

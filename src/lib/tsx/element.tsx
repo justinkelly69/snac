@@ -33,8 +33,9 @@ import {
     XMLTagOpenCloseContext,
     XMLAttributesOpenCloseContext,
     XMLModesContext,
+    insertPath,
 } from '../snac/contexts'
-import { addPath, hasPath } from '../snac/paths'
+import { hasPath } from '../snac/paths'
 
 export const Element = (props: {
     node: SNACElement,
@@ -161,13 +162,10 @@ export const OpenTag = (props: {
                             path={props.path}
                             selected={selectState}
                             chars={snacOpts.switch_selectChars}
-                            openClose={() => {
-                                const newPaths = addPath(
-                                    xmlModesContext.paths,
-                                    props.path,
-                                )
-                                xmlModesContext.setPaths(newPaths)
-                            }}
+                            openClose={() => insertPath(
+                                xmlModesContext,
+                                props.path,
+                            )}
                         />
 
                         <Prefix
