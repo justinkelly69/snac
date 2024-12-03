@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { SNACCDATA, XMLModesType } from '../snac/types'
-import { Button, TextArea } from './widgets'
+import { Button, TextArea, XButton } from './widgets'
 import { escapeCDATA } from '../snac/textutils'
 import { XMLModesContext } from '../snac/contexts'
 import { CDATACloseBracket, CDATAOpenBracket } from './brackets'
@@ -21,13 +21,7 @@ export const CDATAEdit = (props: {
         return (
             <>
                 <div className={`xml-display-controls-right xml-controls-area`}>
-                    <Button
-                        className='button x-button'
-                        onClick={() => {
-                            xmlModesContext.setMode('VIEW_MODE')
-                        }}
-                        label='X'
-                    />
+                    <XButton xmlModesContext={xmlModesContext} />
                     <CDATAOpenBracket />
                     <Button
                         className='button text-button'
@@ -67,13 +61,7 @@ export const CDATAEdit = (props: {
         return (
             <>
                 <div className={`xml-display-controls-right xml-controls-area`}>
-                    <Button
-                        className='button x-button'
-                        onClick={() => {
-                            xmlModesContext.setMode('VIEW_MODE')
-                        }}
-                        label='X'
-                    />
+                    <XButton xmlModesContext={xmlModesContext} />
                     <CDATAOpenBracket />
                     <CDATACloseBracket />
                 </div>

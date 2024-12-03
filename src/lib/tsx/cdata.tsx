@@ -29,7 +29,7 @@ export const CDATA = (props: {
             SwitchStates.ON :
             SwitchStates.OFF
 
-        selectedClassName = isSelected ?
+        selectedClassName = isSelected && xmlModesContext.paths.length > 0 ?
             'cdata selected' :
             'cdata'
     }

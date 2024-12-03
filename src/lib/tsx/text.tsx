@@ -29,7 +29,7 @@ export const Text = (props: {
             SwitchStates.ON :
             SwitchStates.OFF
 
-        selectedClassName = isSelected ?
+        selectedClassName = isSelected && xmlModesContext.paths.length > 0 ?
             'text selected' :
             'text'
     }

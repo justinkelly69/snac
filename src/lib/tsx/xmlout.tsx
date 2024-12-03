@@ -1,7 +1,7 @@
 import React from "react"
 import { SNACItem } from '../snac/types'
 import { XMLRWContext } from "../snac/contexts"
-import { Children } from './children'
+import { Kids } from './kids'
 
 export const XMLOut = (props: {
     snac: SNACItem[],
@@ -20,7 +20,7 @@ export const XMLOut = (props: {
             <h1>XML Out</h1>
             </div>
             <div className={`xml-display-body-${props.side} xml-body-area`}>
-                <Children
+                <Kids
                     snac={props.snac}
                     path={[]}
                     isSelected={props.isSelected}

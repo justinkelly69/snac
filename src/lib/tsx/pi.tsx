@@ -30,7 +30,7 @@ export const PI = (props: {
             SwitchStates.ON :
             SwitchStates.OFF
 
-        selectedClassName = isSelected ?
+        selectedClassName = isSelected && xmlModesContext.paths.length > 0 ?
             'pi selected' :
             'pi'
     }

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { SNACPINode, XMLModesType } from "../snac/types"
-import { Button, DropDownList, TextArea } from './widgets'
+import { Button, DropDownList, TextArea, XButton } from './widgets'
 import { escapePIBody } from '../snac/textutils'
 import { snacOpts } from '../snac/opts'
 import { XMLModesContext } from '../snac/contexts'
@@ -24,13 +24,7 @@ export const PIEdit = (props: {
         return (
             <>
                 <div className={`xml-display-controls-right xml-controls-area`}>
-                    <Button
-                        className='button x-button'
-                        onClick={() => {
-                            xmlModesContext.setMode('VIEW_MODE')
-                        }}
-                        label='X'
-                    />
+                    <XButton xmlModesContext={xmlModesContext} />
                     <PIOpenBracket />
                     <DropDownList
                         className='pi-drop-down'
@@ -78,13 +72,7 @@ export const PIEdit = (props: {
         return (
             <>
                 <div className={`xml-display-controls-right xml-controls-area`}>
-                    <Button
-                        className='button x-button'
-                        onClick={() => {
-                            xmlModesContext.setMode('VIEW_MODE')
-                        }}
-                        label='X'
-                    />
+                    <XButton xmlModesContext={xmlModesContext} />
                     <PIOpenBracket />
                     <span className='pi-lang'>
                         {newPILang}

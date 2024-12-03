@@ -7,7 +7,7 @@ import {
 import { snacOpts } from '../snac/opts'
 import { Prefix } from './prefix'
 import { Attributes, AttributesTable } from './attributes'
-import { Children } from './children'
+import { Kids } from './kids'
 import { attributeKeys } from '../snac/textutils'
 import { attributesGridStyle, EditBoxGridStyle } from '../snac/styles'
 import { ShowHideSwitch } from './showhide'
@@ -33,7 +33,7 @@ export const Element = (props: {
 
     let selectedClassName = 'element'
 
-    if (xmlRWContext.treeMode && snacOpts.xml_showSelected) {
+    if (xmlRWContext.treeMode && snacOpts.xml_showSelected && xmlModesContext.paths.length > 0) {
         selectedClassName = isSelected ?
             'element selected' :
             'element'
@@ -65,7 +65,7 @@ export const Element = (props: {
                 }
 
                 {isChildrenOpen ?
-                    <Children
+                    <Kids
                         snac={props.node.C}
                         path={props.path}
                         isSelected={isSelected}

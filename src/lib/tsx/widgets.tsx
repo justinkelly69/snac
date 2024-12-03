@@ -1,5 +1,7 @@
 import React from 'react'
 import { EditBoxGridStyle } from '../snac/styles'
+import { clearPaths } from '../snac/contexts'
+import { XMLModesType } from '../snac/types'
 
 export const Button = props =>
     <button
@@ -106,7 +108,7 @@ export const EditTextBox = (props: {
     )
 }
 
-export const NSNameEdit = (props:{
+export const NSNameEdit = (props: {
     id: string,
     ns: string,
     name: string,
@@ -144,3 +146,16 @@ export const NSNameEdit = (props:{
     )
 }
 
+export const XButton = (props: {
+    xmlModesContext: XMLModesType,
+}) => {
+    return (
+        <Button
+            className='button x-button'
+            onClick={() => {
+                clearPaths(props.xmlModesContext)
+            }}
+            label='X'
+        />
+    )
+}

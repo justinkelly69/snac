@@ -29,7 +29,6 @@ export const XMLTagOpenCloseContext =
     React.createContext<XMLTagOpenCloseType>({
         isEmpty: false,
         isSelected: false,
-        //setSelected: (f: any) => f,
         isAttributesOpen: false,
         setAttributesOpen: (f: any) => f,
         isChildrenOpen: false,
@@ -65,4 +64,11 @@ export const insertPath = (
     )
     xmlModesContext.setPaths(newPaths)
     xmlModesContext.setMode('SELECT_MODE')
+}
+
+export const clearPaths = (
+    xmlModesContext: XMLModesType,
+) => {
+    xmlModesContext.setPaths([])
+    xmlModesContext.setMode('VIEW_MODE')
 }

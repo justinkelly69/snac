@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { SNACText, XMLModesType } from '../snac/types'
-import { Button, DropDownList, TextArea, TextInput } from './widgets'
+import { Button, DropDownList, TextArea, TextInput, XButton } from './widgets'
 import { snacOpts } from '../snac/opts'
 import { escapeHtml } from '../snac/textutils'
 import { XMLModesContext } from '../snac/contexts'
@@ -8,6 +8,7 @@ import {
     CDATACloseBracket, CDATAOpenBracket, CommentCloseBracket,
     CommentOpenBracket, PICloseBracket, PIOpenBracket
 } from './brackets'
+import { clearPaths } from '../snac/contexts'
 
 export const TextEdit = (props: {
     node: SNACText,
@@ -53,13 +54,7 @@ export const TextEdit = (props: {
             {textMode === 'VIEW_MODE' &&
                 <>
                     <div className={`xml-display-controls-right xml-controls-area`}>
-                        <Button
-                            className='button x-button'
-                            onClick={() => {
-                                xmlModesContext.setMode('VIEW_MODE')
-                            }}
-                            label='X'
-                        />
+                        <XButton xmlModesContext={xmlModesContext} />
                         <Button
                             className='button text-button'
                             onClick={() => {
@@ -83,13 +78,7 @@ export const TextEdit = (props: {
             {textMode === 'EDIT_MODE' &&
                 <>
                     <div className={`xml-display-controls-right xml-controls-area`}>
-                        <Button
-                            className='button x-button'
-                            onClick={() => {
-                                xmlModesContext.setMode('VIEW_MODE')
-                            }}
-                            label='X'
-                        />
+                        <XButton xmlModesContext={xmlModesContext} />
                         <Button
                             className='button text-button'
                             onClick={() => {
@@ -125,13 +114,7 @@ export const TextEdit = (props: {
             {textMode === 'INSERT_MODE' &&
                 <>
                     <div className={`xml-display-controls-right xml-controls-area`}>
-                        <Button
-                            className='button x-button'
-                            onClick={() => {
-                                xmlModesContext.setMode('VIEW_MODE')
-                            }}
-                            label='X'
-                        />
+                        <XButton xmlModesContext={xmlModesContext} />
                         <Button
                             className='button text-button'
                             onClick={() => {
@@ -171,13 +154,7 @@ export const TextEdit = (props: {
                     <div className={`xml-display-controls-right xml-controls-area`}>
                         {textMode === 'INSERT_TAG_MODE' &&
                             <>
-                                <Button
-                                    className='button x-button'
-                                    onClick={() => {
-                                        xmlModesContext.setMode('VIEW_MODE')
-                                    }}
-                                    label='X'
-                                />
+                                <XButton xmlModesContext={xmlModesContext} />
                                 <TextInput
                                     name="ns"
                                     className='text-input ns-input'
@@ -216,13 +193,7 @@ export const TextEdit = (props: {
                         }
                         {textMode === 'INSERT_MODE' &&
                             <>
-                                <Button
-                                    className='button x-button'
-                                    onClick={() => {
-                                        xmlModesContext.setMode('VIEW_MODE')
-                                    }}
-                                    label='X'
-                                />
+                                <XButton xmlModesContext={xmlModesContext} />
                                 <Button
                                     className='button text-button'
                                     onClick={() => {
@@ -262,13 +233,7 @@ export const TextEdit = (props: {
                         }
                         {textMode === 'INSERT_CDATA_MODE' &&
                             <>
-                                <Button
-                                    className='button x-button'
-                                    onClick={() => {
-                                        xmlModesContext.setMode('VIEW_MODE')
-                                    }}
-                                    label='X'
-                                />
+                                <XButton xmlModesContext={xmlModesContext} />
                                 <CDATAOpenBracket />
                                 <Button
                                     className='button text-button'
@@ -289,13 +254,7 @@ export const TextEdit = (props: {
                         }
                         {textMode === 'INSERT_COMMENT_MODE' &&
                             <>
-                                <Button
-                                    className='button x-button'
-                                    onClick={() => {
-                                        xmlModesContext.setMode('VIEW_MODE')
-                                    }}
-                                    label='X'
-                                />
+                                <XButton xmlModesContext={xmlModesContext} />
                                 <CommentOpenBracket />
                                 <Button
                                     className='button text-button'
@@ -316,13 +275,7 @@ export const TextEdit = (props: {
                         }
                         {textMode === 'INSERT_PI_MODE' &&
                             <>
-                                <Button
-                                    className='button x-button'
-                                    onClick={() => {
-                                        xmlModesContext.setMode('VIEW_MODE')
-                                    }}
-                                    label='X'
-                                />
+                                <XButton xmlModesContext={xmlModesContext} />
                                 <PIOpenBracket />
                                 <DropDownList
                                     className='pi-drop-down'

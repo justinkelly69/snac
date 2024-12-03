@@ -9,7 +9,7 @@ import { CDATA } from './cdata'
 import { Comment } from './comment'
 import { PI } from './pi'
 
-export const Children = (props: {
+export const Kids = (props: {
     snac: SNACItem[],
     path: number[],
     isSelected: boolean,

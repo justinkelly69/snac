@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { SNACComment, XMLModesType } from '../snac/types'
-import { Button, TextArea } from './widgets'
+import { Button, TextArea, XButton } from './widgets'
 import { escapeComment } from '../snac/textutils'
 import { XMLModesContext } from '../snac/contexts'
 import { CommentCloseBracket, CommentOpenBracket } from './brackets'
@@ -22,13 +22,7 @@ export const CommentEdit = (props: {
         return (
             <>
                 <div className={`xml-display-controls-right xml-controls-area`}>
-                    <Button
-                        className='button x-button'
-                        onClick={() => {
-                            xmlModesContext.setMode('VIEW_MODE')
-                        }}
-                        label='X'
-                    />
+                    <XButton xmlModesContext={xmlModesContext} />
                     <CommentOpenBracket />
                     <>
                         <Button
@@ -70,13 +64,7 @@ export const CommentEdit = (props: {
         return (
             <>
                 <div className={`xml-display-controls-right xml-controls-area`}>
-                    <Button
-                        className='button x-button'
-                        onClick={() => {
-                            xmlModesContext.setMode('VIEW_MODE')
-                        }}
-                        label='X'
-                    />
+                    <XButton xmlModesContext={xmlModesContext} />
                     <CommentOpenBracket />
                     <CommentCloseBracket />
                 </div>
