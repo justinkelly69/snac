@@ -25,6 +25,8 @@ export const TextInput = props =>
 
 export const TextArea = props =>
     <textarea
+        id={props.id}
+        name={props.name}
         ref={props.ref}
         readOnly={props.readOnly}
         className={props.className}
@@ -33,7 +35,7 @@ export const TextArea = props =>
         onSelect={props.onSelect}
     />
 
-export const DropDownList = props => {    
+export const DropDownList = props => {
     return (
         <select
             ref={props.ref}
@@ -56,11 +58,11 @@ export const TextEditTextBox = (props: {
 }) => {
     return (
         <div className='text-edit-box'
-        style={
-            EditBoxGridStyle({
-                pathWidth: props.path.length * props.widthMultiplier,
-            })
-        }>
+            style={
+                EditBoxGridStyle({
+                    pathWidth: props.path.length * props.widthMultiplier,
+                })
+            }>
             <span className='edit-prefix'></span>
             <span className='edit-button-bar'>
                 {props.editButtonBar()}
@@ -82,11 +84,11 @@ export const EditTextBox = (props: {
 }) => {
     return (
         <div className='edit-box'
-        style={
-            EditBoxGridStyle({
-                pathWidth: props.path.length * props.widthMultiplier,
-            })
-        }>
+            style={
+                EditBoxGridStyle({
+                    pathWidth: props.path.length * props.widthMultiplier,
+                })
+            }>
             <span className='edit-prefix'></span>
             <span className='edit-top-bar'>
                 {props.editTopBar()}
@@ -104,4 +106,41 @@ export const EditTextBox = (props: {
     )
 }
 
+export const NSNameEdit = (props:{
+    id: string,
+    ns: string,
+    name: string,
+    setNS: Function,
+    setName: Function,
+    nsSize: number,
+    nameSize: number,
+}) => {
+    return (
+        <>
+            <span>
+                <TextInput
+                    id={`${props.id}-ns`}
+                    name={`${props.id}-ns`}
+                    className='text-input ns-input'
+                    value={props.ns}
+                    size={props.nsSize}
+                    placeholder='ns'
+                    onChange={() => props.setNS()}
+                />
+                :
+            </span>
+            <span>
+                <TextInput
+                    id={`${props.id}-name`}
+                    name={`${props.id}-name`}
+                    className='text-input name-input'
+                    value={props.name}
+                    size={props.nameSize}
+                    placeholder='name'
+                    onChange={() => props.setName()}
+                />
+            </span>
+        </>
+    )
+}
 

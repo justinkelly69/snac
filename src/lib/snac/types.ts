@@ -1,13 +1,16 @@
 //import React from 'react'
 
 export enum SwitchStates { 'ON', 'OFF', 'HIDDEN' }
-export type SwitchModes = 'VIEW_MODE' | 'EDIT_MODE' | 'SELECT_MODE' | 'INSERT_MODE' | 'LIST_MODE'
+export type SwitchModes = 'VIEW_MODE' | 'EDIT_MODE' | 'SELECT_MODE' | 'INSERT_MODE' | 'LIST_MODE' |
+    'TEXT_EDIT_MODE' | 'CDATA_EDIT_MODE' | 'COMMENT_EDIT_MODE' | 'PI_EDIT_MODE'
 
 export type XMLRWType = {
     treeMode: boolean
 }
 
 export type XMLModesType = {
+    node?: SNACItem,
+    setNode: Function,
     path: number[],
     setPath: Function,
     paths: number[][],
@@ -216,7 +219,7 @@ export type SNACNamesNode = {
     N: string,
 }
 
-export interface SNACElement {
+export type SNACElement = {
     X?: NamespaceType,
     S: string,
     N: string,
@@ -224,19 +227,19 @@ export interface SNACElement {
     C: SNACItem[],
 }
 
-export interface SNACText {
+export type SNACText = {
     T: string,
 }
 
-export interface SNACCDATA {
+export type SNACCDATA = {
     D: string,
 }
 
-export interface SNACComment {
+export type SNACComment = {
     M: string,
 }
 
-export interface SNACPINode {
+export type SNACPINode = {
     L: string,
     B: string,
 }

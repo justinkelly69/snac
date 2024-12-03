@@ -4,7 +4,7 @@ import {
     XMLAttributesTableType,
     XMLModesType,
     XMLRWType,
-    XMLTagOpenCloseType
+    XMLTagOpenCloseType,
 } from "./types";
 import { addPath } from "./paths";
 
@@ -13,9 +13,10 @@ export const XMLRWContext =
         treeMode: false,
     })
 
-
 export const XMLModesContext =
     React.createContext<XMLModesType>({
+        node: undefined,
+        setNode: (f: any) => f,
         path: [],
         setPath: (f: any) => f,
         paths: [],

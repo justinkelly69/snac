@@ -87,7 +87,7 @@
 
 .xml-controls-area {
   border: 1px solid grey;
-  background-color: skyblue;
+  background-color: rgb(15, 2, 85);
   text-align: left;
 }
 
@@ -107,6 +107,13 @@
   font-family: 'RobotoMono', monospace;
   font-size: 0.8rem;
   line-height: 1;
+}
+
+/* -------------------------
+ * PREFIX
+ * -----------------------*/
+.prefix-area {
+  vertical-align: top;
 }
 
 /* -------------------------
@@ -147,6 +154,32 @@
   width: 1.4em;
 }
 
+/* -------------------------
+ * TEXT DEFAULTS
+ * -----------------------*/
+.text-show {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  min-height: 100%;
+  min-width: 100%;
+  white-space: pre-wrap;
+  font-size: .8rem;
+  font-family: 'RobotoMono', monospace;
+}
+
+.text-editor {
+  flex: 1 0 100%;
+  border: 1px dotted var(--text-input-border);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  min-height: 100%;
+  min-width: 100%;
+  white-space: pre-wrap;
+  font-size: .8rem;
+  font-family: 'RobotoMono', monospace;
+}
 /* -------------------------
  * SELECTED TEXT
  * -----------------------*/
@@ -262,17 +295,13 @@
  * TEXT
  * -----------------------*/
 .text {
-  color: var(--text-body)
+  color: var(--text-body);
 }
-
-
 
 .text-body {
   color: var(--text-body);
   display: inline-block;
   padding: .25em;
-  white-space: nowrap;
-  border: 1px dotted var(--text-input-border);
 }
 
 .text-editor {
@@ -365,7 +394,6 @@
 
 .cdata-disabled {
   color: var(--cdata-text-disabled);
-  border: dotted 1px var(--cdata-text-disabled);
 }
 
 .cdata-editor {
@@ -395,7 +423,6 @@
 
 .pi-disabled {
   color: var(--pi-text-disabled);
-  border: dotted 1px var(--pi-text-disabled);
 }
 
 .pi-editor {
@@ -472,8 +499,10 @@
   box-sizing: border-box;
   min-height: 100%;
   min-width: 100%;
-  text-wrap-mode: wrap;
+  white-space: pre-wrap;
   border: 1px dotted var(--text-input-border);
+  font-size: .8rem;
+  font-family: 'RobotoMono', monospace;
 }
 
 .edit-bottom-bar {
