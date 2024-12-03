@@ -7,6 +7,7 @@ import { ShowHideSwitch } from './showhide'
 import { insertPath, XMLModesContext, XMLRWContext } from '../snac/contexts'
 import { hasPath } from '../snac/paths'
 import { PICloseBracket, PIOpenBracket } from './brackets'
+import { XmlShow } from './xmlshow'
 
 export const PI = (props: {
     node: SNACPINode,
@@ -22,11 +23,16 @@ export const PI = (props: {
     const isSelected = hasPath(xmlModesContext.paths, props.path) || props.isSelected
 
     let selectState = SwitchStates.HIDDEN
+    let selectedClassName = 'pi'
 
     if (xmlRWContext.treeMode) {
         selectState = isSelected ?
             SwitchStates.ON :
             SwitchStates.OFF
+
+        selectedClassName = isSelected ?
+            'pi selected' :
+            'pi'
     }
 
     const piBody = trimBody(
@@ -35,48 +41,66 @@ export const PI = (props: {
         snacOpts.xml_trimPIBodyLength,
         snacOpts.xml_ellipsis
     )
-
-    return (
-        <>
-            <span>
-                <ShowHideSwitch
-                    path={props.path}
-                    selected={selectState}
-                    chars={snacOpts.switch_selectChars}
-                    openClose={() => insertPath(
-                        xmlModesContext,
-                        props.path,
-                    )}
-                />
-                <Prefix path={props.path} />
-                <ShowHideSwitch
-                    path={props.path}
-                    selected={selectState}
-                    chars={snacOpts.switch_elementChars}
-                    openClose={() => {
-                        if (isChildrenOpen) {
-                            setChildrenOpen(false)
-                        }
-                        else {
-                            setChildrenOpen(true)
-                        }
-                    }}
-                />
-                <PIOpenBracket />
-                <span className='pi-lang'>{props.node.L}</span>
-                {" "}
-                <span
-                    className='text-show pi'
-                    onClick={() => {
-                        xmlModesContext.setPath(props.path)
-                        xmlModesContext.setNode(props.node)
-                        xmlModesContext.setMode('PI_EDIT_MODE')
-                    }}>
-                    {escapePIBody(piBody)}
+    if (xmlRWContext.treeMode) {
+        return (
+            <>
+                <span>
+                    <ShowHideSwitch
+                        path={props.path}
+                        selected={selectState}
+                        chars={snacOpts.switch_selectChars}
+                        openClose={() => insertPath(
+                            xmlModesContext,
+                            props.path,
+                        )}
+                    />
+                    <Prefix path={props.path} />
+                    <ShowHideSwitch
+                        path={props.path}
+                        selected={selectState}
+                        chars={snacOpts.switch_elementChars}
+                        openClose={() => {
+                            if (isChildrenOpen) {
+                                setChildrenOpen(false)
+                            }
+                            else {
+                                setChildrenOpen(true)
+                            }
+                        }}
+                    />
+                    <PIOpenBracket />
+                    <span className='pi-lang'>{props.node.L}</span>
+                    {" "}
+                    <span
+                        className='text-show pi'
+                        onClick={() => {
+                            xmlModesContext.setPath(props.path)
+                            xmlModesContext.setNode(props.node)
+                            xmlModesContext.setMode('PI_EDIT_MODE')
+                        }}>
+                        {escapePIBody(piBody)}
+                    </span>
+                    {" "}
+                    <PICloseBracket />
                 </span>
-                {" "}
-                <PICloseBracket />
-            </span>
-        </>
-    )
+            </>
+        )
+    }
+    else {
+        return (
+            <>
+                {isSelected ?
+                    <XmlShow
+                        path={props.path}
+                        className={selectedClassName}
+                    >
+                        <PIOpenBracket /><br />
+                        {props.node.B.trim()}<br />
+                        <PICloseBracket />
+                    </XmlShow> :
+                    null
+                }
+            </>
+        )
+    }
 }

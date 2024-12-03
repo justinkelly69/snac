@@ -1,39 +1,19 @@
-import React, {
-    useContext,
-    useState
-} from 'react'
+import React, { useContext, useState } from 'react'
+import { Button, TextInput } from './widgets'
 import {
-    Button,
-    TextInput,
-} from './widgets'
-import {
-    SNACElement,
-    SwitchStates,
-    XMLModesType,
-    XMLRWType,
-    XMLTagOpenCloseType,
+    SNACElement, SwitchStates,
+    XMLModesType, XMLRWType, XMLTagOpenCloseType
 } from '../snac/types'
 import { snacOpts } from '../snac/opts'
 import { Prefix } from './prefix'
-import {
-    Attributes,
-    AttributesTable,
-} from './attributes'
-import {
-    Children
-} from './xmlout'
+import { Attributes, AttributesTable } from './attributes'
+import { Children } from './children'
 import { attributeKeys } from '../snac/textutils'
-import {
-    attributesGridStyle,
-    EditBoxGridStyle,
-} from '../snac/styles'
+import { attributesGridStyle, EditBoxGridStyle } from '../snac/styles'
 import { ShowHideSwitch } from './showhide'
 import {
-    XMLRWContext,
-    XMLTagOpenCloseContext,
-    XMLAttributesOpenCloseContext,
-    XMLModesContext,
-    insertPath,
+    XMLRWContext, XMLTagOpenCloseContext, XMLAttributesOpenCloseContext,
+    XMLModesContext, insertPath
 } from '../snac/contexts'
 import { hasPath } from '../snac/paths'
 
@@ -167,11 +147,7 @@ export const OpenTag = (props: {
                                 props.path,
                             )}
                         />
-
-                        <Prefix
-                            path={props.path}
-                        />
-
+                        <Prefix path={props.path} />
                         <ShowHideSwitch
                             path={props.path}
                             selected={childrenOpenState}
@@ -335,7 +311,6 @@ const NSName = (props: {
             {props.node.N}
         </span>
 }
-
 
 const NSNodeEdit = (props: {
     node: SNACElement,

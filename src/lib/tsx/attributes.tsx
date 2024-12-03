@@ -194,8 +194,6 @@ export const AttributesTable = (props: {
     )
 }
 
-
-
 const AttributeTableRow = () => {
 
     const xmlModesContext = useContext(XMLModesContext) as XMLModesType

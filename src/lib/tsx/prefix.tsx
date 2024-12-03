@@ -19,4 +19,3 @@ const getPrefixString = (path: number[]): string => {
     const init = ""
     return path.reduce((out) => out + snacOpts.prefix_charOn, init)
 }
-

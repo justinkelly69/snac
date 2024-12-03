@@ -14,6 +14,7 @@ import { TextEdit } from "./textedit"
 import { CDATAEdit } from "./cdataedit"
 import { CommentEdit } from "./commentedit"
 import { PIEdit } from "./piedit"
+import { Selection } from "./selection"
 
 export const XMLDisplay = (props: {
     snac: SNACItem[],
@@ -59,7 +60,7 @@ export const XMLDisplay = (props: {
                     />
                 }
                 {xmlModes.mode === 'SELECT_MODE' &&
-                    <XMLOut
+                    <Selection
                         snac={props.snac}
                         treeMode={false}
                         isSelected={false}
