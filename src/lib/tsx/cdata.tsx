@@ -34,7 +34,7 @@ export const CDATA = (props: {
             'cdata'
     }
 
-    const cdata = trimBody(
+    const [body, showHide] = trimBody(
         isChildrenOpen,
         props.node.D,
         snacOpts.xml_trimCDATALength,
@@ -55,19 +55,21 @@ export const CDATA = (props: {
                         )}
                     />
                     <Prefix path={props.path} />
-                    <ShowHideSwitch
-                        path={props.path}
-                        selected={selectState}
-                        chars={snacOpts.switch_elementChars}
-                        openClose={() => {
-                            if (isChildrenOpen) {
-                                setChildrenOpen(false)
-                            }
-                            else {
-                                setChildrenOpen(true)
-                            }
-                        }}
-                    />
+                    {showHide &&
+                        <ShowHideSwitch
+                            path={props.path}
+                            selected={selectState}
+                            chars={snacOpts.switch_elementChars}
+                            openClose={() => {
+                                if (isChildrenOpen) {
+                                    setChildrenOpen(false)
+                                }
+                                else {
+                                    setChildrenOpen(true)
+                                }
+                            }}
+                        />
+                    }
                     {' '}
                     <CDATAOpenBracket />
                     <span
@@ -77,7 +79,7 @@ export const CDATA = (props: {
                             xmlModesContext.setNode(props.node)
                             xmlModesContext.setMode('CDATA_EDIT_MODE')
                         }}>
-                        {escapeCDATA(cdata)}
+                        {escapeCDATA(body)}
                     </span>
                     {" "}
                     <CDATACloseBracket />

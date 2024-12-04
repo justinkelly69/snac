@@ -2,11 +2,12 @@ import React, { useContext, useState } from 'react'
 import { SNACText, SwitchStates, XMLModesType, XMLRWType } from '../snac/types'
 import { Prefix } from './prefix'
 import { snacOpts } from '../snac/opts'
-import { escapeHtml, trimBody } from '../snac/textutils'
+import { escapeHtml, isLonger, trimBody } from '../snac/textutils'
 import { ShowHideSwitch } from './showhide'
 import { insertPath, XMLModesContext, XMLRWContext } from '../snac/contexts'
 import { XmlShow } from './xmlshow'
 import { hasPath } from '../snac/paths'
+import { TextCloseBracket, TextOpenBracket } from './brackets'
 
 export const Text = (props: {
     node: SNACText,
@@ -21,6 +22,7 @@ export const Text = (props: {
 
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'text'
+    let childrenState = SwitchStates.HIDDEN
 
     const isSelected = hasPath(xmlModesContext.paths, props.path) || props.isSelected
 
@@ -29,12 +31,16 @@ export const Text = (props: {
             SwitchStates.ON :
             SwitchStates.OFF
 
+        childrenState = isChildrenOpen ?
+            SwitchStates.ON :
+            SwitchStates.OFF
+
         selectedClassName = isSelected && xmlModesContext.paths.length > 0 ?
             'text selected' :
             'text'
     }
 
-    const body = trimBody(
+    const [body, showHide] = trimBody(
         isChildrenOpen,
         props.node.T,
         snacOpts.xml_trimTextLength,
@@ -55,19 +61,23 @@ export const Text = (props: {
                         )}
                     />
                     <Prefix path={props.path} />
-                    <ShowHideSwitch
-                        path={props.path}
-                        selected={selectState}
-                        chars={snacOpts.switch_elementChars}
-                        openClose={() => {
-                            if (isChildrenOpen) {
-                                setChildrenOpen(false)
-                            }
-                            else {
-                                setChildrenOpen(true)
-                            }
-                        }}
-                    />
+                    {showHide ?
+                        <ShowHideSwitch
+                            path={props.path}
+                            selected={childrenState}
+                            chars={snacOpts.switch_elementChars}
+                            openClose={() => {
+                                if (isChildrenOpen) {
+                                    setChildrenOpen(false)
+                                }
+                                else {
+                                    setChildrenOpen(true)
+                                }
+                            }}
+                        /> :
+                        null
+                    }
+
                 </span>
                 <span
                     className='text-show text-body'
@@ -76,7 +86,9 @@ export const Text = (props: {
                         xmlModesContext.setNode(props.node)
                         xmlModesContext.setMode('TEXT_EDIT_MODE')
                     }}>
+                    <TextOpenBracket />
                     {escapeHtml(body)}
+                    <TextCloseBracket />
                 </span>
             </div>
         )
@@ -89,12 +101,7 @@ export const Text = (props: {
                         path={props.path}
                         className={selectedClassName}
                     >
-                        {props.node.T.trim().length > 0 ?
-                            <>
-                                {escapeHtml(props.node.T)}
-                            </> :
-                            null
-                        }
+                        {escapeHtml(body)}
                     </XmlShow> :
                     null
                 }

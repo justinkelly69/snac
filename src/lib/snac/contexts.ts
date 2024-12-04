@@ -63,7 +63,13 @@ export const insertPath = (
         path,
     )
     xmlModesContext.setPaths(newPaths)
-    xmlModesContext.setMode('SELECT_MODE')
+
+    if (newPaths.length > 0) {
+        xmlModesContext.setMode('SELECT_MODE')
+    }
+    else {
+        clearPaths(xmlModesContext)
+    }
 }
 
 export const clearPaths = (

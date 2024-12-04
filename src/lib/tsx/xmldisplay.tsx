@@ -1,12 +1,8 @@
 import React from "react"
 import { XMLOut } from "./xmlout"
 import {
-    SNACCDATA,
-    SNACComment,
-    SNACItem,
-    SNACPINode,
-    SNACText,
-    SwitchModes
+    SNACCDATA, SNACComment, SNACElement, SNACItem,
+    SNACPINode, SNACText, SwitchModes
 } from "../snac/types"
 import { useState } from "react"
 import { XMLModesContext } from "../snac/contexts"
@@ -15,6 +11,7 @@ import { CDATAEdit } from "./cdataedit"
 import { CommentEdit } from "./commentedit"
 import { PIEdit } from "./piedit"
 import { Selection } from "./selection"
+import { ElementEdit } from "./elementedit"
 
 export const XMLDisplay = (props: {
     snac: SNACItem[],
@@ -22,7 +19,7 @@ export const XMLDisplay = (props: {
     path?: number[],
 }) => {
 
-    const [path, setPath] = useState<number[]>([])
+    const [path, setPath] = useState<number[]>(props.path || [])
     const [paths, setPaths] = useState<number[][]>([])
     const [mode, setMode] = useState<SwitchModes>('VIEW_MODE')
     const [node, setNode] = useState<SNACItem | undefined>(props.node)
@@ -38,7 +35,8 @@ export const XMLDisplay = (props: {
         setMode: setMode,
     }
 
-    //console.log(paths)
+    //console.log('path', JSON.stringify(path, null, 4))
+    //console.log(JSON.stringify(paths, null, 4))
     //console.log(xmlModes.mode)
 
     return (
@@ -67,31 +65,38 @@ export const XMLDisplay = (props: {
                         side='right'
                     />
                 }
+                {xmlModes.mode === 'ELEMENT_EDIT_MODE' &&
+                    <ElementEdit
+                        node={node as SNACElement}
+                        path={xmlModes.path}
+                        isSelected={false}
+                    />
+                }
                 {xmlModes.mode === 'TEXT_EDIT_MODE' &&
                     <TextEdit
                         node={node as SNACText}
-                        path={path || []}
+                        path={xmlModes.path}
                         isSelected={false}
                     />
                 }
                 {xmlModes.mode === 'CDATA_EDIT_MODE' &&
                     <CDATAEdit
                         node={node as SNACCDATA}
-                        path={path || []}
+                        path={xmlModes.path}
                         isSelected={false}
                     />
                 }
                 {xmlModes.mode === 'COMMENT_EDIT_MODE' &&
                     <CommentEdit
                         node={node as SNACComment}
-                        path={path || []}
+                        path={xmlModes.path}
                         isSelected={false}
                     />
                 }
                 {xmlModes.mode === 'PI_EDIT_MODE' &&
                     <PIEdit
                         node={node as SNACPINode}
-                        path={path || []}
+                        path={xmlModes.path}
                         isSelected={false}
                     />
                 }

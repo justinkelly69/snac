@@ -9,6 +9,7 @@ the food starts here
     <empty />
     <fo:food co:nationality="BE" id="x999" class="noclass">
         <name>Belgian Waffles</name>
+        <![CDATA[ Hello from CDATA ]]>
 before
         <html:p>
 Chapter One - Down the Rabbit Hole: Alice, a seven-year-old girl, is feeling bored and drowsy while sitting on the riverbank with her elder sister. She notices a talking, clothed white rabbit 
@@ -27,6 +28,7 @@ after
         for($i = 0; $i < SIZE_OF_MEMORY; $i++){
             deleteMemory($i);
         } ?>
+         <!-- This is comment numero one -->
         <price co:currency="USD" curse="Oh Noe!" fo:bs="Awesome">$5.95</price>
         <description xmlns:xy="http://boxxlox.com" class="longtext">
         <!-- THIS IS 

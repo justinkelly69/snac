@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { SNACPINode, XMLModesType } from "../snac/types"
 import { Button, DropDownList, TextArea, XButton } from './widgets'
 import { escapePIBody } from '../snac/textutils'
@@ -19,6 +19,11 @@ export const PIEdit = (props: {
     const [newPIBody, setNewPIBody] = useState(props.node.B)
     const [prevPILang, setPrevPILang] = useState(props.node.L)
     const [prevPIBody, setPrevPIBody] = useState(props.node.B)
+
+    useEffect(() => {
+        setNewPILang(props.node.L)
+        setNewPIBody(props.node.B)
+    }, [props.node.L, props.node.B])
 
     if (isEditable) {
         return (

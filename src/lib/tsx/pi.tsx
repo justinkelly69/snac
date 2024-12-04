@@ -35,7 +35,7 @@ export const PI = (props: {
             'pi'
     }
 
-    const piBody = trimBody(
+    const [body, showHide] = trimBody(
         isChildrenOpen,
         props.node.B,
         snacOpts.xml_trimPIBodyLength,
@@ -43,18 +43,18 @@ export const PI = (props: {
     )
     if (xmlRWContext.treeMode) {
         return (
-            <>
-                <span>
-                    <ShowHideSwitch
-                        path={props.path}
-                        selected={selectState}
-                        chars={snacOpts.switch_selectChars}
-                        openClose={() => insertPath(
-                            xmlModesContext,
-                            props.path,
-                        )}
-                    />
-                    <Prefix path={props.path} />
+            <div className={selectedClassName}>
+                <ShowHideSwitch
+                    path={props.path}
+                    selected={selectState}
+                    chars={snacOpts.switch_selectChars}
+                    openClose={() => insertPath(
+                        xmlModesContext,
+                        props.path,
+                    )}
+                />
+                <Prefix path={props.path} />
+                {showHide &&
                     <ShowHideSwitch
                         path={props.path}
                         selected={selectState}
@@ -68,22 +68,22 @@ export const PI = (props: {
                             }
                         }}
                     />
-                    <PIOpenBracket />
-                    <span className='pi-lang'>{props.node.L}</span>
-                    {" "}
-                    <span
-                        className='text-show pi'
-                        onClick={() => {
-                            xmlModesContext.setPath(props.path)
-                            xmlModesContext.setNode(props.node)
-                            xmlModesContext.setMode('PI_EDIT_MODE')
-                        }}>
-                        {escapePIBody(piBody)}
-                    </span>
-                    {" "}
-                    <PICloseBracket />
+                }
+                <PIOpenBracket />
+                <span className='pi-lang'>{props.node.L}</span>
+                {" "}
+                <span
+                    className='text-show pi'
+                    onClick={() => {
+                        xmlModesContext.setPath(props.path)
+                        xmlModesContext.setNode(props.node)
+                        xmlModesContext.setMode('PI_EDIT_MODE')
+                    }}>
+                    {escapePIBody(body)}
                 </span>
-            </>
+                {" "}
+                <PICloseBracket />
+            </div>
         )
     }
     else {

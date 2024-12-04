@@ -100,14 +100,46 @@ export const repeatString = (
     return Array.from('x'.repeat(end - start), (_, i) => 'x').join(str)
 }
 
+export const isLonger = (
+    text1: string,
+    length: number,
+):boolean => {
+    return text1.length > length
+}
+
 export const trimBody = (
     isChildrenOpen: boolean,
     body: string,
     trimLength: number,
     ellipsis: string
-) => {
-    return !isChildrenOpen && body.length > trimLength ?
-        `${body.split(/\s+/).join(' ').substring(0, trimLength)} ${ellipsis}` :
-        body
+):[string, boolean] => {
+    if(!isChildrenOpen) {
+        if(body.trim().length === 0){
+            return ['', false]
+        }
+        else if(isLonger(body, trimLength)) {
+            return [`${body.split(/\s+/).join(' ').substring(0, trimLength)} ${ellipsis}`, true]
+        }
+        else if(body.length > body.trim().length) {
+            return [`${body.split(/\s+/).join(' ').trim()}`, true]
+        }
+        else {
+            return [`${body.split(/\s+/).join(' ').trim()}`, false]
+        }
+    }
+    else {
+        if(body.trim().length === 0){
+            return ['', false]
+        }
+        else if(isLonger(body, trimLength)) {
+            return [body, true]
+        }
+        else if(body.length > body.trim().length) {
+            return [body, true]
+        }
+        else {
+            return [body, false]
+        }
+    }
 }
 

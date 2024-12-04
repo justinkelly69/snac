@@ -34,7 +34,7 @@ export const Comment = (props: {
             'comment'
     }
 
-    const comment = trimBody(
+    const [body, showHide] = trimBody(
         isChildrenOpen,
         props.node.M,
         snacOpts.xml_trimCommentLength,
@@ -55,20 +55,22 @@ export const Comment = (props: {
                         )}
                     />
                     <Prefix path={props.path} />
-                    <ShowHideSwitch
-                        path={props.path}
-                        selected={selectState}
-                        chars={snacOpts.switch_elementChars}
-                        openClose={() => {
-                            if (isChildrenOpen) {
-                                setChildrenOpen(false)
-                            }
-                            else {
-                                setChildrenOpen(true)
+                    {showHide &&
+                        <ShowHideSwitch
+                            path={props.path}
+                            selected={selectState}
+                            chars={snacOpts.switch_elementChars}
+                            openClose={() => {
+                                if (isChildrenOpen) {
+                                    setChildrenOpen(false)
+                                }
+                                else {
+                                    setChildrenOpen(true)
 
-                            }
-                        }}
-                    />
+                                }
+                            }}
+                        />
+                    }
                     {' '}
                     <CommentOpenBracket />
                     {' '}
@@ -79,7 +81,7 @@ export const Comment = (props: {
                             xmlModesContext.setNode(props.node)
                             xmlModesContext.setMode('COMMENT_EDIT_MODE')
                         }}>
-                        {escapeComment(comment)}
+                        {escapeComment(body)}
                     </span>
                     {' '}
                     <CommentCloseBracket />

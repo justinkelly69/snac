@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { SNACCDATA, XMLModesType } from '../snac/types'
 import { Button, TextArea, XButton } from './widgets'
 import { escapeCDATA } from '../snac/textutils'
@@ -16,6 +16,11 @@ export const CDATAEdit = (props: {
     const [isEditable, setIsEditable] = useState(false)
     const [newCDATA, setNewCDATA] = useState(props.node.D)
     const [prevCDATA, setPrevCDATA] = useState(props.node.D)
+
+    useEffect(() => {
+        setNewCDATA(props.node.D)
+    }, [props.node.D])
+
 
     if (isEditable) {
         return (

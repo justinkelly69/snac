@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { SNACComment, XMLModesType } from '../snac/types'
 import { Button, TextArea, XButton } from './widgets'
 import { escapeComment } from '../snac/textutils'
@@ -17,6 +17,11 @@ export const CommentEdit = (props: {
 
     const [newComment, setNewComment] = useState(props.node.M)
     const [prevComment, setPrevComment] = useState(props.node.M)
+
+    useEffect(() => {
+        setNewComment(props.node.M)
+    }, [props.node.M])
+
 
     if (isEditable) {
         return (

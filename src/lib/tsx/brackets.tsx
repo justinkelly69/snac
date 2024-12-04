@@ -1,3 +1,14 @@
+export const TextOpenBracket = () =>
+    <span className='text-brackets'>
+        [
+    </span>
+
+export const TextCloseBracket = () =>
+    <span className='text-brackets'>
+        ]
+    </span>
+
+
 export const CDATAOpenBracket = () =>
     <span className='cdata-brackets'>
         &lt;![
