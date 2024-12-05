@@ -45,6 +45,11 @@ export type XMLAttributesTableType = {
     setSelected: Function
 }
 
+export type XMLAttributesStoreType = {
+    store: EditAttributesType
+    dispatch: React.Dispatch<EditAttributesActionType>
+}
+
 
 export type XMLOpts = {
     prefix_showPrefix: boolean,

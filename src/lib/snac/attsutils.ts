@@ -1,9 +1,6 @@
 import {
-    EditAttributesType,
-    AttributesType,
-    EditAttributesPayloadType,
-    EditAttributesActionType,
-    EditAttributesNSNameType
+    EditAttributesType, AttributesType, EditAttributesPayloadType,
+    EditAttributesActionType, EditAttributesNSNameType
 } from "./types"
 
 export const snac2EditAttributes = (
@@ -15,6 +12,7 @@ export const snac2EditAttributes = (
             editAttributes[ns] = {}
         }
         for (const name of Object.keys(attributes[ns])) {
+            //console.log('snac2edit', ns, name)
             if (!editAttributes[ns][name]) {
                 editAttributes[ns][name] = {
                     V: attributes[ns][name],
@@ -24,6 +22,8 @@ export const snac2EditAttributes = (
             }
         }
     }
+
+    //console.log('snac2edit', JSON.stringify(editAttributes, null, 4))
     return editAttributes
 }
 
@@ -50,6 +50,8 @@ export const attributesEditReducer = (
     state: EditAttributesType,
     action: EditAttributesActionType
 ): EditAttributesType => {
+
+    //console.log('action', JSON.stringify(action, null, 4))
 
     switch (action.type) {
         case "selectAttribute":

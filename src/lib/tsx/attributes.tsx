@@ -3,6 +3,7 @@ import React, {
     useReducer,
     useState
 } from 'react'
+import {produce} from 'immer'
 import {
     Button,
     TextInput
@@ -11,6 +12,7 @@ import {
     AttributesType,
     EditAttributesType,
     XMLAttributesOpenCloseType,
+    XMLAttributesStoreType,
     XMLAttributesTableType,
     XMLModesType
 } from '../snac/types'
@@ -27,13 +29,15 @@ import {
     setCancelAttribute,
     attributeGetValue,
     setNewAttribute,
+    attributeGetNumRows,
 } from '../snac/attsutils'
 import { EditBoxGridStyle } from '../snac/styles'
 import {
     XMLAttributesTableContext,
     XMLAttributesOpenCloseContext,
     XMLRWContext,
-    XMLModesContext
+    XMLModesContext,
+    XMLAttributesStoreContext
 } from '../snac/contexts'
 
 export const Attributes = (props: {
@@ -150,11 +154,33 @@ export const AttributesTable = (props: {
     attributes: AttributesType,
 }): JSX.Element => {
 
-    const openCloseContext = useContext(XMLAttributesOpenCloseContext) as XMLAttributesOpenCloseType
+    console.log('AttributesTable', JSON.stringify(props.attributes, null, 4))
 
-    const [state, dispatch] = useReducer(
-        attributesEditReducer,
-        snac2EditAttributes(props.attributes))
+    const openCloseContext = useContext(XMLAttributesOpenCloseContext) as XMLAttributesOpenCloseType
+    const storeContext = useContext(XMLAttributesStoreContext) as XMLAttributesStoreType
+
+    console.log('AttributesTable store', JSON.stringify(storeContext.store, null, 4))
+
+
+    //const newAttributes = snac2EditAttributes(props.attributes)
+
+    // const [state, dispatch] = useReducer(
+    //     attributesEditReducer,
+    //     newAttributes
+    // )
+
+    // (alias) type XMLAttributesOpenCloseType = {
+    //     setAttributes: Function;
+    //     editAttributes: boolean;
+    //     numRows: number;
+    //     setNumRows: Function;
+    // }
+
+    //const numRows = attributeGetNumRows(state)
+
+    //console.log('AttributesTable numRows', JSON.stringify(numRows, null, 4))
+    //console.log('AttributesTable newAttributes', JSON.stringify(newAttributes, null, 4))
+    //console.log('AttributesTable state', JSON.stringify(state, null, 4))
 
     const [selected, setSelected] = useState({
         ns: '#',
@@ -163,17 +189,18 @@ export const AttributesTable = (props: {
 
     return (
         <>
-            {Object.keys(state).map((ns, i) => {
-                return Object.keys(state[ns]).map((name, j) => {
+            {Object.keys(storeContext.store).map((ns, i) => {
+                return Object.keys(storeContext.store[ns]).map((name, j) => {
+                    console.log('state', ns, name, i, j)
                     return (
                         <XMLAttributesTableContext.Provider
                             key={`${i}:${j}`}
                             value={{
                                 ns: ns,
                                 name: name,
-                                value: attributeGetValue(state, ns, name),
-                                dispatch: dispatch,
-                                isDeleted: attributeIsDeleted(state, ns, name),
+                                value: attributeGetValue(storeContext.store, ns, name),
+                                dispatch: storeContext.dispatch,
+                                isDeleted: attributeIsDeleted(storeContext.store, ns, name),
                                 isSelected: attributeIsSelected(selected, ns, name),
                                 setSelected: setSelected,
                             }}>
@@ -185,8 +212,8 @@ export const AttributesTable = (props: {
 
             {openCloseContext.editAttributes ?
                 <AttributeNewRow
-                    state={state}
-                    dispatch={dispatch}
+                    state={storeContext.store}
+                    dispatch={storeContext.dispatch}
                 /> :
                 <span></span>
             }

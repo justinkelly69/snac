@@ -1,11 +1,10 @@
-import React, { useContext, useReducer, useState } from 'react'
-import { SNACElement, XMLAttributesTableType, XMLModesType, XMLRWType } from '../snac/types'
+import React, { useContext, useState } from 'react'
+import { SNACElement, XMLModesType, XMLRWType } from '../snac/types'
 import { snacOpts } from '../snac/opts'
 import { Kids } from './kids'
-import { XMLRWContext, XMLTagOpenCloseContext, XMLModesContext, XMLAttributesTableContext } from '../snac/contexts'
+import { XMLRWContext, XMLTagOpenCloseContext, XMLModesContext } from '../snac/contexts'
 import { hasPath } from '../snac/paths'
 import { CloseTag, OpenTag } from './tags'
-import { attributesEditReducer, snac2EditAttributes } from '../snac/attsutils'
 
 export const Element = (props: {
     node: SNACElement,
@@ -15,7 +14,6 @@ export const Element = (props: {
 
     const xmlRWContext = useContext(XMLRWContext) as XMLRWType
     const xmlModesContext = useContext(XMLModesContext) as XMLModesType
-    //const xmlAttributesTableContext = useContext(XMLAttributesTableContext) as XMLAttributesTableType
 
     const [isAttributesOpen, setAttributesOpen] = useState(false)
     const [isChildrenOpen, setChildrenOpen] = useState(true)
@@ -40,10 +38,6 @@ export const Element = (props: {
         isChildrenOpen: isChildrenOpen,
         setChildrenOpen: setChildrenOpen,
     }
-
-
-
-
 
     return (
         <XMLTagOpenCloseContext.Provider

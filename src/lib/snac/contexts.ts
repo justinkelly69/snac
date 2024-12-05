@@ -1,6 +1,7 @@
 import React from "react";
 import {
     XMLAttributesOpenCloseType,
+    XMLAttributesStoreType,
     XMLAttributesTableType,
     XMLModesType,
     XMLRWType,
@@ -52,6 +53,12 @@ export const XMLAttributesOpenCloseContext =
         editAttributes: false,
         numRows: 0,
         setNumRows: (f: any) => f,
+    })
+
+export const XMLAttributesStoreContext =
+    React.createContext<XMLAttributesStoreType>({
+        store: {},
+        dispatch: (f: any) => f,
     })
 
 export const insertPath = (

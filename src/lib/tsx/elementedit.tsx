@@ -1,16 +1,19 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useReducer, useState } from 'react'
 import { Button, TextInput, XButton } from './widgets'
 import {
-    AttributesType, SNACElement,
+    AttributesType, EditAttributesType, SNACElement,
+    XMLAttributesStoreType,
     XMLModesType, XMLRWType
 } from '../snac/types'
-import { AttributesTable } from './attributes'
+import { Attributes, AttributesTable } from './attributes'
 import { attributeKeys } from '../snac/textutils'
 import { attributesGridStyle } from '../snac/styles'
 import {
     XMLRWContext, XMLAttributesOpenCloseContext,
-    XMLModesContext
+    XMLModesContext,
+    XMLAttributesStoreContext
 } from '../snac/contexts'
+import { attributesEditReducer, snac2EditAttributes } from '../snac/attsutils'
 
 export const ElementEdit = (props: {
     node: SNACElement,
@@ -31,7 +34,21 @@ export const ElementEdit = (props: {
         setAttributes(props.node.A)
     }, [props.node.S, props.node.N, props.node.A])
 
-    //console.log('ElementEdit props.node', JSON.stringify(props.node, null, 4))
+    const editAttributes = snac2EditAttributes(attributes)
+
+    console.log('ElementEdit editAttributes', JSON.stringify(editAttributes, null, 4))
+
+    const [store, dispatch] = useReducer(
+        attributesEditReducer,
+        editAttributes
+    )
+
+    const attributesStoreContext = {
+        store: store,
+        dispatch: dispatch,
+    }
+
+    console.log('ElementEdit store', JSON.stringify(attributesStoreContext, null, 4))
 
     return (
         <>
@@ -68,17 +85,18 @@ export const ElementEdit = (props: {
                 />
             </div>
             <div className={`xml-display-body-right xml-body-area`}>
-                <AttributesEdit
-                    attributes={attributes}
-                    path={props.path}
-                    openClose={f => f}
-                />
+                <XMLAttributesStoreContext.Provider value={attributesStoreContext}>
+                    <AttributesTable
+                        attributes={attributes}
+                        path={props.path}
+                    />
+                </XMLAttributesStoreContext.Provider>
             </div>
         </>
     )
 }
 
-const AttributesEdit = (props: {
+/* const AttributesEdit = (props: {
     attributes: AttributesType,
     path: number[],
     openClose?: Function
@@ -97,6 +115,7 @@ const AttributesEdit = (props: {
 
     console.log('AttributesEdit attributes, keys', JSON.stringify(attributes, null, 4), JSON.stringify(keys, null, 4))
 
+    console.log('numRows', numRows)
 
     return (
         <>
@@ -150,4 +169,4 @@ const AttributesEdit = (props: {
             </span>
         </>
     )
-}
+} */
