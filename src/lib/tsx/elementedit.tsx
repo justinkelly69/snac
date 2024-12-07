@@ -10,7 +10,7 @@ import {
     XMLModesContext,
     XMLAttributesStoreContext
 } from '../snac/contexts'
-import { attributesEditReducer, snac2EditAttributes } from '../snac/attsutils'
+import { snac2EditAttributes } from '../snac/attsutils'
 
 export const ElementEdit = (props: {
     node: SNACElement,
@@ -34,15 +34,6 @@ export const ElementEdit = (props: {
 
     //console.log('ElementEdit editAttributes', JSON.stringify(editAttributes, null, 4))
 
-    const [store, dispatch] = useReducer(
-        attributesEditReducer,
-        editAttributes
-    )
-
-    const attributesStoreContext = {
-        store: editAttributes,
-        dispatch: dispatch,
-    }
 
     //console.log('ElementEdit store', JSON.stringify(attributesStoreContext, null, 4))
 
@@ -81,12 +72,10 @@ export const ElementEdit = (props: {
                 />
             </div>
             <div className={`xml-display-body-right xml-body-area`}>
-                <XMLAttributesStoreContext.Provider value={attributesStoreContext}>
                     <AttributesEdit
-                        attributes={attributes}
+                        editAttributes={snac2EditAttributes(attributes)}
                         path={props.path}
                     />
-                </XMLAttributesStoreContext.Provider>
             </div>
         </>
     )

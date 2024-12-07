@@ -6,7 +6,7 @@ import {
 } from '../snac/types'
 import { snacOpts } from '../snac/opts'
 import { Prefix } from './prefix'
-import { Attributes, AttributesTable } from './attributes'
+import { Attributes, AttributesEdit } from './attributes'
 import { attributeKeys } from '../snac/textutils'
 import { attributesGridStyle, EditBoxGridStyle } from '../snac/styles'
 import { ShowHideSwitch } from './showhide'
@@ -15,6 +15,7 @@ import {
     XMLModesContext, insertPath
 } from '../snac/contexts'
 import { clearPaths } from '../snac/paths'
+import { snac2EditAttributes } from '../snac/attsutils'
 
 export const OpenTag = (props: {
     node: SNACElement,
@@ -54,7 +55,7 @@ export const OpenTag = (props: {
         closeSlash = ""
     }
     if (xmlRWContext.treeMode) {
-       // console.log('props.node', JSON.stringify(props.node, null, 4))
+        // console.log('props.node', JSON.stringify(props.node, null, 4))
         return (
             <>
                 {isEditable ?
@@ -347,9 +348,9 @@ const NSNodeEdit = (props: {
                 </span>
                 <XMLAttributesOpenCloseContext.Provider
                     value={attributesOpenCloseContext}>
-                    <AttributesTable
+                    <AttributesEdit
                         path={props.path}
-                        attributes={attributes}
+                        editAttributes={snac2EditAttributes(attributes)}
                     />
                 </XMLAttributesOpenCloseContext.Provider>
             </span>

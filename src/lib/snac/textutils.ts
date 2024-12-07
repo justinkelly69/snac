@@ -1,4 +1,4 @@
-import { AttributesType, SNACNamesNode } from "./types"
+import { AttributesType, EditAttributesType, EditAttributeType, SNACNamesNode } from "./types"
 
 export const escapeHtml = (text: string): string => {
     return text.replace(/&/g, '&amp;')
@@ -82,7 +82,7 @@ export const nsNameJoin = (nsNode?: SNACNamesNode): string | null => {
     return null
 }
 
-export const attributeKeys = (attributes: AttributesType): string[][] => {
+export const attributeKeys = (attributes: AttributesType | EditAttributesType): string[][] => {
     const out:string[][] = []
     Object.keys(attributes).map((ns, i) => {
         return Object.keys(attributes[ns]).map((name, j) => {

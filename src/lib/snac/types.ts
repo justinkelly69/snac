@@ -13,6 +13,13 @@ export type SwitchModes =
     'COMMENT_EDIT_MODE' |
     'PI_EDIT_MODE'
 
+export type AttributeModes =
+    'ATTRIBUTES_VIEW_MODE' |
+    'ATTRIBUTES_EDIT_MODE' |
+    'ATTRIBUTES_DELETE_MODE' |
+    'ATTRIBUTES_NEW_MODE' |
+    'ATTRIBUTES_NEW2_MODE'
+
 export type XMLRWType = {
     treeMode: boolean
 }

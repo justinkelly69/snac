@@ -235,14 +235,17 @@
 .attribute-ns {
   color: var(--attribute-ns);
   text-align: right;
+  padding: .2em;
 }
 
 .attribute-name {
-  color: var(--attribute-name)
+  color: var(--attribute-name);
+  padding: .2em;
 }
 
 .attribute-value {
-  color: var(--attribute-value)
+  color: var(--attribute-value);
+  padding: .2em;
 }
 
 .attribute-deleted {
@@ -255,6 +258,7 @@
   outline: none !important;
   border: 1px solid var(--attribute-ns-focus);
   text-align: right;
+  padding: .2em;
 }
 
 .attribute-ns-input:focus {
@@ -268,6 +272,7 @@
   outline: none !important;
   border: 1px solid var(--attribute-name-focus);
   margin-right: 0.1em;
+  padding: .2em;
 }
 
 .attribute-name-input:focus {
@@ -280,6 +285,7 @@
   color: var(--attribute-value);
   outline: none !important;
   border-color: var(--attribute-value-focus);
+  padding: .2em;
 }
 
 .attribute-value-input:focus {

@@ -5,7 +5,6 @@ import { Kids } from './kids'
 import { XMLRWContext, XMLTagOpenCloseContext, XMLModesContext, XMLAttributesTableContext } from '../snac/contexts'
 import { hasPath } from '../snac/paths'
 import { CloseTag, OpenTag } from './tags'
-import { attributesEditReducer, snac2EditAttributes } from '../snac/attsutils'
 
 export const Element = (props: {
     node: SNACElement,

@@ -8,22 +8,36 @@ import {
     TextInput
 } from './widgets'
 import {
-    AttributeModes,
     AttributesType,
     EditAttributesType,
+    XMLAttributesOpenCloseType,
+    XMLAttributesStoreType,
+    XMLAttributesTableType,
     XMLModesType
 } from '../snac/types'
 import { snacOpts } from '../snac/opts'
 import { Prefix } from './prefix'
+import {
+    attributeIsSelected,
+    setSelectedAttribute,
+    attributeIsDeleted,
+    setDeletedAttribute,
+    setSaveAttribute,
+    setCancelAttribute,
+    attributeGetValue,
+    setNewAttribute,
+} from '../snac/attsutils'
 import { attributesGridStyle, EditBoxGridStyle } from '../snac/styles'
 import {
+    XMLAttributesTableContext,
     XMLAttributesOpenCloseContext,
     XMLRWContext,
-    XMLModesContext
+    XMLModesContext,
+    XMLAttributesStoreContext
 } from '../snac/contexts'
 import { attributeKeys } from '../snac/textutils'
 
-export const Attributes = (props: {
+export const Attributes1 = (props: {
     path: number[],
     attributes: AttributesType,
 }): JSX.Element | null => {
@@ -132,26 +146,26 @@ const Attribute = (props: {
     }
 }
 
-export const AttributesEdit = (props: {
-    editAttributes: EditAttributesType,
+const AttributesEdit = (props: {
+    attributes: AttributesType,
     path: number[],
     openClose?: Function
 }): JSX.Element => {
 
-    const [editAttributes, setEditAttributes] = useState(props.editAttributes)
+    const [attributes, setAttributes] = useState(props.attributes)
+    const [editAttributes, setEditAttributes] = useState(true)
     const [numRows, setNumRows] = useState(1)
-    const [attMode, setAttMode] = useState<AttributeModes>('ATTRIBUTES_VIEW_MODE')
-    const [selected, setSelected] = useState(-1)
 
-    const keys = attributeKeys(editAttributes)
+    const keys = attributeKeys(attributes)
 
     useEffect(() => {
-        setEditAttributes(props.editAttributes)
+        setAttributes(props.attributes)
         setNumRows(keys.length + 1)
-    }, [props.editAttributes, keys])
+    }, [props.attributes, keys])
 
-    //console.log('numRows', numRows)
-    console.log(JSON.stringify(props.editAttributes, null, 4))
+    console.log('AttributesEdit attributes, keys', JSON.stringify(attributes, null, 4), JSON.stringify(keys, null, 4))
+
+    console.log('numRows', numRows)
 
     return (
         <>
@@ -170,83 +184,168 @@ export const AttributesEdit = (props: {
                         gridArea: `1 / 1 / ${numRows} / 1`,
                     }}
                 ></span>
+                {/*<span>
+                    <Button
+                        className='button x-button'
+                        onClick={() => {
+                            props.openClose && props.openClose()
+                        }}
+                        label='X'
+                    />
+                </span>
+                 {editAttributes &&
+                    <>
+                        <span>
+                            <Button
+                                className='button text-button'
+                                onClick={() => {
+                                    setEditAttributes(true)
+                                }}
+                                label='Edit'
+                            />
+                            <span style={{
+                                display: 'block',
+                                width: '6em'
+                            }}>
+                            </span>
+                        </span>
+                    </>
+                } */}
 
-                <>
-                    {Object.keys(props.editAttributes).map((ns, i) => {
-                        return Object.keys(props.editAttributes[ns]).map((name, j) => {
-                            console.log('state', ns, name,props.editAttributes[ns][name].V, i, j)
-                            return (
-                                <AttributeTableRow
-                                    key={`${i}:${j}`}
-                                    ns={ns}
-                                    name={name}
-                                    value={props.editAttributes[ns][name].V}
-                                    isDeleted={false}
-                                    setDeleted={(f: any) => f}
-                                    isSelected={false}
-                                    setSelected={(f: any) => f}
-                                    mode={attMode}
-                                />
-                            )
-                        })
-                    })}
-
-                    {/* <AttributeNewRow
-                        state={storeContext.store}
-                        dispatch={storeContext.dispatch}
-                    /> */}
-                </>
+                <AttributesTable
+                    path={props.path}
+                    attributes={attributes}
+                />
             </span>
         </>
     )
 }
 
-const AttributeTableRow = (props: {
-    ns: string,
-    name: string,
-    value: string,
-    isDeleted: boolean,
-    isSelected: boolean,
-    setSelected: Function,
-    setDeleted: Function,
-    mode: AttributeModes,
-}) => {
+const AttributesTable = (props: {
+    path: number[],
+    attributes: AttributesType,
+}): JSX.Element => {
 
-    const classDeleted = props.isDeleted ? 'attribute-deleted' : ''
-    const deletedLabel = props.isDeleted ? 'O' : 'X'
+    //console.log('AttributesTable', JSON.stringify(props.attributes, null, 4))
 
-    const [value, setValue] = useState(props.value)
-    const [oldValue, setOldValue] = useState('')
+    const openCloseContext = useContext(XMLAttributesOpenCloseContext) as XMLAttributesOpenCloseType
+    const storeContext = useContext(XMLAttributesStoreContext) as XMLAttributesStoreType
+
+    //console.log('AttributesTable store', JSON.stringify(storeContext.store, null, 4))
+
+
+    //const newAttributes = snac2EditAttributes(props.attributes)
+
+    // const [state, dispatch] = useReducer(
+    //     attributesEditReducer,
+    //     newAttributes
+    // )
+
+    // (alias) type XMLAttributesOpenCloseType = {
+    //     setAttributes: Function;
+    //     editAttributes: boolean;
+    //     numRows: number;
+    //     setNumRows: Function;
+    // }
+
+    //const numRows = attributeGetNumRows(state)
+
+    //console.log('AttributesTable numRows', JSON.stringify(numRows, null, 4))
+    //console.log('AttributesTable newAttributes', JSON.stringify(newAttributes, null, 4))
+    //console.log('AttributesTable state', JSON.stringify(state, null, 4))
+
+    const [selected, setSelected] = useState({
+        ns: '#',
+        name: '#',
+    })
+
+    return (
+        <>
+            {Object.keys(storeContext.store).map((ns, i) => {
+                return Object.keys(storeContext.store[ns]).map((name, j) => {
+                    console.log('state', ns, name, i, j)
+                    return (
+                        <XMLAttributesTableContext.Provider
+                            key={`${i}:${j}`}
+                            value={{
+                                ns: ns,
+                                name: name,
+                                value: attributeGetValue(storeContext.store, ns, name),
+                                dispatch: storeContext.dispatch,
+                                isDeleted: attributeIsDeleted(storeContext.store, ns, name),
+                                isSelected: attributeIsSelected(selected, ns, name),
+                                setSelected: setSelected,
+                            }}>
+                            <AttributeTableRow />
+                        </XMLAttributesTableContext.Provider >
+                    )
+                })
+            })}
+
+            {openCloseContext.editAttributes ?
+                <AttributeNewRow
+                    state={storeContext.store}
+                    dispatch={storeContext.dispatch}
+                /> :
+                <span></span>
+            }
+        </>
+    )
+}
+
+const AttributeTableRow = () => {
+
+    const xmlModesContext = useContext(XMLModesContext) as XMLModesType
+    const openCloseContext = useContext(XMLAttributesOpenCloseContext) as XMLAttributesOpenCloseType
+    const tableContext = useContext(XMLAttributesTableContext) as XMLAttributesTableType
+
+    const classDeleted = tableContext.isDeleted ? 'attribute-deleted' : ''
+    const deletedLabel = tableContext.isDeleted ? 'O' : 'X'
+
+    const [value, setValue] = useState(tableContext.value)
+    const [oldValue, setOldValue] = useState(tableContext.value)
 
     return (
         <>
             <span>
-                <Button
-                    className='button x-button'
-                    onClick={() => {
-                        props.setDeleted()
-                    }}
-                    label={deletedLabel}
-                />
+                {openCloseContext.editAttributes &&
+                    //xmlModesContext.mode === 'VIEW_MODE' &&
+                    <Button
+                        className='button x-button'
+                        onClick={() => {
+                            setDeletedAttribute({
+                                ...tableContext,
+                            })
+                        }}
+                        label={deletedLabel}
+                    />
+                }
             </span>
-            <span
-                className={`attribute-ns ${classDeleted}`}
+            <span className={`attribute-ns ${classDeleted}`}
                 onClick={() => {
-                    props.setSelected()
+                    openCloseContext.editAttributes &&
+                        setSelectedAttribute({
+                            ...xmlModesContext,
+                            ...tableContext,
+                        })
                 }}
             >
-                {props.ns !== '@' ? `${props.ns}:` : ''}
+                {tableContext.ns !== '@' ? `${tableContext.ns}:` : ''}
             </span>
-            <span
-                className={`attribute-name ${classDeleted}`}
+            <span className={`attribute-name ${classDeleted}`}
                 onClick={() => {
-                    props.setSelected()
+                    openCloseContext.editAttributes &&
+                        setSelectedAttribute({
+                            ...xmlModesContext,
+                            ...tableContext,
+                        })
                 }}
             >
-                {props.name}
+                {tableContext.name}
             </span>
 
-            {props.mode === 'ATTRIBUTES_EDIT_MODE' ?
+            {xmlModesContext.mode === 'ELEMENT_EDIT_MODE' &&
+                tableContext.isSelected ?
                 <>
                     <span>
                         <TextInput
@@ -267,11 +366,11 @@ const AttributeTableRow = (props: {
                             className='button text-button'
                             onClick={() => {
                                 setOldValue(value)
-                                // setSaveAttribute({
-                                //     ...xmlModesContext,
-                                //     ...tableContext,
-                                //     value
-                                // })
+                                setSaveAttribute({
+                                    ...xmlModesContext,
+                                    ...tableContext,
+                                    value
+                                })
                             }}
                             label='Save'
                         />
@@ -281,25 +380,28 @@ const AttributeTableRow = (props: {
                             className='button text-button'
                             onClick={() => {
                                 setValue(oldValue)
-                                // setCancelAttribute({
-                                //     ...xmlModesContext,
-                                //     ...tableContext,
-                                //     oldValue,
-                                // })
+                                setCancelAttribute({
+                                    ...xmlModesContext,
+                                    ...tableContext,
+                                    oldValue,
+                                })
                             }}
                             label='Cancel'
                         />
                     </span>
                 </> :
                 <>
-                    <span className={`attribute-value  ${classDeleted}`}
-                        onClick={() => {
-                            // setSelectedAttribute({
-                            //     ...xmlModesContext,
-                            //     ...tableContext,
-                            // })
-                        }}>
-                        {props.value}
+                    <span>
+                        <span className={`attribute-value  ${classDeleted}`}
+                            onClick={() => {
+                                openCloseContext.editAttributes &&
+                                    setSelectedAttribute({
+                                        ...xmlModesContext,
+                                        ...tableContext,
+                                    })
+                            }}>
+                            {value}
+                        </span>
                     </span>
                     <span></span>
                     <span></span>
@@ -379,12 +481,12 @@ const AttributeNewRow = (props: {
                             !(newNs in props.state
                                 && name in props.state[newNs]
                             )) {
-                            // setNewAttribute(
-                            //     props.dispatch,
-                            //     newNs,
-                            //     name,
-                            //     value
-                            // )
+                            setNewAttribute(
+                                props.dispatch,
+                                newNs,
+                                name,
+                                value
+                            )
                             openCloseContext.setNumRows(
                                 openCloseContext.numRows + 1
                             )
