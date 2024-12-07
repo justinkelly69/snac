@@ -1,15 +1,12 @@
-import React, { useContext, useEffect, useReducer, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Button, TextInput, XButton } from './widgets'
 import {
-    AttributesType, SNACElement,
-    XMLModesType, XMLRWType
-} from '../snac/types'
+    EditAttributesType, SNACElement,
+    XMLModesType} from '../snac/types'
 import { AttributesEdit } from './attributes'
 import {
-    XMLRWContext, 
-    XMLModesContext,
-    XMLAttributesStoreContext
-} from '../snac/contexts'
+    XMLAttributesEditContext,
+    XMLModesContext} from '../snac/contexts'
 import { snac2EditAttributes } from '../snac/attsutils'
 
 export const ElementEdit = (props: {
@@ -22,23 +19,21 @@ export const ElementEdit = (props: {
 
     const [nsText, setNSText] = useState('')
     const [nameText, setNameText] = useState('')
-    const [attributes, setAttributes] = useState<AttributesType>({})
+    const [editAttributes, setEditAttributes] = useState<EditAttributesType>({})
 
     useEffect(() => {
         setNSText(props.node.S)
         setNameText(props.node.N)
-        setAttributes(props.node.A)
+        setEditAttributes(snac2EditAttributes(props.node.A))
     }, [props.node.S, props.node.N, props.node.A])
 
-    const editAttributes = snac2EditAttributes(attributes)
-
-    //console.log('ElementEdit editAttributes', JSON.stringify(editAttributes, null, 4))
-
-
-    //console.log('ElementEdit store', JSON.stringify(attributesStoreContext, null, 4))
+    const value = {
+        editAttributes: editAttributes,
+        setEditAttributes: setEditAttributes,
+    }
 
     return (
-        <>
+        <XMLAttributesEditContext.Provider value={value}>
             <div className={`xml-display-controls-right xml-controls-area`}>
                 <XButton xmlModesContext={xmlModesContext} />
                 <TextInput
@@ -73,11 +68,12 @@ export const ElementEdit = (props: {
             </div>
             <div className={`xml-display-body-right xml-body-area`}>
                     <AttributesEdit
-                        editAttributes={snac2EditAttributes(attributes)}
+                        editAttributes={editAttributes}
+                        setEditAttributes={setEditAttributes}
                         path={props.path}
                     />
             </div>
-        </>
+        </XMLAttributesEditContext.Provider>
     )
 }
 

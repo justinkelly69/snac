@@ -1,8 +1,7 @@
 import React from "react";
 import {
-    XMLAttributesOpenCloseType,
-    XMLAttributesStoreType,
-    XMLAttributesTableType,
+    XMLAttributesEditType,
+    XMLAttributeRowType,
     XMLModesType,
     XMLRWType,
     XMLTagOpenCloseType,
@@ -36,29 +35,18 @@ export const XMLTagOpenCloseContext =
         setChildrenOpen: (f: any) => f,
     })
 
-export const XMLAttributesTableContext =
-    React.createContext<XMLAttributesTableType>({
-        ns: '',
-        name: '',
-        value: '',
-        dispatch: (f: any) => f,
-        isDeleted: false,
-        isSelected: false,
-        setSelected: (f: any) => f,
-    })
-
-export const XMLAttributesOpenCloseContext =
-    React.createContext<XMLAttributesOpenCloseType>({
-        setAttributes: (f: any) => f,
-        editAttributes: false,
-        numRows: 0,
+export const XMLAttributeRowContext =
+    React.createContext<XMLAttributeRowType>({
+        attMode: '',
+        setAttMode: (f: any) => f,
+        numRows: 0, 
         setNumRows: (f: any) => f,
     })
 
-export const XMLAttributesStoreContext =
-    React.createContext<XMLAttributesStoreType>({
-        store: {},
-        dispatch: (f: any) => f,
+export const XMLAttributesEditContext =
+    React.createContext<XMLAttributesEditType>({
+        editAttributes: {},
+        setEditAttributes: (f: any) => f,
     })
 
 export const insertPath = (

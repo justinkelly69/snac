@@ -11,11 +11,10 @@ import { attributeKeys } from '../snac/textutils'
 import { attributesGridStyle, EditBoxGridStyle } from '../snac/styles'
 import { ShowHideSwitch } from './showhide'
 import {
-    XMLRWContext, XMLTagOpenCloseContext, XMLAttributesOpenCloseContext,
+    XMLRWContext, XMLTagOpenCloseContext, XMLAttributesEditContext,
     XMLModesContext, insertPath
 } from '../snac/contexts'
 import { clearPaths } from '../snac/paths'
-import { snac2EditAttributes } from '../snac/attsutils'
 
 export const OpenTag = (props: {
     node: SNACElement,
@@ -346,13 +345,13 @@ const NSNodeEdit = (props: {
                         label='Cancel'
                     />
                 </span>
-                <XMLAttributesOpenCloseContext.Provider
+                {/* <XMLAttributesEditContext.Provider
                     value={attributesOpenCloseContext}>
                     <AttributesEdit
                         path={props.path}
-                        editAttributes={snac2EditAttributes(attributes)}
+                        attributes={attributes}
                     />
-                </XMLAttributesOpenCloseContext.Provider>
+                </XMLAttributesEditContext.Provider> */}
             </span>
         </>
     )

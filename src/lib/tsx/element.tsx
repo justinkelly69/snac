@@ -1,8 +1,8 @@
 import React, { useContext, useReducer, useState } from 'react'
-import { SNACElement, XMLAttributesTableType, XMLModesType, XMLRWType } from '../snac/types'
+import { SNACElement, XMLAttributeRowType, XMLModesType, XMLRWType } from '../snac/types'
 import { snacOpts } from '../snac/opts'
 import { Kids } from './kids'
-import { XMLRWContext, XMLTagOpenCloseContext, XMLModesContext, XMLAttributesTableContext } from '../snac/contexts'
+import { XMLRWContext, XMLTagOpenCloseContext, XMLModesContext, XMLAttributeRowContext } from '../snac/contexts'
 import { hasPath } from '../snac/paths'
 import { CloseTag, OpenTag } from './tags'
 

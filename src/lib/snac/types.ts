@@ -44,28 +44,17 @@ export type XMLTagOpenCloseType = {
     setChildrenOpen: Function,
 }
 
-export type XMLAttributesOpenCloseType = {
-    setAttributes: Function,
-    editAttributes: boolean,
-    numRows: number,
+export type XMLAttributesEditType = {
+    setEditAttributes: Function,
+    editAttributes: EditAttributesType,
+}
+
+export type XMLAttributeRowType = {
+    attMode: string,
+    setAttMode: Function,
+    numRows: number, 
     setNumRows: Function,
 }
-
-export type XMLAttributesTableType = {
-    ns: string
-    name: string
-    value: string
-    dispatch: Function
-    isDeleted: boolean
-    isSelected: boolean
-    setSelected: Function
-}
-
-export type XMLAttributesStoreType = {
-    store: EditAttributesType
-    dispatch: React.Dispatch<EditAttributesActionType>
-}
-
 
 export type XMLOpts = {
     prefix_showPrefix: boolean,
@@ -220,13 +209,13 @@ export interface EditAttributeType {
 
 export interface EditAttributesActionType {
     type: string,
-    payload: EditAttributesPayloadType,
+    payload: SelectedAttributeType,
 }
 
-export interface EditAttributesPayloadType {
-    newNS?: string,
-    newName?: string,
-    newValue?: string,
+export interface SelectedAttributeType {
+    ns?: string,
+    name?: string,
+    value?: string,
 }
 
 export interface EditAttributesNSNameType {

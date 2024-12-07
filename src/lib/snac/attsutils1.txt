@@ -1,5 +1,5 @@
 import {
-    EditAttributesType, AttributesType, EditAttributesPayloadType,
+    EditAttributesType, AttributesType, SelectedAttributeType,
     EditAttributesActionType, EditAttributesNSNameType
 } from "./types"
 
@@ -134,7 +134,8 @@ export const attributeIsSelected = (
 
 export const selectAttribute = (
     state: EditAttributesType,
-    payload: EditAttributesPayloadType,
+    payload: SelectedAttributeType,
+
 ): EditAttributesType => {
     const newAttrbutes: EditAttributesType = {}
     for (const ns of Object.keys(state)) {
@@ -188,7 +189,7 @@ export const setSaveAttribute = (props: {
 
 export const saveAttribute = (
     state: EditAttributesType,
-    payload: EditAttributesPayloadType,
+    payload: SelectedAttributeType,
 ): EditAttributesType => {
     const newAttrbutes: EditAttributesType = {}
     for (const ns of Object.keys(state)) {
@@ -276,7 +277,7 @@ export const setDeletedAttribute = (props: {
 
 export const deleteAttribute = (
     state: EditAttributesType,
-    payload: EditAttributesPayloadType,
+    payload: SelectedAttributeType,
 ): EditAttributesType => {
     const newAttrbutes: EditAttributesType = {}
     for (const ns of Object.keys(state)) {
@@ -316,7 +317,7 @@ export const setNewAttribute = (
 
 export const newAttribute = (
     state: EditAttributesType,
-    payload: EditAttributesPayloadType,
+    payload: SelectedAttributeType,
 ): EditAttributesType => {
     const newAttrbutes: EditAttributesType = {}
     for (const ns of Object.keys(state)) {
