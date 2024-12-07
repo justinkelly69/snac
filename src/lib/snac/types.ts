@@ -1,8 +1,17 @@
 //import React from 'react'
 
 export enum SwitchStates { 'ON', 'OFF', 'HIDDEN' }
-export type SwitchModes = 'VIEW_MODE' | 'EDIT_MODE' | 'SELECT_MODE' | 'INSERT_MODE' | 'LIST_MODE' |
-    'ELEMENT_EDIT_MODE' | 'TEXT_EDIT_MODE' | 'CDATA_EDIT_MODE' | 'COMMENT_EDIT_MODE' | 'PI_EDIT_MODE'
+export type SwitchModes =
+    'VIEW_MODE' |
+    'EDIT_MODE' |
+    'SELECT_MODE' |
+    'INSERT_MODE' |
+    'LIST_MODE' |
+    'ELEMENT_EDIT_MODE' |
+    'TEXT_EDIT_MODE' |
+    'CDATA_EDIT_MODE' |
+    'COMMENT_EDIT_MODE' |
+    'PI_EDIT_MODE'
 
 export type XMLRWType = {
     treeMode: boolean

@@ -6,7 +6,7 @@ import { snacOpts } from '../snac/opts'
 import { ShowHideSwitch } from './showhide'
 import { insertPath, XMLModesContext, XMLRWContext } from '../snac/contexts'
 import { XmlShow } from './xmlshow'
-import { hasPath } from '../snac/paths'
+import { clearPaths, hasPath } from '../snac/paths'
 import { CommentCloseBracket, CommentOpenBracket } from './brackets'
 
 export const Comment = (props: {
@@ -80,6 +80,7 @@ export const Comment = (props: {
                             xmlModesContext.setPath(props.path)
                             xmlModesContext.setNode(props.node)
                             xmlModesContext.setMode('COMMENT_EDIT_MODE')
+                            xmlModesContext.setPaths(clearPaths())
                         }}>
                         {escapeComment(body)}
                     </span>

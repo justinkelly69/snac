@@ -70,7 +70,7 @@ export const TextEdit = (props: {
                         <span
                             className='text-show text-body'
                             onClick={() => {
-                                setTextMode('EDIT_MODE')
+                                setTextMode('TEXT_EDIT_MODE')
                             }}
                         >
                             {escapeHtml(newText)}
@@ -78,7 +78,7 @@ export const TextEdit = (props: {
                     </div>
                 </>
             }
-            {textMode === 'EDIT_MODE' &&
+            {textMode === 'TEXT_EDIT_MODE' &&
                 <>
                     <div className={`xml-display-controls-right xml-controls-area`}>
                         <XButton xmlModesContext={xmlModesContext} />

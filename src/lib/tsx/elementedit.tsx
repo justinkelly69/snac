@@ -1,15 +1,12 @@
 import React, { useContext, useEffect, useReducer, useState } from 'react'
 import { Button, TextInput, XButton } from './widgets'
 import {
-    AttributesType, EditAttributesType, SNACElement,
-    XMLAttributesStoreType,
+    AttributesType, SNACElement,
     XMLModesType, XMLRWType
 } from '../snac/types'
-import { Attributes, AttributesTable } from './attributes'
-import { attributeKeys } from '../snac/textutils'
-import { attributesGridStyle } from '../snac/styles'
+import { AttributesEdit } from './attributes'
 import {
-    XMLRWContext, XMLAttributesOpenCloseContext,
+    XMLRWContext, 
     XMLModesContext,
     XMLAttributesStoreContext
 } from '../snac/contexts'
@@ -21,7 +18,6 @@ export const ElementEdit = (props: {
     isSelected: boolean,
 }): JSX.Element => {
 
-    const xmlRWContext = useContext(XMLRWContext) as XMLRWType
     const xmlModesContext = useContext(XMLModesContext) as XMLModesType
 
     const [nsText, setNSText] = useState('')
@@ -36,7 +32,7 @@ export const ElementEdit = (props: {
 
     const editAttributes = snac2EditAttributes(attributes)
 
-    console.log('ElementEdit editAttributes', JSON.stringify(editAttributes, null, 4))
+    //console.log('ElementEdit editAttributes', JSON.stringify(editAttributes, null, 4))
 
     const [store, dispatch] = useReducer(
         attributesEditReducer,
@@ -44,11 +40,11 @@ export const ElementEdit = (props: {
     )
 
     const attributesStoreContext = {
-        store: store,
+        store: editAttributes,
         dispatch: dispatch,
     }
 
-    console.log('ElementEdit store', JSON.stringify(attributesStoreContext, null, 4))
+    //console.log('ElementEdit store', JSON.stringify(attributesStoreContext, null, 4))
 
     return (
         <>
@@ -86,7 +82,7 @@ export const ElementEdit = (props: {
             </div>
             <div className={`xml-display-body-right xml-body-area`}>
                 <XMLAttributesStoreContext.Provider value={attributesStoreContext}>
-                    <AttributesTable
+                    <AttributesEdit
                         attributes={attributes}
                         path={props.path}
                     />

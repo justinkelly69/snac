@@ -6,7 +6,7 @@ import { snacOpts } from '../snac/opts'
 import { ShowHideSwitch } from './showhide'
 import { insertPath, XMLModesContext, XMLRWContext } from '../snac/contexts'
 import { XmlShow } from './xmlshow'
-import { hasPath } from '../snac/paths'
+import { clearPaths, hasPath } from '../snac/paths'
 import { CDATACloseBracket, CDATAOpenBracket } from './brackets'
 
 export const CDATA = (props: {
@@ -78,6 +78,7 @@ export const CDATA = (props: {
                             xmlModesContext.setPath(props.path)
                             xmlModesContext.setNode(props.node)
                             xmlModesContext.setMode('CDATA_EDIT_MODE')
+                            xmlModesContext.setPaths(clearPaths())
                         }}>
                         {escapeCDATA(body)}
                     </span>

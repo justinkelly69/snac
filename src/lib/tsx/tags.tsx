@@ -14,6 +14,7 @@ import {
     XMLRWContext, XMLTagOpenCloseContext, XMLAttributesOpenCloseContext,
     XMLModesContext, insertPath
 } from '../snac/contexts'
+import { clearPaths } from '../snac/paths'
 
 export const OpenTag = (props: {
     node: SNACElement,
@@ -66,6 +67,7 @@ export const OpenTag = (props: {
                                 xmlModesContext.setNode(props.node)
                                 xmlModesContext.setPath(props.path)
                                 xmlModesContext.setMode('ELEMENT_EDIT_MODE')
+                                xmlModesContext.setPaths(clearPaths())
                             }}
                         />
                     </> :
@@ -97,6 +99,8 @@ export const OpenTag = (props: {
                                 xmlModesContext.setNode(props.node)
                                 xmlModesContext.setPath(props.path)
                                 xmlModesContext.setMode('ELEMENT_EDIT_MODE')
+                                xmlModesContext.setPaths(clearPaths())
+
                             }}
                         />
                         <>

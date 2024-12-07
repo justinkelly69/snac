@@ -31,6 +31,8 @@ export const addPath = (
     return [path]
 }
 
+export const clearPaths = () => []
+
 export const hasPath = (
     paths: number[][],
     path: number[]

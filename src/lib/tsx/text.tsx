@@ -6,7 +6,7 @@ import { escapeHtml, isLonger, trimBody } from '../snac/textutils'
 import { ShowHideSwitch } from './showhide'
 import { insertPath, XMLModesContext, XMLRWContext } from '../snac/contexts'
 import { XmlShow } from './xmlshow'
-import { hasPath } from '../snac/paths'
+import { clearPaths, hasPath } from '../snac/paths'
 import { TextCloseBracket, TextOpenBracket } from './brackets'
 
 export const Text = (props: {
@@ -85,6 +85,7 @@ export const Text = (props: {
                         xmlModesContext.setPath(props.path)
                         xmlModesContext.setNode(props.node)
                         xmlModesContext.setMode('TEXT_EDIT_MODE')
+                        xmlModesContext.setPaths(clearPaths())
                     }}>
                     <TextOpenBracket />
                     {escapeHtml(body)}

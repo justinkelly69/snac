@@ -41,13 +41,8 @@ export const Element = (props: {
         setChildrenOpen: setChildrenOpen,
     }
 
-
-
-
-
     return (
-        <XMLTagOpenCloseContext.Provider
-            value={xmlTagOpenCloseContext}>
+        <XMLTagOpenCloseContext.Provider value={xmlTagOpenCloseContext}>
             <div className={selectedClassName}>
 
                 {xmlRWContext.treeMode || isSelected ?

@@ -5,7 +5,7 @@ import { escapePIBody, trimBody } from '../snac/textutils'
 import { snacOpts } from '../snac/opts'
 import { ShowHideSwitch } from './showhide'
 import { insertPath, XMLModesContext, XMLRWContext } from '../snac/contexts'
-import { hasPath } from '../snac/paths'
+import { clearPaths, hasPath } from '../snac/paths'
 import { PICloseBracket, PIOpenBracket } from './brackets'
 import { XmlShow } from './xmlshow'
 
@@ -78,6 +78,7 @@ export const PI = (props: {
                         xmlModesContext.setPath(props.path)
                         xmlModesContext.setNode(props.node)
                         xmlModesContext.setMode('PI_EDIT_MODE')
+                        xmlModesContext.setPaths(clearPaths())
                     }}>
                     {escapePIBody(body)}
                 </span>
