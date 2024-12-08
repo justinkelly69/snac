@@ -207,7 +207,7 @@ const AttributeTableRow = (props: {
                 }
             </span>
             <span
-                className={`attribute-ns ${classDeleted}`}
+                className={`text-show attribute-ns ${classDeleted}`}
                 onClick={() => {
                     setEditAttributes(
                         selectAttribute(editAttributes, {
@@ -221,7 +221,7 @@ const AttributeTableRow = (props: {
                 {props.ns !== '@' ? `${props.ns}:` : ''}
             </span>
             <span
-                className={`attribute-name ${classDeleted}`}
+                className={`text-show attribute-name ${classDeleted}`}
                 onClick={() => {
                     setEditAttributes(
                         selectAttribute(editAttributes, {
@@ -244,7 +244,7 @@ const AttributeTableRow = (props: {
                             className='text-input attribute-value-input'
                             value={newValue}
                             size={4}
-                            placeholder='ns'
+                            placeholder='value'
                             onChange={(e: { target: { value: React.SetStateAction<string> } }) => setNewValue(e.target.value)}
                         />
                     </span>
@@ -281,7 +281,18 @@ const AttributeTableRow = (props: {
                     </span>
                 </> :
                 <>
-                    <span className={`attribute-value  ${classDeleted}`} >
+                    <span
+                        className={`text-show attribute-value  ${classDeleted}`}
+                        onClick={() => {
+                            setEditAttributes(
+                                selectAttribute(editAttributes, {
+                                    ns: props.ns,
+                                    name: props.name,
+                                })
+                            )
+                            setAttMode('ATTRIBUTES_EDIT_MODE')
+                        }}
+                    >
                         {editAttributes[props.ns][props.name].V}
                     </span>
                     <span></span>
