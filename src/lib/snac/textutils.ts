@@ -1,4 +1,4 @@
-import { AttributesType, EditAttributesType, EditAttributeType, SNACNamesNode } from "./types"
+import { AttributesType, EditAttributesType, SNACNamesNode } from "./types"
 
 export const escapeHtml = (text: string): string => {
     return text.replace(/&/g, '&amp;')

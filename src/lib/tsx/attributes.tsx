@@ -1,30 +1,12 @@
-import React, {
-    useContext,
-    useEffect,
-    useState
-} from 'react'
-import {
-    Button,
-    TextInput
-} from './widgets'
-import {
-    AttributeModes,
-    AttributesType,
-    EditAttributesType,
-    EditAttributeType,
-    XMLModesType
-} from '../snac/types'
+import React, { useContext, useEffect, useState } from 'react'
+import { Button, TextInput } from './widgets'
+import { AttributeModes, AttributesType, EditAttributesType } from '../snac/types'
 import { snacOpts } from '../snac/opts'
 import { Prefix } from './prefix'
 import { attributesGridStyle, EditBoxGridStyle } from '../snac/styles'
-import {
-    XMLAttributesEditContext,
-    XMLRWContext,
-    XMLModesContext,
-    XMLAttributeRowContext
-} from '../snac/contexts'
+import { XMLAttributesEditContext, XMLRWContext, XMLAttributeRowContext } from '../snac/contexts'
 import { attributeKeys, cancelAttribute, deleteAttribute, newAttribute, rowSelected, saveAttribute } from '../snac/attsutils'
-import { rowValue, selectAttribute, snac2EditAttributes } from '../snac/attsutils'
+import { selectAttribute } from '../snac/attsutils'
 
 export const Attributes = (props: {
     path: number[],
@@ -37,7 +19,6 @@ export const Attributes = (props: {
         <>
             <div>
                 {Object.keys(props.attributes).map((ns, i) => {
-
                     return Object.keys(props.attributes[ns]).map((name, j) => {
                         let tagName = name
                         if (ns !== '@') {
@@ -65,7 +46,6 @@ export const Attributes = (props: {
                             </span>
                         )
                     })
-
                 })}
             </div>
             {xmlContext.treeMode &&
@@ -100,7 +80,7 @@ const Attribute = (props: {
                 {snacOpts.prefix_attributePrefix}
                 <ANSName
                     name={props.name}
-                    openClose={f => f}
+                    openClose={(f: any) => f}
                 />
                 =&quot;
                 <span className='attribute-value'>
@@ -122,7 +102,7 @@ const Attribute = (props: {
                     {snacOpts.prefix_attributePrefix}
                     <ANSName
                         name={props.name}
-                        openClose={f => f}
+                        openClose={(f: any) => f}
                     />
                     =&quot;
                     <span className='attribute-value'>
@@ -141,11 +121,8 @@ export const AttributesEdit = (props: {
     path: number[],
 }): JSX.Element => {
 
-
     const [numRows, setNumRows] = useState(1)
     const [attMode, setAttMode] = useState<AttributeModes>('ATTRIBUTES_VIEW_MODE')
-    const [selectRow, setSelectRow] = useState(-1)
-
     const keys = attributeKeys(props.editAttributes)
 
     useEffect(() => {
@@ -176,12 +153,8 @@ export const AttributesEdit = (props: {
                         gridArea: `1 / 1 / ${numRows} / 1`,
                     }}
                 ></span>
-
-
                 {Object.keys(props.editAttributes).map((ns, i) => {
                     return Object.keys(props.editAttributes[ns]).map((name, j) => {
-                        //console.log('state', ns, name, attributeGetValue(editAttributes, ns, name), i, j)
-
                         return (
                             <AttributeTableRow
                                 key={`${i}:${j}`}
@@ -191,7 +164,6 @@ export const AttributesEdit = (props: {
                         )
                     })
                 })}
-
                 <AttributeNewRow />
             </span >
         </XMLAttributeRowContext.Provider>
@@ -229,7 +201,6 @@ const AttributeTableRow = (props: {
                                     name: props.name,
                                 })
                             )
-                            //console.log(JSON.stringify(editAttributes, null, 4))
                         }}
                         label={deletedLabel}
                     />
@@ -245,7 +216,6 @@ const AttributeTableRow = (props: {
                         })
                     )
                     setAttMode('ATTRIBUTES_EDIT_MODE')
-                    //console.log(JSON.stringify(editAttributes, null, 4))
                 }}
             >
                 {props.ns !== '@' ? `${props.ns}:` : ''}
@@ -260,7 +230,6 @@ const AttributeTableRow = (props: {
                         })
                     )
                     setAttMode('ATTRIBUTES_EDIT_MODE')
-                    //console.log(JSON.stringify(editAttributes, null, 4))
                 }}
             >
                 {props.name}
@@ -276,11 +245,7 @@ const AttributeTableRow = (props: {
                             value={newValue}
                             size={4}
                             placeholder='ns'
-                            onChange={(e: {
-                                target: {
-                                    value: React.SetStateAction<string>
-                                }
-                            }) => setNewValue(e.target.value)}
+                            onChange={(e: { target: { value: React.SetStateAction<string> } }) => setNewValue(e.target.value)}
                         />
                     </span>
                     <span>
@@ -296,7 +261,6 @@ const AttributeTableRow = (props: {
                                 )
                                 setAttMode('ATTRIBUTES_VIEW_MODE')
                                 setOldValue('')
-                                //console.log('newValue', JSON.stringify(editAttributes, null, 4))
                             }}
                             label='Save'
                         />
@@ -305,14 +269,12 @@ const AttributeTableRow = (props: {
                         <Button
                             className='button text-button'
                             onClick={() => {
-                                //setNewValue(oldValue)
                                 setEditAttributes(
                                     cancelAttribute(editAttributes)
                                 )
                                 setAttMode('ATTRIBUTES_VIEW_MODE')
                                 setNewValue(oldValue)
                                 setOldValue('')
-                                //console.log('oldValue', JSON.stringify(editAttributes, null, 4))
                             }}
                             label='Cancel'
                         />
@@ -333,7 +295,6 @@ const AttributeTableRow = (props: {
 const AttributeNewRow = () => {
     const { editAttributes, setEditAttributes } = useContext(XMLAttributesEditContext)
     const { attMode, setAttMode, numRows, setNumRows } = useContext(XMLAttributeRowContext)
-
 
     const [ns, setNs] = useState('')
     const [name, setName] = useState('')

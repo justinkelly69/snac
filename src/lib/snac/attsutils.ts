@@ -1,7 +1,5 @@
 import {
-    EditAttributesType, AttributesType, SelectedAttributeType,
-    EditAttributesActionType, EditAttributesNSNameType
-} from "./types"
+    EditAttributesType, AttributesType, SelectedAttributeType} from "./types"
 
 export const snac2EditAttributes = (
     attributes: AttributesType

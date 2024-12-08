@@ -1,8 +1,8 @@
-import React, { useContext, useReducer, useState } from 'react'
-import { SNACElement, XMLAttributeRowType, XMLModesType, XMLRWType } from '../snac/types'
+import React, { useContext, useState } from 'react'
+import { SNACElement, XMLModesType, XMLRWType } from '../snac/types'
 import { snacOpts } from '../snac/opts'
 import { Kids } from './kids'
-import { XMLRWContext, XMLTagOpenCloseContext, XMLModesContext, XMLAttributeRowContext } from '../snac/contexts'
+import { XMLRWContext, XMLTagOpenCloseContext, XMLModesContext } from '../snac/contexts'
 import { hasPath } from '../snac/paths'
 import { CloseTag, OpenTag } from './tags'
 
@@ -14,7 +14,6 @@ export const Element = (props: {
 
     const xmlRWContext = useContext(XMLRWContext) as XMLRWType
     const xmlModesContext = useContext(XMLModesContext) as XMLModesType
-    //const xmlAttributesTableContext = useContext(XMLAttributesTableContext) as XMLAttributesTableType
 
     const [isAttributesOpen, setAttributesOpen] = useState(false)
     const [isChildrenOpen, setChildrenOpen] = useState(true)
@@ -52,7 +51,6 @@ export const Element = (props: {
                     :
                     null
                 }
-
                 {isChildrenOpen ?
                     <Kids
                         snac={props.node.C}
@@ -61,7 +59,6 @@ export const Element = (props: {
                     /> :
                     snacOpts.xml_ellipsis
                 }
-
                 {isSelected && !isEmpty && (!xmlRWContext.treeMode || snacOpts.xml_showCloseTags) ? (
                     <CloseTag
                         node={props.node}
