@@ -65,7 +65,7 @@ export const attributeGetNumRows = (state: EditAttributesType): number => {
     return numRows
 }
 
-export const attributeGetValue = (
+export const rowValue = (
     editAttributes: EditAttributesType,
     ns: string,
     name: string,

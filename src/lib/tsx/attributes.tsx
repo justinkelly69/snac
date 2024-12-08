@@ -23,8 +23,8 @@ import {
     XMLModesContext,
     XMLAttributeRowContext
 } from '../snac/contexts'
-import { attributeKeys, cancelAttribute, deleteAttribute, rowSelected, saveAttribute } from '../snac/attsutils'
-import { attributeGetValue, selectAttribute, snac2EditAttributes } from '../snac/attsutils'
+import { attributeKeys, cancelAttribute, deleteAttribute, newAttribute, rowSelected, saveAttribute } from '../snac/attsutils'
+import { rowValue, selectAttribute, snac2EditAttributes } from '../snac/attsutils'
 
 export const Attributes = (props: {
     path: number[],
@@ -204,40 +204,48 @@ const AttributeTableRow = (props: {
     name: string,
 }) => {
     const { editAttributes, setEditAttributes } = useContext(XMLAttributesEditContext)
-    const { attMode, setAttMode, numRows, setNumRows } = useContext(XMLAttributeRowContext)
+    const { attMode, setAttMode } = useContext(XMLAttributeRowContext)
 
     const classDeleted = editAttributes[props.ns][props.name].d ? 'attribute-deleted' : ''
     const deletedLabel = editAttributes[props.ns][props.name].d ? 'O' : 'X'
 
-    const [value, setValue] = useState(editAttributes[props.ns][props.name].V)
-    const [oldValue, setOldValue] = useState(editAttributes[props.ns][props.name].V)
+    const [newValue, setNewValue] = useState('')
+    const [oldValue, setOldValue] = useState('')
 
-    console.log('attMode', attMode)
+    // console.log('attMode', attMode)
+    // console.log('oldValue', oldValue)
+    // console.log('newValue', newValue)
 
     return (
         <>
             <span>
-                <Button
-                    className='button x-button'
-                    onClick={() => {
-                        setEditAttributes(deleteAttribute(editAttributes, {
-                            ns: props.ns,
-                            name: props.name,
-                        }))
-                        console.log(JSON.stringify(editAttributes, null, 4))
-                    }}
-                    label={deletedLabel}
-                />
+                {attMode === 'ATTRIBUTES_VIEW_MODE' &&
+                    <Button
+                        className='button x-button'
+                        onClick={() => {
+                            setEditAttributes(
+                                deleteAttribute(editAttributes, {
+                                    ns: props.ns,
+                                    name: props.name,
+                                })
+                            )
+                            //console.log(JSON.stringify(editAttributes, null, 4))
+                        }}
+                        label={deletedLabel}
+                    />
+                }
             </span>
             <span
                 className={`attribute-ns ${classDeleted}`}
                 onClick={() => {
-                    setEditAttributes(selectAttribute(editAttributes, {
-                        ns: props.ns,
-                        name: props.name,
-                    }))
+                    setEditAttributes(
+                        selectAttribute(editAttributes, {
+                            ns: props.ns,
+                            name: props.name,
+                        })
+                    )
                     setAttMode('ATTRIBUTES_EDIT_MODE')
-                    console.log(JSON.stringify(editAttributes, null, 4))
+                    //console.log(JSON.stringify(editAttributes, null, 4))
                 }}
             >
                 {props.ns !== '@' ? `${props.ns}:` : ''}
@@ -245,12 +253,14 @@ const AttributeTableRow = (props: {
             <span
                 className={`attribute-name ${classDeleted}`}
                 onClick={() => {
-                    setEditAttributes(selectAttribute(editAttributes, {
-                        ns: props.ns,
-                        name: props.name,
-                    }))
+                    setEditAttributes(
+                        selectAttribute(editAttributes, {
+                            ns: props.ns,
+                            name: props.name,
+                        })
+                    )
                     setAttMode('ATTRIBUTES_EDIT_MODE')
-                    console.log(JSON.stringify(editAttributes, null, 4))
+                    //console.log(JSON.stringify(editAttributes, null, 4))
                 }}
             >
                 {props.name}
@@ -263,25 +273,30 @@ const AttributeTableRow = (props: {
                         <TextInput
                             name="ns"
                             className='text-input attribute-value-input'
-                            value={value}
+                            value={newValue}
                             size={4}
                             placeholder='ns'
                             onChange={(e: {
                                 target: {
                                     value: React.SetStateAction<string>
                                 }
-                            }) => setValue(e.target.value)}
+                            }) => setNewValue(e.target.value)}
                         />
                     </span>
                     <span>
                         <Button
                             className='button text-button'
                             onClick={() => {
-                                setEditAttributes(saveAttribute(editAttributes, {
-                                    ns: props.ns,
-                                    name: props.name,
-                                    value: value
-                                }))
+                                setEditAttributes(
+                                    saveAttribute(editAttributes, {
+                                        ns: props.ns,
+                                        name: props.name,
+                                        value: newValue
+                                    })
+                                )
+                                setAttMode('ATTRIBUTES_VIEW_MODE')
+                                setOldValue('')
+                                //console.log('newValue', JSON.stringify(editAttributes, null, 4))
                             }}
                             label='Save'
                         />
@@ -290,7 +305,14 @@ const AttributeTableRow = (props: {
                         <Button
                             className='button text-button'
                             onClick={() => {
-                                setEditAttributes(cancelAttribute(editAttributes))
+                                //setNewValue(oldValue)
+                                setEditAttributes(
+                                    cancelAttribute(editAttributes)
+                                )
+                                setAttMode('ATTRIBUTES_VIEW_MODE')
+                                setNewValue(oldValue)
+                                setOldValue('')
+                                //console.log('oldValue', JSON.stringify(editAttributes, null, 4))
                             }}
                             label='Cancel'
                         />
@@ -328,11 +350,7 @@ const AttributeNewRow = () => {
                     value={ns}
                     size={4}
                     placeholder='ns'
-                    onChange={(e: {
-                        target: {
-                            value: React.SetStateAction<string>
-                        }
-                    }) => setNs(e.target.value)}
+                    onChange={(e: { target: { value: React.SetStateAction<string> } }) => setNs(e.target.value)}
                 />
             </span>
             <span className='attributes-table-cell'>
@@ -342,11 +360,7 @@ const AttributeNewRow = () => {
                     value={name}
                     size={4}
                     placeholder='name'
-                    onChange={(e: {
-                        target: {
-                            value: React.SetStateAction<string>
-                        }
-                    }) => setName(e.target.value)}
+                    onChange={(e: { target: { value: React.SetStateAction<string> } }) => setName(e.target.value)}
                 />
             </span>
             <span className='attributes-table-cell'>
@@ -356,11 +370,7 @@ const AttributeNewRow = () => {
                     value={value}
                     size={4}
                     placeholder='value'
-                    onChange={(e: {
-                        target: {
-                            value: React.SetStateAction<string>
-                        }
-                    }) => setValue(e.target.value)}
+                    onChange={(e: { target: { value: React.SetStateAction<string> } }) => setValue(e.target.value)}
                 />
             </span>
 
@@ -368,18 +378,18 @@ const AttributeNewRow = () => {
                 <Button
                     className='button text-button'
                     onClick={() => {
-                        const newNs = ns.length === 0 ? '@' : ns
+                        const namespace = ns.length === 0 ? '@' : ns
 
-                        if (name.length > 0 &&
-                            value.length > 0 &&
-                            !(ns in editAttributes
-                                && name in editAttributes['ns']
-                            )) {
-                            setEditAttributes(saveAttribute(editAttributes, {
-                                ns: ns,
-                                name: name,
-                                value: value
-                            }))
+                        if (name.length > 0 && value.length > 0 &&
+                            !(ns in editAttributes && name in editAttributes[namespace])) {
+                            setEditAttributes(
+                                newAttribute(editAttributes, {
+                                    ns: ns,
+                                    name: name,
+                                    value: value
+                                })
+                            )
+                            console.log('newAttribute', JSON.stringify(editAttributes, null, 4))
                         }
                         setNumRows(numRows + 1)
                         setNs('')
