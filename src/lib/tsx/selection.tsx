@@ -1,8 +1,10 @@
-import React, { useContext } from "react"
+import React, { useContext, useState } from "react"
 import { SNACItem, XMLModesType } from '../snac/types'
 import { XMLModesContext, XMLRWContext } from "../snac/contexts"
 import { Kids } from './kids'
 import { Button, TextInput, XButton } from "./widgets"
+import { afterLastPath, beforeFirstPath, deepClone } from "../snac/paths"
+import { findElement, findElements, wrapElements } from "../snac/snac"
 
 export const Selection = (props: {
     snac: SNACItem[],
@@ -11,10 +13,17 @@ export const Selection = (props: {
     side: string,
 }): JSX.Element => {
 
-    const xmlModesContext = useContext(XMLModesContext) as XMLModesType
+    const xmlModesContext = useContext(XMLModesContext) //as XMLModesType
+
+    const [nsText, setNSText] = useState('')
+    const [nameText, setNameText] = useState('')
 
     const xmlRWValue = {
         treeMode: props.treeMode
+    }
+
+    const cutCopy = (data: number[][]) => {
+        xmlModesContext.setClipboard(deepClone(data))
     }
 
     return (
@@ -28,20 +37,28 @@ export const Selection = (props: {
                             className='text-input ns-input'
                             size={4}
                             placeholder='ns'
-                            onChange={(f: any) => f}
+                            onChange={(e: { target: { value: React.SetStateAction<string> } }) => {
+                                setNSText(e.target.value)
+                            }}
                         />
                         <TextInput
                             name="name"
                             className='text-input name-input'
                             size={10}
                             placeholder='name'
-                            onChange={(f: any) => f}
+                            onChange={(e: { target: { value: React.SetStateAction<string> } }) => {
+                                setNameText(e.target.value)
+                            }}
                         />
                         <Button
                             className='button text-button'
                             onClick={() => {
-                                xmlModesContext.setMode('VIEW_MODE')
-                                xmlModesContext.setPaths([])
+                                wrapElements(
+                                    props.snac,
+                                    xmlModesContext,
+                                    nsText,
+                                    nameText,
+                                )
                             }}
                             label='Wrap'
                         />

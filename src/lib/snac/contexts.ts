@@ -5,6 +5,7 @@ import {
     XMLModesType,
     XMLRWType,
     XMLTagOpenCloseType,
+    XMLTextModesType,
 } from "./types";
 import { addPath } from "./paths";
 
@@ -23,6 +24,8 @@ export const XMLModesContext =
         setPaths: (f: any) => f,
         mode: 'VIEW_MODE',
         setMode: (f: any) => f,
+        clipboard: [],
+        setClipboard: (f: any) => f,
     })
 
 export const XMLTagOpenCloseContext =
@@ -39,7 +42,7 @@ export const XMLAttributeRowContext =
     React.createContext<XMLAttributeRowType>({
         attMode: '',
         setAttMode: (f: any) => f,
-        numRows: 0, 
+        numRows: 0,
         setNumRows: (f: any) => f,
     })
 
@@ -47,6 +50,16 @@ export const XMLAttributesEditContext =
     React.createContext<XMLAttributesEditType>({
         editAttributes: {},
         setEditAttributes: (f: any) => f,
+    })
+
+export const XMLTextModesContext =
+    React.createContext<XMLTextModesType>({
+        setTextMode: (f: any) => f,
+        setNSText: (f: any) => f,
+        setNameText: (f: any) => f,
+        setBeforeText: (f: any) => f,
+        setDuringText: (f: any) => f,
+        setAfterText: (f: any) => f,
     })
 
 export const insertPath = (

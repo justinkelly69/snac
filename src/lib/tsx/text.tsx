@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import { SNACText, SwitchStates, XMLModesType, XMLRWType } from '../snac/types'
 import { Prefix } from './prefix'
 import { snacOpts } from '../snac/opts'
-import { escapeHtml, isLonger, trimBody } from '../snac/textutils'
+import { escapeHtml, trimBody } from '../snac/textutils'
 import { ShowHideSwitch } from './showhide'
 import { insertPath, XMLModesContext, XMLRWContext } from '../snac/contexts'
 import { XmlShow } from './xmlshow'
@@ -22,22 +22,24 @@ export const Text = (props: {
 
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'text'
-    let childrenState = SwitchStates.HIDDEN
 
     const isSelected = hasPath(xmlModesContext.paths, props.path) || props.isSelected
 
-    if (xmlRWContext.treeMode) {
+    if (xmlRWContext.treeMode && (xmlModesContext.mode === 'VIEW_MODE' || xmlModesContext.mode === 'SELECT_MODE')) {
         selectState = isSelected ?
-            SwitchStates.ON :
-            SwitchStates.OFF
-
-        childrenState = isChildrenOpen ?
             SwitchStates.ON :
             SwitchStates.OFF
 
         selectedClassName = isSelected && xmlModesContext.paths.length > 0 ?
             'text selected' :
             'text'
+    }
+
+    let childrenState = SwitchStates.HIDDEN
+    if (xmlRWContext.treeMode && (xmlModesContext.mode !== 'SELECT_MODE')) {
+        childrenState = isChildrenOpen ?
+            SwitchStates.ON :
+            SwitchStates.OFF
     }
 
     const [body, showHide] = trimBody(

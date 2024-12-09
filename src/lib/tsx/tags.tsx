@@ -28,13 +28,13 @@ export const OpenTag = (props: {
     let childrenOpenState = SwitchStates.HIDDEN
     let closeSlash = "/"
 
-    if (snacOpts.xml_showSelected) {
+    if (snacOpts.xml_showSelected && ((xmlModesContext.mode === 'VIEW_MODE' || xmlModesContext.mode === 'SELECT_MODE'))) {
         selectState = openCloseContext.isSelected ?
             SwitchStates.ON :
             SwitchStates.OFF
     }
 
-    if (snacOpts.xml_showAttributesOpen &&
+    if (snacOpts.xml_showAttributesOpen && xmlModesContext.mode !== 'SELECT_MODE' &&
         Object.keys(props.node.A).length > 0) {
         attributesOpenState = openCloseContext.isAttributesOpen ?
             SwitchStates.ON :
@@ -42,7 +42,7 @@ export const OpenTag = (props: {
     }
 
     if (!openCloseContext.isEmpty) {
-        if (snacOpts.xml_showChildrenOpen) {
+        if (snacOpts.xml_showChildrenOpen && xmlModesContext.mode !== 'SELECT_MODE') {
             childrenOpenState = openCloseContext.isChildrenOpen ?
                 SwitchStates.ON :
                 SwitchStates.OFF

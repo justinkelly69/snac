@@ -25,14 +25,22 @@ export const PI = (props: {
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'pi'
 
-    if (xmlRWContext.treeMode) {
+
+    if (xmlRWContext.treeMode && (xmlModesContext.mode === 'VIEW_MODE' || xmlModesContext.mode === 'SELECT_MODE')) {
         selectState = isSelected ?
             SwitchStates.ON :
             SwitchStates.OFF
 
         selectedClassName = isSelected && xmlModesContext.paths.length > 0 ?
-            'pi selected' :
-            'pi'
+            'text selected' :
+            'text'
+    }
+
+    let childrenState = SwitchStates.HIDDEN
+    if (xmlRWContext.treeMode && (xmlModesContext.mode !== 'SELECT_MODE')) {
+        childrenState = isChildrenOpen ?
+            SwitchStates.ON :
+            SwitchStates.OFF
     }
 
     const [body, showHide] = trimBody(
@@ -57,7 +65,7 @@ export const PI = (props: {
                 {showHide &&
                     <ShowHideSwitch
                         path={props.path}
-                        selected={selectState}
+                        selected={childrenState}
                         chars={snacOpts.switch_elementChars}
                         openClose={() => {
                             if (isChildrenOpen) {

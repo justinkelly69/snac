@@ -215,7 +215,12 @@ const AttributeTableRow = (props: {
                             name: props.name,
                         })
                     )
-                    setAttMode('ATTRIBUTES_EDIT_MODE')
+                    if(attMode === 'ATTRIBUTES_VIEW_MODE') {
+                        setAttMode('ATTRIBUTES_EDIT_MODE')
+                    }
+                    else {
+                        setAttMode('ATTRIBUTES_VIEW_MODE')
+                    }
                 }}
             >
                 {props.ns !== '@' ? `${props.ns}:` : ''}
@@ -229,7 +234,12 @@ const AttributeTableRow = (props: {
                             name: props.name,
                         })
                     )
-                    setAttMode('ATTRIBUTES_EDIT_MODE')
+                    if(attMode === 'ATTRIBUTES_VIEW_MODE') {
+                        setAttMode('ATTRIBUTES_EDIT_MODE')
+                    }
+                    else {
+                        setAttMode('ATTRIBUTES_VIEW_MODE')
+                    }
                 }}
             >
                 {props.name}

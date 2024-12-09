@@ -42,7 +42,7 @@ export const ElementEdit = (props: {
                     size={4}
                     value={nsText}
                     placeholder='ns'
-                    onChange={(e) => {
+                    onChange={(e: { target: { value: React.SetStateAction<string> } }) => {
                         setNSText(e.target.value)
                     }}
                 />
@@ -52,17 +52,17 @@ export const ElementEdit = (props: {
                     size={10}
                     value={nameText}
                     placeholder='name'
-                    onChange={(e) => {
+                    onChange={(e: { target: { value: React.SetStateAction<string> } }) => {
                         setNameText(e.target.value)
                     }} />
                 <Button
                     className='button text-button'
-                    onClick={f => f}
+                    onClick={(f: any) => f}
                     label='Save'
                 />
                 <Button
                     className='button text-button'
-                    onClick={f => f}
+                    onClick={(f: any) => f}
                     label='Cancel'
                 />
             </div>
@@ -76,78 +76,3 @@ export const ElementEdit = (props: {
         </XMLAttributesEditContext.Provider>
     )
 }
-
-/* const AttributesEdit = (props: {
-    attributes: AttributesType,
-    path: number[],
-    openClose?: Function
-}): JSX.Element => {
-
-    const [attributes, setAttributes] = useState(props.attributes)
-    const [editAttributes, setEditAttributes] = useState(true)
-    const [numRows, setNumRows] = useState(1)
-
-    const keys = attributeKeys(attributes)
-
-    useEffect(() => {
-        setAttributes(props.attributes)
-        setNumRows(keys.length + 1)
-    }, [props.attributes, keys])
-
-    console.log('AttributesEdit attributes, keys', JSON.stringify(attributes, null, 4), JSON.stringify(keys, null, 4))
-
-    console.log('numRows', numRows)
-
-    return (
-        <>
-            <span
-                className='attributes-table'
-                style={attributesGridStyle({
-                    keys: keys,
-                    pathWidth: props.path.length * 1.2,
-                    buttonWidth: 6,
-                    cellWidth: 6,
-                    height: numRows * 1.4,
-                })}
-            >
-                <span
-                    style={{
-                        gridArea: `1 / 1 / ${numRows} / 1`,
-                    }}
-                ></span>
-                <span>
-                    <Button
-                        className='button x-button'
-                        onClick={() => {
-                            props.openClose && props.openClose()
-                        }}
-                        label='X'
-                    />
-                </span>
-                {editAttributes &&
-                    <>
-                        <span>
-                            <Button
-                                className='button text-button'
-                                onClick={() => {
-                                    setEditAttributes(false)
-                                }}
-                                label='Edit'
-                            />
-                            <span style={{
-                                display: 'block',
-                                width: '6em'
-                            }}>
-                            </span>
-                        </span>
-                    </>
-                }
-
-                <AttributesTable
-                    path={props.path}
-                    attributes={attributes}
-                />
-            </span>
-        </>
-    )
-} */

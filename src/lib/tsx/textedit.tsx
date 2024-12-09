@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { SNACText, XMLModesType } from '../snac/types'
+import { SNACItem, SNACText, XMLModesType, XMLTextModesType } from '../snac/types'
 import { Button, DropDownList, TextArea, TextInput, XButton } from './widgets'
 import { snacOpts } from '../snac/opts'
 import { escapeHtml } from '../snac/textutils'
-import { XMLModesContext } from '../snac/contexts'
+import { XMLModesContext, XMLTextModesContext } from '../snac/contexts'
 import {
     CDATACloseBracket, CDATAOpenBracket, CommentCloseBracket,
     CommentOpenBracket, PICloseBracket, PIOpenBracket
 } from './brackets'
+import { insertTagInText } from '../snac/snac'
 
 export const TextEdit = (props: {
     node: SNACText,
@@ -35,25 +36,19 @@ export const TextEdit = (props: {
         setNewText(props.node.T)
     }, [props.node.T])
 
-    const saveInsert = () => {
-        if (nsText.length > 0 && nameText.length > 0) {
-            const tag = `${nsText}:${nameText}`
-            console.log(`${props.path}:${beforeText}<${tag}>${duringText}</${tag}>${afterText}`)
-        }
-        else if (nameText.length > 0) {
-            const tag = `${nameText}`
-            console.log(`${props.path}:${beforeText}<${tag}>${duringText}</${tag}>${afterText}`)
-        }
-        setTextMode('TEXT_VIEW_MODE')
-        setNSText('')
-        setNameText('')
-        setBeforeText('')
-        setDuringText('')
-        setAfterText('')
+
+
+    const value = {
+        setTextMode,
+        setNSText,
+        setNameText,
+        setBeforeText,
+        setDuringText,
+        setAfterText,
     }
 
     return (
-        <>
+        <XMLTextModesContext.Provider value={value} >
             {textMode === 'TEXT_VIEW_MODE' &&
                 <>
                     <div className={`xml-display-controls-right xml-controls-area`}>
@@ -182,7 +177,15 @@ export const TextEdit = (props: {
                                 />
                                 <Button
                                     className='button text-button'
-                                    onClick={() => saveInsert()}
+                                    onClick={() => insertTagInText(
+                                        value,
+                                        props.path,
+                                        nsText,
+                                        nameText,
+                                        beforeText,
+                                        duringText,
+                                        afterText,
+                                    )}
                                     label='Insert Here'
                                 />
                                 <Button
@@ -330,6 +333,6 @@ export const TextEdit = (props: {
                     </div>
                 </>
             }
-        </>
+        </XMLTextModesContext.Provider>
     )
 }

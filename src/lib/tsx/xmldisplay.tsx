@@ -21,6 +21,7 @@ export const XMLDisplay = (props: {
 
     const [path, setPath] = useState<number[]>(props.path || [])
     const [paths, setPaths] = useState<number[][]>([])
+    const [clipboard, setClipboard] = useState<number[]>([])
     const [mode, setMode] = useState<SwitchModes>('VIEW_MODE')
     const [node, setNode] = useState<SNACItem | undefined>(props.node)
 
@@ -33,6 +34,8 @@ export const XMLDisplay = (props: {
         setPaths: setPaths,
         mode: mode,
         setMode: setMode,
+        clipboard: clipboard, 
+        setClipboard: setClipboard,
     }
 
     //console.log('path', JSON.stringify(path, null, 4))

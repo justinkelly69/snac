@@ -33,6 +33,8 @@ export type XMLModesType = {
     setPaths: Function,
     mode: SwitchModes,
     setMode: Function,
+    clipboard: number[],
+    setClipboard: Function,
 }
 
 export type XMLTagOpenCloseType = {
@@ -52,8 +54,17 @@ export type XMLAttributesEditType = {
 export type XMLAttributeRowType = {
     attMode: string,
     setAttMode: Function,
-    numRows: number, 
+    numRows: number,
     setNumRows: Function,
+}
+
+export type XMLTextModesType = {
+    setTextMode: Function,
+    setNSText: Function,
+    setNameText: Function,
+    setBeforeText: Function,
+    setDuringText: Function,
+    setAfterText: Function,
 }
 
 export type XMLOpts = {
@@ -259,6 +270,16 @@ export type SNACItem =
     SNACCDATA |
     SNACComment |
     SNACPINode
+
+
+export type SNACRoot = {
+    root: SNACItem[],
+    clipboard: SNACItem[],
+}
+export type SNACStep = {
+    out: SNACItem[],
+    remainder: string
+}
 
 export interface AttributesXMLhasChildrenType {
     attributes: AttributesType,

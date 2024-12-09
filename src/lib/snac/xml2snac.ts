@@ -3,7 +3,9 @@ import {
     SNACItem,
     SNACElement,
     AttributesType,
-    NamespaceAttributesType
+    NamespaceAttributesType,
+    SNACStep,
+    SNACRoot
 } from './types'
 
 import {
@@ -23,12 +25,20 @@ import {
 } from './textutils'
 import { getAllAttributes } from './atts2snac'
 
-const render = (xml: string) => {
+const render = (xml: string):SNACRoot => {
+    const stack: SNACNamesNode[] = []
+    return {
+        root: _render(xml, stack)['out'],
+        clipboard: [],
+    }
+}
+
+const render0 = (xml: string):SNACItem[] => {
     const stack: SNACNamesNode[] = []
     return _render(xml, stack)['out']
 }
 
-const _render = (remainder: string, stack: SNACNamesNode[]) => {
+const _render = (remainder: string, stack: SNACNamesNode[]):SNACStep => {
     const out: SNACItem[] = []
 
     while (remainder.length > 0) {

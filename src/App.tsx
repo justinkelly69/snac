@@ -6,7 +6,7 @@ import xml2snac from './lib/snac/xml2snac'
 import { XMLDisplay } from './lib/tsx/xmldisplay';
 
 function App() {
-    const snac = xml2snac(xmlInput)[0]
+    const snac = xml2snac(xmlInput).root[0]
 
     //console.log(JSON.stringify(snac, null, 4))
 

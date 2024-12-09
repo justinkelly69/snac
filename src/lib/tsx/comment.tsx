@@ -24,14 +24,21 @@ export const Comment = (props: {
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'comment'
 
-    if (xmlRWContext.treeMode) {
+    if (xmlRWContext.treeMode && (xmlModesContext.mode === 'VIEW_MODE' || xmlModesContext.mode === 'SELECT_MODE')) {
         selectState = isSelected ?
             SwitchStates.ON :
             SwitchStates.OFF
 
         selectedClassName = isSelected && xmlModesContext.paths.length > 0 ?
-            'comment selected' :
-            'comment'
+            'text selected' :
+            'text'
+    }
+
+    let childrenState = SwitchStates.HIDDEN
+    if (xmlRWContext.treeMode && (xmlModesContext.mode !== 'SELECT_MODE')) {
+        childrenState = isChildrenOpen ?
+            SwitchStates.ON :
+            SwitchStates.OFF
     }
 
     const [body, showHide] = trimBody(
@@ -58,7 +65,7 @@ export const Comment = (props: {
                     {showHide &&
                         <ShowHideSwitch
                             path={props.path}
-                            selected={selectState}
+                            selected={childrenState}
                             chars={snacOpts.switch_elementChars}
                             openClose={() => {
                                 if (isChildrenOpen) {
