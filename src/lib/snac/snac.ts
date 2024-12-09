@@ -1,3 +1,4 @@
+import { snacOpts } from "./opts"
 import { afterLastPath, beforeFirstPath } from "./paths"
 import {
     SNACItem,
@@ -138,43 +139,118 @@ export const insertTagInText = (
     duringText: string,
     afterText: string,
 ) => {
+    if (nameText.length > 0) {
+        let ns = '@'
+        const name = nameText
+        if (nsText.length > 0) {
+            ns = nsText
+        }
+        insertInText(
+            textModeContext,
+            path,
+            beforeText,
+            {
+                S: ns,
+                N: name,
+                X: {},
+                A: {},
+                C: [
+                    { T: duringText }
+                ]
+            },
+            afterText,
+        )
+    }
+}
+
+export const insertCDATAInText = (
+    textModeContext: XMLTextModesType,
+    path: number[],
+    beforeText: string,
+    duringText: string,
+    afterText: string,
+) => {
+    insertInText(
+        textModeContext,
+        path,
+        beforeText,
+        { D: duringText },
+        afterText,
+    )
+}
+
+export const insertCommentInText = (
+    textModeContext: XMLTextModesType,
+    path: number[],
+    beforeText: string,
+    duringText: string,
+    afterText: string,
+) => {
+    insertInText(
+        textModeContext,
+        path,
+        beforeText,
+        { M: duringText },
+        afterText,
+    )
+}
+
+export const piLanguages = () => {
+    const out: string[] = []
+    snacOpts.pi_languages.map((language) => {
+        return out.push(language[0])
+    })
+    return out
+}
+
+export const insertPIInText = (
+    textModeContext: XMLTextModesType,
+    path: number[],
+    language: string,
+    beforeText: string,
+    duringText: string,
+    afterText: string,
+) => {
+
+    if (language.length > 0) {
+        insertInText(
+            textModeContext,
+            path,
+            beforeText,
+            {
+                L: language,
+                B: duringText
+            },
+            afterText,
+        )
+    }
+}
+
+export const insertInText = (
+    textModeContext: XMLTextModesType,
+    path: number[],
+    beforeText: string,
+    payload: SNACItem,
+    afterText: string,
+) => {
 
     const {
-        setTextMode,
-        setNSText,
-        setNameText,
         setBeforeText,
         setDuringText,
         setAfterText,
     } = textModeContext
 
-    if(nameText.length > 0) {
-        let ns = '@'
-        const name = nameText
-        if(nsText.length > 0) {
-            ns = nsText
-        }
-        const out = [
-            {T:beforeText},
-            {
-                S:ns,
-                N:name,
-                X:{},
-                A:{},
-                C:[
-                    {T:duringText}
-                ]
-            },
-            {T:afterText},
-        ]
-        console.log(
-            JSON.stringify(path, null, 4),
-            JSON.stringify(out, null, 4)
-        )
-    }
-    setTextMode('TEXT_VIEW_MODE')
-    setNSText('')
-    setNameText('')
+
+    const out = [
+        { T: beforeText },
+        payload,
+        { T: afterText },
+    ]
+
+    console.log(
+        JSON.stringify(path, null, 4),
+        JSON.stringify(out, null, 4)
+    )
     setBeforeText('')
     setDuringText('')
     setAfterText('')

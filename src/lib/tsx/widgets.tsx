@@ -43,10 +43,13 @@ export const DropDownList = props => {
             ref={props.ref}
             className={props.className}
             value={props.value}
+            //defaultValue={props.value}
             onChange={props.onChange}
         >
-            {props.opts.map((opt: string[]) =>
-                <option value={opt[0]}>{opt[1]}</option>
+            {props.opts.map((opt: string[], index: number) =>
+                <option value={opt[0]} key={index}>
+                    {opt[1]}
+                </option>
             )}
         </select>
     )
