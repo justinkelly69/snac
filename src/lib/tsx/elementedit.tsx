@@ -7,7 +7,7 @@ import { AttributesEdit } from './attributes'
 import {
     XMLAttributesEditContext,
     XMLModesContext} from '../snac/contexts'
-import { snac2EditAttributes } from '../snac/attsutils'
+import { editAttributes2snac, snac2EditAttributes } from '../snac/attsutils'
 
 export const ElementEdit = (props: {
     node: SNACElement,
@@ -57,7 +57,17 @@ export const ElementEdit = (props: {
                     }} />
                 <Button
                     className='button text-button'
-                    onClick={(f: any) => f}
+                    onClick={() => {
+                        const out = {
+                            S: nsText,
+                            N: nameText,
+                            A: editAttributes2snac(editAttributes),
+                            X: props.node.X,
+                            C: props.node.C,
+                        }
+                        console.log(JSON.stringify(props.path, null, 4))
+                        console.log(JSON.stringify(out, null, 4))
+                    }}
                     label='Save'
                 />
                 <Button

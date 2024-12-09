@@ -1,52 +1,48 @@
 import {
-    EditAttributesType, AttributesType, SelectedAttributeType} from "./types"
+    EditAttributesType, AttributesType, SelectedAttributeType
+} from "./types"
 
 export const snac2EditAttributes = (
     attributes: AttributesType
 ): EditAttributesType => {
     const editAttributes: EditAttributesType = {}
-
     for (const ns of Object.keys(attributes)) {
-        //if (!editAttributes[ns]) {
-            editAttributes[ns] = {}
-        //}
+        editAttributes[ns] = {}
         for (const name of Object.keys(attributes[ns])) {
-            //if (!editAttributes[ns][name]) {
-                editAttributes[ns][name] = {
-                    V: attributes[ns][name],
-                    d: false,
-                    q: false,
-                }
-            //}
+            editAttributes[ns][name] = {
+                V: attributes[ns][name],
+                d: false,
+                q: false,
+            }
         }
     }
-
     return editAttributes
 }
 
 export const editAttributes2snac = (
     editAttributes: EditAttributesType
 ): AttributesType => {
-    const attributes: AttributesType = {}
-
+    const attributes1: AttributesType = {}
     for (const ns of Object.keys(editAttributes)) {
-        //if (!attributes[ns]) {
-            attributes[ns] = {}
-        //}
+        attributes1[ns] = {}
         for (const name of Object.keys(editAttributes[ns])) {
-            //if (!attributes[ns][name]) {
-                if (!editAttributes[ns][name]['d']) {
-                    attributes[ns][name] = editAttributes[ns][name]['V']
-                }
-            //}
+            if (!editAttributes[ns][name]['d']) {
+                attributes1[ns][name] = editAttributes[ns][name]['V']
+            }
         }
     }
-
-    return attributes
+    const attributes2 = {}
+    for(const ns of Object.keys(attributes1)) {
+        if(Object.keys(attributes1[ns]).length === 0){
+            continue
+        }
+        attributes2[ns] = attributes1[ns]
+    }
+    return attributes2
 }
 
 export const attributeKeys = (editAttributes: EditAttributesType): string[][] => {
-    const out:string[][] = []
+    const out: string[][] = []
     Object.keys(editAttributes).map((ns, i) => {
         return Object.keys(editAttributes[ns]).map((name, j) => {
             return out.push([ns, name])
