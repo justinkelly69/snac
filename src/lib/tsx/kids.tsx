@@ -19,7 +19,6 @@ export const Kids = (props: {
         <span className='xml-out'>
             {props.snac.map((s, i) => {
                 const newPath = [...props.path, i]
-
                 return (
                     <Fragment key={i}>
                         {s.hasOwnProperty("N") &&

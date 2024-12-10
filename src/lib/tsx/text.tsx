@@ -19,11 +19,10 @@ export const Text = (props: {
     const xmlRWContext = useContext(XMLRWContext) as XMLRWType
 
     const [isChildrenOpen, setChildrenOpen] = useState(false)
+    const isSelected = hasPath(xmlModesContext.paths, props.path) || props.isSelected
 
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'text'
-
-    const isSelected = hasPath(xmlModesContext.paths, props.path) || props.isSelected
 
     if (xmlRWContext.treeMode && (xmlModesContext.mode === 'VIEW_MODE' || xmlModesContext.mode === 'SELECT_MODE')) {
         selectState = isSelected ?
@@ -57,10 +56,7 @@ export const Text = (props: {
                         path={props.path}
                         selected={selectState}
                         chars={snacOpts.switch_selectChars}
-                        openClose={() => insertPath(
-                            xmlModesContext,
-                            props.path,
-                        )}
+                        openClose={() => insertPath(xmlModesContext, props.path)}
                     />
                     <Prefix path={props.path} />
                     {showHide ?
@@ -81,8 +77,7 @@ export const Text = (props: {
                     }
 
                 </span>
-                <span
-                    className='text-show text-body'
+                <span className='text-show text-body'
                     onClick={() => {
                         xmlModesContext.setPath(props.path)
                         xmlModesContext.setNode(props.node)
@@ -100,10 +95,7 @@ export const Text = (props: {
         return (
             <>
                 {isSelected ?
-                    <XmlShow
-                        path={props.path}
-                        className={selectedClassName}
-                    >
+                    <XmlShow className={selectedClassName} path={props.path}>
                         {escapeHtml(body)}
                     </XmlShow> :
                     null

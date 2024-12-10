@@ -30,8 +30,8 @@ export const Comment = (props: {
             SwitchStates.OFF
 
         selectedClassName = isSelected && xmlModesContext.paths.length > 0 ?
-            'text selected' :
-            'text'
+            'comment selected' :
+            'comment'
     }
 
     let childrenState = SwitchStates.HIDDEN
@@ -73,7 +73,6 @@ export const Comment = (props: {
                                 }
                                 else {
                                     setChildrenOpen(true)
-
                                 }
                             }}
                         />
@@ -101,10 +100,7 @@ export const Comment = (props: {
         return (
             <>
                 {isSelected ?
-                    <XmlShow
-                        path={props.path}
-                        className={selectedClassName}
-                    >
+                    <XmlShow className={selectedClassName} path={props.path}  >
                         <CommentOpenBracket /><br />
                         {props.node.M.trim()}<br />
                         <CommentCloseBracket />

@@ -52,9 +52,7 @@ export const Attributes = (props: {
                 Object.keys(props.attributes).length > 0 ?
                 <>
                     {snacOpts.prefix_spaceBefore}
-                    <Prefix
-                        path={props.path}
-                    />
+                    <Prefix path={props.path} />
                     {snacOpts.prefix_spaceAfter}
                 </>
                 : null
@@ -74,8 +72,7 @@ const Attribute = (props: {
     if (xmlContext.treeMode) {
         return (
             <span className='attribute'>
-                <Prefix
-                    path={props.path}
+                <Prefix path={props.path}
                 />
                 {snacOpts.prefix_attributePrefix}
                 <ANSName
@@ -215,7 +212,7 @@ const AttributeTableRow = (props: {
                             name: props.name,
                         })
                     )
-                    if(attMode === 'ATTRIBUTES_VIEW_MODE') {
+                    if (attMode === 'ATTRIBUTES_VIEW_MODE') {
                         setAttMode('ATTRIBUTES_EDIT_MODE')
                     }
                     else {
@@ -234,7 +231,7 @@ const AttributeTableRow = (props: {
                             name: props.name,
                         })
                     )
-                    if(attMode === 'ATTRIBUTES_VIEW_MODE') {
+                    if (attMode === 'ATTRIBUTES_VIEW_MODE') {
                         setAttMode('ATTRIBUTES_EDIT_MODE')
                     }
                     else {

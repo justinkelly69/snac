@@ -31,13 +31,10 @@ export const TextEdit = (props: {
     const [afterText, setAfterText] = useState('')
 
     const [newPILang, setNewPILang] = useState(piLanguages()[0])
-    console.log('newPILang', newPILang)
 
     useEffect(() => {
         setNewText(props.node.T)
     }, [props.node.T])
-
-
 
     const value = {
         setTextMode,
@@ -56,18 +53,14 @@ export const TextEdit = (props: {
                         <XButton xmlModesContext={xmlModesContext} />
                         <Button
                             className='button text-button'
-                            onClick={() => {
-                                setTextMode('TEXT_INSERT_MODE')
-                            }}
+                            onClick={() => setTextMode('TEXT_INSERT_MODE')}
                             label='Insert Mode'
                         />
                     </div>
                     <div className={`xml-display-body-right xml-body-area`}>
                         <span
                             className='text-show text-body'
-                            onClick={() => {
-                                setTextMode('TEXT_EDIT_MODE')
-                            }}
+                            onClick={() => setTextMode('TEXT_EDIT_MODE')}
                         >
                             {escapeHtml(newText)}
                         </span>
@@ -101,7 +94,8 @@ export const TextEdit = (props: {
                             readOnly={false}
                             className='edit-text-editor text-editor'
                             value={newText}
-                            onChange={(e) => setNewText(e.target.value)}
+                            onChange={(e: { target: { value: React.SetStateAction<string> } }) =>
+                                setNewText(e.target.value)}
                         />
                     </div>
                 </>
@@ -133,11 +127,8 @@ export const TextEdit = (props: {
                             readOnly={false}
                             className='edit-text-editor text-editor'
                             value={props.node.T}
-                            onChange={(e: {
-                                target: {
-                                    value: React.SetStateAction<string>
-                                }
-                            }) => setNewText(e.target.value)}
+                            onChange={(e: { target: { value: React.SetStateAction<string> } }) =>
+                                setNewText(e.target.value)}
                         />
                     </div>
                 </>
@@ -159,44 +150,29 @@ export const TextEdit = (props: {
                                     className='text-input ns-input'
                                     size={4}
                                     placeholder='ns'
-                                    onChange={(e: {
-                                        target: {
-                                            value: React.SetStateAction<string>
-                                        }
-                                    }) => setNSText(e.target.value)}
+                                    onChange={(e: { target: { value: React.SetStateAction<string> } }) =>
+                                        setNSText(e.target.value)}
                                 />
                                 <TextInput
                                     name="name"
                                     className='text-input name-input'
                                     size={10}
                                     placeholder='name'
-                                    onChange={(e: {
-                                        target: {
-                                            value: React.SetStateAction<string>
-                                        }
-                                    }) => setNameText(e.target.value)}
+                                    onChange={(e: { target: { value: React.SetStateAction<string> } }) =>
+                                        setNameText(e.target.value)}
                                 />
                                 <Button
                                     className='button text-button'
                                     onClick={() => {
-                                        insertTagInText(
-                                            value,
-                                            props.path,
-                                            nsText,
-                                            nameText,
-                                            beforeText,
-                                            duringText,
-                                            afterText,
-                                        )
+                                        insertTagInText(value, props.path, nsText, nameText,
+                                            beforeText, duringText, afterText)
                                         setTextMode('TEXT_INSERT_MODE')
                                     }}
                                     label='Insert Here'
                                 />
                                 <Button
                                     className='button text-button'
-                                    onClick={() => {
-                                        setTextMode('TEXT_INSERT_MODE')
-                                    }}
+                                    onClick={() => setTextMode('TEXT_INSERT_MODE')}
                                     label='Back'
                                 />
                             </>
@@ -206,37 +182,27 @@ export const TextEdit = (props: {
                                 <XButton xmlModesContext={xmlModesContext} />
                                 <Button
                                     className='button text-button'
-                                    onClick={() => {
-                                        setTextMode('TEXT_INSERT_TAG_MODE')
-                                    }}
+                                    onClick={() => setTextMode('TEXT_INSERT_TAG_MODE')}
                                     label='Element'
                                 />
                                 <Button
                                     className='button text-button'
-                                    onClick={() => {
-                                        setTextMode('TEXT_INSERT_CDATA_MODE')
-                                    }}
+                                    onClick={() => setTextMode('TEXT_INSERT_CDATA_MODE')}
                                     label='CDATA'
                                 />
                                 <Button
                                     className='button text-button'
-                                    onClick={() => {
-                                        setTextMode('TEXT_INSERT_COMMENT_MODE')
-                                    }}
+                                    onClick={() => setTextMode('TEXT_INSERT_COMMENT_MODE')}
                                     label='Comment'
                                 />
                                 <Button
                                     className='button text-button'
-                                    onClick={() => {
-                                        setTextMode('TEXT_INSERT_PI_MODE')
-                                    }}
+                                    onClick={() => setTextMode('TEXT_INSERT_PI_MODE')}
                                     label='PI'
                                 />
                                 <Button
                                     className='button text-button'
-                                    onClick={() => {
-                                        setTextMode('TEXT_VIEW_MODE')
-                                    }}
+                                    onClick={() => setTextMode('TEXT_VIEW_MODE')}
                                     label='Back'
                                 />
                             </>
@@ -248,22 +214,15 @@ export const TextEdit = (props: {
                                 <Button
                                     className='button text-button'
                                     onClick={() => {
-                                        insertCDATAInText(
-                                            value,
-                                            props.path,
-                                            beforeText,
-                                            duringText,
-                                            afterText,
-                                        )
+                                        insertCDATAInText(value, props.path,
+                                            beforeText, duringText, afterText)
                                         setTextMode('TEXT_INSERT_MODE')
                                     }}
                                     label='Insert'
                                 />
                                 <Button
                                     className='button text-button'
-                                    onClick={() => {
-                                        setTextMode('TEXT_INSERT_MODE')
-                                    }}
+                                    onClick={() => setTextMode('TEXT_INSERT_MODE')}
                                     label='Back'
                                 />
                                 <CDATACloseBracket />
@@ -276,22 +235,15 @@ export const TextEdit = (props: {
                                 <Button
                                     className='button text-button'
                                     onClick={() => {
-                                        insertCommentInText(
-                                            value,
-                                            props.path,
-                                            beforeText,
-                                            duringText,
-                                            afterText,
-                                        )
+                                        insertCommentInText(value, props.path,
+                                            beforeText, duringText, afterText)
                                         setTextMode('TEXT_INSERT_MODE')
                                     }}
                                     label='Insert'
                                 />
                                 <Button
                                     className='button text-button'
-                                    onClick={() => {
-                                        setTextMode('TEXT_INSERT_MODE')
-                                    }}
+                                    onClick={() => setTextMode('TEXT_INSERT_MODE')}
                                     label='Back'
                                 />
                                 <CommentCloseBracket />
@@ -304,31 +256,23 @@ export const TextEdit = (props: {
                                 <DropDownList
                                     className='pi-drop-down'
                                     value={newPILang}
-                                    onChange={(e: { target: { value: React.SetStateAction<string> } }) => {
+                                    onChange={(e: { target: { value: React.SetStateAction<string> } }) =>
                                         setNewPILang(e.target.value)
-                                    }}
+                                    }
                                     opts={snacOpts.pi_languages}
                                 />
                                 <Button
                                     className='button text-button'
                                     onClick={() => {
-                                        insertPIInText(
-                                            value,
-                                            props.path,
-                                            newPILang,
-                                            beforeText,
-                                            duringText,
-                                            afterText,
-                                        )
+                                        insertPIInText(value, props.path, newPILang,
+                                            beforeText, duringText, afterText)
                                         setTextMode('TEXT_INSERT_MODE')
                                     }}
                                     label='Save'
                                 />
                                 <Button
                                     className='button text-button'
-                                    onClick={() => {
-                                        setTextMode('TEXT_INSERT_MODE')
-                                    }}
+                                    onClick={() => setTextMode('TEXT_INSERT_MODE')}
                                     label='Back'
                                 />
                                 <PICloseBracket />
@@ -342,8 +286,8 @@ export const TextEdit = (props: {
                             value={newText}
                             onSelect={(e: {
                                 target: {
-                                    value: any;
-                                    selectionStart: any;
+                                    value: any,
+                                    selectionStart: any,
                                     selectionEnd: any
                                 }
                             }) => {

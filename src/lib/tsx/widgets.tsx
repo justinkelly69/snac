@@ -39,11 +39,9 @@ export const TextArea = props =>
 
 export const DropDownList = props => {
     return (
-        <select
+        <select className={props.className}
             ref={props.ref}
-            className={props.className}
             value={props.value}
-            //defaultValue={props.value}
             onChange={props.onChange}
         >
             {props.opts.map((opt: string[], index: number) =>
@@ -155,9 +153,7 @@ export const XButton = (props: {
     return (
         <Button
             className='button x-button'
-            onClick={() => {
-                clearPaths(props.xmlModesContext)
-            }}
+            onClick={() => clearPaths(props.xmlModesContext)}
             label='X'
         />
     )

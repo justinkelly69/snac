@@ -2,11 +2,13 @@ import React, { useContext, useEffect, useState } from 'react'
 import { Button, TextInput, XButton } from './widgets'
 import {
     EditAttributesType, SNACElement,
-    XMLModesType} from '../snac/types'
+    XMLModesType
+} from '../snac/types'
 import { AttributesEdit } from './attributes'
 import {
     XMLAttributesEditContext,
-    XMLModesContext} from '../snac/contexts'
+    XMLModesContext
+} from '../snac/contexts'
 import { editAttributes2snac, snac2EditAttributes } from '../snac/attsutils'
 
 export const ElementEdit = (props: {
@@ -42,9 +44,9 @@ export const ElementEdit = (props: {
                     size={4}
                     value={nsText}
                     placeholder='ns'
-                    onChange={(e: { target: { value: React.SetStateAction<string> } }) => {
+                    onChange={(e: { target: { value: React.SetStateAction<string> } }) =>
                         setNSText(e.target.value)
-                    }}
+                    }
                 />
                 <TextInput
                     name="name"
@@ -52,9 +54,9 @@ export const ElementEdit = (props: {
                     size={10}
                     value={nameText}
                     placeholder='name'
-                    onChange={(e: { target: { value: React.SetStateAction<string> } }) => {
+                    onChange={(e: { target: { value: React.SetStateAction<string> } }) =>
                         setNameText(e.target.value)
-                    }} />
+                    } />
                 <Button
                     className='button text-button'
                     onClick={() => {
@@ -77,11 +79,11 @@ export const ElementEdit = (props: {
                 />
             </div>
             <div className={`xml-display-body-right xml-body-area`}>
-                    <AttributesEdit
-                        editAttributes={editAttributes}
-                        setEditAttributes={setEditAttributes}
-                        path={props.path}
-                    />
+                <AttributesEdit
+                    editAttributes={editAttributes}
+                    setEditAttributes={setEditAttributes}
+                    path={props.path}
+                />
             </div>
         </XMLAttributesEditContext.Provider>
     )

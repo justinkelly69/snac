@@ -34,9 +34,9 @@ export const PIEdit = (props: {
                     <DropDownList
                         className='pi-drop-down'
                         value={newPILang}
-                        onChange={(e: { target: { value: React.SetStateAction<string> } }) => {
+                        onChange={(e: { target: { value: React.SetStateAction<string> } }) =>
                             setNewPILang(e.target.value)
-                        }}
+                        }
                         opts={snacOpts.pi_languages}
                     />
                     <Button
@@ -65,9 +65,9 @@ export const PIEdit = (props: {
                         readOnly={false}
                         className='text-editor pi-editor'
                         value={newPIBody}
-                        onChange={(e: { target: { value: React.SetStateAction<string> } }) => {
+                        onChange={(e: { target: { value: React.SetStateAction<string> } }) =>
                             setNewPIBody(e.target.value)
-                        }}
+                        }
                     />
                 </div>
             </>

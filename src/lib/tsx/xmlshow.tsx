@@ -11,9 +11,7 @@ export const XmlShow = (props: {
         <>
             {props.children ?
                 <div className={`show-body-code ${props.className}`}
-                    style={EditBoxGridStyle({
-                        pathWidth: props.path.length
-                    })}
+                    style={EditBoxGridStyle({ pathWidth: props.path.length })}
                 >
                     <span className='show-body-code-prefix'></span>
                     <span className='show-body-code-text'>

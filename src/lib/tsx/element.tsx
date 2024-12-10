@@ -42,30 +42,26 @@ export const Element = (props: {
     return (
         <XMLTagOpenCloseContext.Provider value={xmlTagOpenCloseContext}>
             <div className={selectedClassName}>
-
                 {xmlRWContext.treeMode || isSelected ?
                     <OpenTag
                         node={props.node}
                         path={props.path}
                     />
-                    :
-                    null
+                    : null
                 }
                 {isChildrenOpen ?
                     <Kids
                         snac={props.node.C}
                         path={props.path}
                         isSelected={isSelected}
-                    /> :
-                    snacOpts.xml_ellipsis
+                    /> : snacOpts.xml_ellipsis
                 }
                 {isSelected && !isEmpty && (!xmlRWContext.treeMode || snacOpts.xml_showCloseTags) ? (
                     <CloseTag
                         node={props.node}
                         path={props.path}
                     />
-                ) :
-                    null
+                ) : null
                 }
             </div>
         </XMLTagOpenCloseContext.Provider>

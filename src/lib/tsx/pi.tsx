@@ -19,12 +19,10 @@ export const PI = (props: {
     const xmlModesContext = useContext(XMLModesContext) as XMLModesType
 
     const [isChildrenOpen, setChildrenOpen] = useState(false)
-
     const isSelected = hasPath(xmlModesContext.paths, props.path) || props.isSelected
 
     let selectState = SwitchStates.HIDDEN
     let selectedClassName = 'pi'
-
 
     if (xmlRWContext.treeMode && (xmlModesContext.mode === 'VIEW_MODE' || xmlModesContext.mode === 'SELECT_MODE')) {
         selectState = isSelected ?
@@ -49,6 +47,7 @@ export const PI = (props: {
         snacOpts.xml_trimPIBodyLength,
         snacOpts.xml_ellipsis
     )
+    
     if (xmlRWContext.treeMode) {
         return (
             <div className={selectedClassName}>

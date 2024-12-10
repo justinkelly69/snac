@@ -113,19 +113,13 @@ export const findElement = (
 
 const clone = (
     snac: SNACItem[],
-    removeFrom: number[],
-    removeTo: number[],
-    replace: SNACItem[] | null
+    removePaths: number[][] | null,
+    replace?: SNACItem[],
 ): SNACItem[] => {
 
     const snacOut: SNACItem[] = []
     for (const s in snac) {
-        if (removeFrom[0] === parseInt(s)) {
-
-        }
-        else {
-            snacOut.push(snac[s])
-        }
+        
     }
     return snacOut
 }

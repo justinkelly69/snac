@@ -56,21 +56,14 @@ export const OpenTag = (props: {
                     path={props.path}
                     selected={selectState}
                     chars={snacOpts.switch_selectChars}
-                    openClose={() => insertPath(
-                        xmlModesContext,
-                        props.path,
-                    )}
+                    openClose={() => insertPath(xmlModesContext, props.path)}
                 />
                 <Prefix path={props.path} />
                 <ShowHideSwitch
                     path={props.path}
                     selected={childrenOpenState}
                     chars={snacOpts.switch_elementChars}
-                    openClose={() =>
-                        openCloseContext.setChildrenOpen(
-                            !openCloseContext.isChildrenOpen
-                        )
-                    }
+                    openClose={() => openCloseContext.setChildrenOpen(!openCloseContext.isChildrenOpen)}
                 />
                 &lt;
                 <NSName
@@ -80,7 +73,6 @@ export const OpenTag = (props: {
                         xmlModesContext.setPath(props.path)
                         xmlModesContext.setMode('ELEMENT_EDIT_MODE')
                         xmlModesContext.setPaths(clearPaths())
-
                     }}
                 />
                 <>
@@ -97,11 +89,7 @@ export const OpenTag = (props: {
                     path={props.path}
                     selected={attributesOpenState}
                     chars={snacOpts.switch_attributeChars}
-                    openClose={() =>
-                        openCloseContext.setAttributesOpen(
-                            !openCloseContext.isAttributesOpen
-                        )
-                    }
+                    openClose={() => openCloseContext.setAttributesOpen(!openCloseContext.isAttributesOpen)}
                 />
             </>
         )
@@ -109,9 +97,7 @@ export const OpenTag = (props: {
     else {
         return (
             <div className='show-body-code'
-                style={EditBoxGridStyle({
-                    pathWidth: props.path.length
-                })}
+                style={EditBoxGridStyle({ pathWidth: props.path.length })}
             >
                 <span className='show-body-code-prefix'></span>
                 <span className='show-body-code-text'>
@@ -138,9 +124,7 @@ export const CloseTag = (props: {
 
     return (
         <div className='show-body-code'
-            style={EditBoxGridStyle({
-                pathWidth: props.path.length
-            })}
+            style={EditBoxGridStyle({ pathWidth: props.path.length })}
         >
             <span className='show-body-code-prefix'></span>
             <span className='show-body-code-text'>

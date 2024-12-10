@@ -30,8 +30,8 @@ export const CDATA = (props: {
             SwitchStates.OFF
 
         selectedClassName = isSelected && xmlModesContext.paths.length > 0 ?
-            'text selected' :
-            'text'
+            'cdata selected' :
+            'cdata'
     }
 
     let childrenState = SwitchStates.HIDDEN
@@ -99,10 +99,7 @@ export const CDATA = (props: {
         return (
             <>
                 {isSelected ?
-                    <XmlShow
-                        path={props.path}
-                        className={selectedClassName}
-                    >
+                    <XmlShow className={selectedClassName} path={props.path}>
                         <CDATAOpenBracket /><br />
                         {props.node.D.trim()}<br />
                         <CDATACloseBracket />
@@ -110,7 +107,6 @@ export const CDATA = (props: {
                     null
                 }
             </>
-
         )
     }
 }

@@ -55,11 +55,8 @@ export const CommentEdit = (props: {
                         readOnly={false}
                         className='edit-text-editor comment-editor'
                         value={prevComment}
-                        onChange={(e: {
-                            target: {
-                                value: React.SetStateAction<string>
-                            }
-                        }) => setPrevComment(e.target.value)}
+                        onChange={(e: { target: { value: React.SetStateAction<string> } }) =>
+                            setPrevComment(e.target.value)}
                     />
                 </div>
             </>

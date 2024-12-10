@@ -52,11 +52,8 @@ export const CDATAEdit = (props: {
                         readOnly={false}
                         className='text-editor cdata-editor'
                         value={prevCDATA}
-                        onChange={(e: {
-                            target: {
-                                value: React.SetStateAction<string>
-                            }
-                        }) => setPrevCDATA(e.target.value)}
+                        onChange={(e: { target: { value: React.SetStateAction<string> } }) =>
+                            setPrevCDATA(e.target.value)}
                     />
                 </div>
             </>
@@ -71,8 +68,7 @@ export const CDATAEdit = (props: {
                     <CDATACloseBracket />
                 </div>
                 <div className={`xml-display-body-right xml-body-area`}>
-                    <span
-                        className='text-show cdata-disabled'
+                    <span  className='text-show cdata-disabled'
                         onClick={() => {
                             setIsEditable(true)
                             setPrevCDATA(newCDATA)
