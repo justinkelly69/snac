@@ -1,5 +1,5 @@
 import { snacOpts } from "./opts"
-import { afterLastPath, beforeFirstPath } from "./paths"
+import { afterLastPath, beforeFirstPath, comparePaths } from "./paths"
 import {
     SNACItem,
     SNACElement,
@@ -111,15 +111,59 @@ export const findElement = (
     return null
 }
 
-const clone = (
+export const clone = (
     snac: SNACItem[],
-    removePaths: number[][] | null,
+    paths: number[][],
+    replace?: SNACItem[],
+) => {
+    return _clone(snac, paths, [], 0, replace)
+}
+
+export const _clone = (
+    snac: SNACItem[],
+    paths: number[][],
+    tmpPath: number[],
+    depth: number,
     replace?: SNACItem[],
 ): SNACItem[] => {
-
     const snacOut: SNACItem[] = []
-    for (const s in snac) {
-        
+
+    let blocked = false
+    let pathsIndex = 0
+
+    for (let i = 0; i < snac.length; i++) {
+
+        if (paths.length > 0 && comparePaths(paths[pathsIndex], [...tmpPath, i]) === 0) {
+            blocked = true
+            pathsIndex = pathsIndex + 1
+            continue
+        }
+
+        else if (blocked === true && replace) {
+            for (let j = 0; j < replace.length; j++) {
+                snacOut.push(replace[j])
+            }
+            blocked = false
+        }
+
+        if (snac[i].hasOwnProperty('C')) {
+            const e = snac[i] as SNACElement
+            if (e !== null) {
+
+
+                const out = {
+                    S: e.S,
+                    N: e.N,
+                    A: e.A,
+                    X: e.X,
+                    C: _clone(e.C, paths, [...tmpPath, i], depth + 1, replace)
+                }
+                snacOut.push(out)
+            }
+        }
+        else {
+            snacOut.push(snac[i])
+        }
     }
     return snacOut
 }

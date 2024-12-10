@@ -94,8 +94,9 @@ export const TextEdit = (props: {
                             readOnly={false}
                             className='edit-text-editor text-editor'
                             value={newText}
-                            onChange={(e: { target: { value: React.SetStateAction<string> } }) =>
-                                setNewText(e.target.value)}
+                            onChange={(e: { target: { value: React.SetStateAction<string> } }) =>{
+                                setNewText(e.target.value)
+                            }}
                         />
                     </div>
                 </>
