@@ -1,5 +1,14 @@
-import React, {useReducer} from "react";
+import { createSlice } from '@reduxjs/toolkit'
 
-export const reducer = () => {
-    
-}
+const snacSlice = createSlice({
+    name: 'snac',
+    initialState: [],
+    reducers: {
+        snacReplace(state, action) {
+
+        },
+    }
+})
+
+export const { snacReplace } = snacSlice.actions
+export default snacSlice.reducer

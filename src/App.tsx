@@ -1,6 +1,3 @@
-import React from 'react';
-import "./App.css";
-
 import xmlInput from './lib/data/xml/waffle'
 import xml2snac from './lib/snac/xml2snac'
 import { XMLDisplay } from './lib/tsx/xmldisplay';

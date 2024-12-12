@@ -1,4 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState,  } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { findReplaceSingle } from '../snac/snacslice'
 import { SNACCDATA, XMLModesType } from '../snac/types'
 import { Button, TextArea, XButton } from './widgets'
 import { escapeCDATA } from '../snac/textutils'
@@ -12,6 +14,9 @@ export const CDATAEdit = (props: {
 }): JSX.Element => {
 
     const xmlModesContext = useContext(XMLModesContext) as XMLModesType
+
+    //const count = useSelector(state => state.counter.value)
+    const dispatch = useDispatch()
 
     const [isEditable, setIsEditable] = useState(false)
     const [newCDATA, setNewCDATA] = useState(props.node.D)

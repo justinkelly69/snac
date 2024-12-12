@@ -8,7 +8,7 @@ import {
     CDATACloseBracket, CDATAOpenBracket, CommentCloseBracket,
     CommentOpenBracket, PICloseBracket, PIOpenBracket
 } from './brackets'
-import { insertCDATAInText, insertCommentInText, insertPIInText, insertTagInText, piLanguages } from '../snac/snac'
+import { clone, insertCDATAInText, insertCommentInText, insertPIInText, insertTagInText, piLanguages } from '../snac/snac'
 
 export const TextEdit = (props: {
     node: SNACText,
@@ -75,8 +75,7 @@ export const TextEdit = (props: {
                             className='button text-button'
                             onClick={() => {
                                 setTextMode('TEXT_VIEW_MODE')
-                                setOldText(newText)
-                                console.log(`[${props.path}]:${newText}`)
+                                setOldText(`[${props.path}]:${newText}`)
                             }}
                             label='Save'
                         />
